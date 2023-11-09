@@ -72,17 +72,17 @@ Instalación:
           
               sudo apt-get install libglfw3-dev
 
-        - Instalacion OpenCL (opcional)
+      - Instalacion OpenCL (opcional)
 
-            - Intel GPU:
+        - Intel GPU:
 
-              - Ubuntu 14.04 only:
+          - Ubuntu 14.04 only:
             
-                     sudo apt-add-repository ppa:floe/beignet; sudo apt-get update; sudo apt-get install beignet-dev; sudo dpkg -i debs/ocl-icd*deb
+                  sudo apt-add-repository ppa:floe/beignet; sudo apt-get update; sudo apt-get install beignet-dev; sudo dpkg -i debs/ocl-icd*deb
                 
-              - Otras:
+            - Otras:
                  
-                      sudo apt-get install beignet-dev
+                   sudo apt-get install beignet-dev
               
 
       
