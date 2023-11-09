@@ -48,7 +48,7 @@ Instalación:
       
               sudo apt-get install libusb-1.0-0-dev
           
-      - Instalar TurboJPEG
+      - Instalacion TurboJPEG:
         
         - Ubuntu 14.04 a 16.04:
           
@@ -58,7 +58,7 @@ Instalación:
         
               sudo apt-get install libturbojpeg0-dev
           
-      - Instalar OpenGL:
+      - Instalacion OpenGL:
         
         - Ubuntu 14.04 only:
           
@@ -83,6 +83,7 @@ Instalación:
            - Otras:
                  
                   sudo apt-get install beignet-dev
+             
         - AMD GPU: 
           
               apt-get install opencl-headers
@@ -90,8 +91,32 @@ Instalación:
         - Mali GPU (e.g. Odroid XU4): (with root)
 
               mkdir -p /etc/OpenCL/vendors; echo /usr/lib/arm-linux-gnueabihf/mali-egl/libmali.so >/etc/OpenCL/vendors/mali.icd; apt-get install opencl-headers.
-              
 
+      - Instalacion CUDA (opcional, Nvidia only):
+        
+          - Ubuntu 14.04 only:
+            
+                 apt-get install cuda
+            
+      - Instalacion VAAPI (opcional, Intel only):
+  
+          - Ubuntu 14.04 only:
+            
+                sudo dpkg -i debs/{libva,i965}*deb; sudo apt-get install -f
+            
+          - Otras:
+            
+                sudo apt-get install libva-dev libjpeg-dev
+            
+      - Instalacion OpenNI2 (opcional)
+        
+          - Ubuntu 14.04 only:
+            
+                sudo apt-add-repository ppa:deb-rob/ros-trusty && sudo apt-get update (You don't need this if you have ROS repos), then sudo apt-get install libopenni2-dev
+            
+          - Otra:
+            
+                sudo apt-get install libopenni2-dev
       
   - MacOS:
     
@@ -105,6 +130,17 @@ Instalación:
           brew update
           brew install libusb
           brew install glfw3
+      
+    - Instalacion TurboJPEG (opcional)
+
+          brew install jpeg-turbo
+
+    - Instalacion OpenNI2 (opcional)
+      
+          brew tap brewsci/science
+          brew install openni2
+          export OPENNI2_REDIST=/usr/local/lib/ni2
+          export OPENNI2_INCLUDE=/usr/local/include/ni2
       
     - Build:
 
@@ -120,6 +156,9 @@ Instalación:
     - cccc
 
 Librerias utilizadas:
+
   - https://github.com/google/mediapipe
+
   - https://github.com/CMU-Perceptual-Computing-Lab/openpose
+  
   - https://github.com/OpenKinect/libfreenect2
