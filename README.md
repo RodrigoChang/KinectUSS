@@ -1,11 +1,12 @@
 # KinectUSS
-Proyecto basado en el bodytracking, utilizando la Kinect como cámara junto a diversas librerias tales como OpenCV, MediaPipe y Python.
+Proyecto basado en el bodytracking, utilizando la Kinect como cámara junto a diversas librerias tales como libfreenect2, MediaPipe y Python.
 
+  Busca trackear los movimientos del individuo, calculando el angulo de movimiento de sus extremidades para poder detectar si el movimiento deseado esta realizado de manera correcta o si existe un margen de error del individuo.
+  
 https://github.com/ctellol/KinectUSS/assets/102624847/979460d9-7f28-452d-a14e-0bf865e7de0c
 
 https://github.com/ctellol/KinectUSS/assets/102624847/12ddbc10-a729-4def-8c80-8088356c3c58
 
-![BodyTracking 1](https://github.com/ctellol/KinectUSS/assets/102624847/56c49979-c6c3-4082-bf60-5368d564162f)
 ![Streaming test1](https://github.com/ctellol/KinectUSS/assets/102624847/6f5eb25e-3ece-4048-81cd-e88291db8ca3)
 ![Streaming test 2](https://github.com/ctellol/KinectUSS/assets/102624847/f193925a-3bed-455d-a1b7-77558fa4f862)
 
