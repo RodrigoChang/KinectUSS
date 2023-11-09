@@ -34,7 +34,7 @@ Como instalar:
           brew install glfw3
     - Build:
 
-           mkdir build && cd build
+          mkdir build && cd build
           cmake ..
           make
           make install
