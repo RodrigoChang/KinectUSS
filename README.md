@@ -175,7 +175,31 @@ Paso 2: Istalacion Media Pipe en Python
     - Audio:
     
           from mediapipe.tasks.python import audio
+      
+Paso 3: Instalacion de OBS (opcional, solo instalar si se busca ejecutar el codigo de manera remota):
 
+  - Windows:   https://cdn-fastly.obsproject.com/downloads/OBS-Studio-29.1.3-Full-Installer-x64.exe
+    
+  - Linux:
+
+      - Debian/Ubuntu-based:
+
+            sudo apt install v4l2loopback-dkms
+        
+      - Red Hat/Fedora-based (requires RPM Fusion to be enabled):
+
+            sudo dnf install kmod-v4l2loopback
+        
+      - Arch Linux-based/Manjaro:
+
+            sudo pacman -Sy v4l2loopback-dkms
+    
+  - MacOS:
+
+    - Intel:   https://cdn-fastly.obsproject.com/downloads/obs-studio-29.1.3-macos-x86_64.dmg
+      
+    - Apple Silicon:   https://cdn-fastly.obsproject.com/downloads/obs-studio-29.1.3-macos-arm64.dmg
+      
 Librerias utilizadas:
 
   - https://github.com/google/mediapipe
