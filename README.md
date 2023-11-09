@@ -38,7 +38,16 @@ Instalación:
 
             sudo apt-get install build-essential cmake pkg-config
 
-  
+      - Instalacion libusb. la version debe ser >= 1.0.20.
+
+        - (Ubuntu 14.04 only)
+
+              sudo dpkg -i debs/libusb*deb
+          
+        - (Otra)
+      
+                sudo apt-get install libusb-1.0-0-dev
+
       
   - MacOS:
     
