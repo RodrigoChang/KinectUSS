@@ -173,14 +173,8 @@ Paso 2: Istalacion Media Pipe en Python
     
           from mediapipe.tasks.python import audio
 
-    
-  Paso 3:
-    - cccc
-
 Librerias utilizadas:
 
   - https://github.com/google/mediapipe
-
-  - https://github.com/CMU-Perceptual-Computing-Lab/openpose
   
   - https://github.com/OpenKinect/libfreenect2
