@@ -11,6 +11,8 @@ https://github.com/ctellol/KinectUSS/assets/102624847/12ddbc10-a729-4def-8c80-80
 
 Instalación:
 
+Nota: Para un correcto funcionamiento del programa como tal, es necesario hacer las instalaciones de las librerias y dependencias necesarias que dependeran del sistema operativo en que se desee implementar. Es por esto que se separaron en 2 pasos de manera general:
+
   Paso 1: Instalacion libfreenect2:
   
   - Windows/Visual Studio:
