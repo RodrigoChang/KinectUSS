@@ -13,7 +13,7 @@ Como instalar:
 
   Paso 1:
   
-    - aaa
+  - aaa
     
   Paso 2:
     - bbb
