@@ -10,6 +10,8 @@ https://github.com/ctellol/KinectUSS/assets/102624847/12ddbc10-a729-4def-8c80-80
 ![Streaming test1](https://github.com/ctellol/KinectUSS/assets/102624847/6f5eb25e-3ece-4048-81cd-e88291db8ca3)
 ![Streaming test 2](https://github.com/ctellol/KinectUSS/assets/102624847/f193925a-3bed-455d-a1b7-77558fa4f862)
 
+Nota: Se recomienda utilizar Visual Studio Code para mayor comodidad.
+
 Instalación:
 
 Nota: Para un correcto funcionamiento del programa como tal, es necesario hacer las instalaciones de las librerias y dependencias necesarias que dependeran del sistema operativo en que se desee implementar. Es por esto que se separaron en 2 pasos de manera general:
