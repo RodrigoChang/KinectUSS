@@ -80,9 +80,16 @@ Instalación:
             
                   sudo apt-add-repository ppa:floe/beignet; sudo apt-get update; sudo apt-get install beignet-dev; sudo dpkg -i debs/ocl-icd*deb
                 
-            - Otras:
+           - Otras:
                  
-                   sudo apt-get install beignet-dev
+                  sudo apt-get install beignet-dev
+        - AMD GPU: 
+          
+              apt-get install opencl-headers
+          
+        - Mali GPU (e.g. Odroid XU4): (with root)
+
+              mkdir -p /etc/OpenCL/vendors; echo /usr/lib/arm-linux-gnueabihf/mali-egl/libmali.so >/etc/OpenCL/vendors/mali.icd; apt-get install opencl-headers.
               
 
       
