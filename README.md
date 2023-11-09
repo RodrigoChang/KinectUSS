@@ -25,7 +25,7 @@ Instalación:
 
     Nota: Ubuntu 12.04 es demasiado antigua para utilizarla. Debian jessie puede ser tambien demasiado antigua y Debian stretch esta incluida en las instrucciones.
 
-      - Descarga libfreenect2
+      - Descarga libfreenect2:
     
             git clone https://github.com/OpenKinect/libfreenect2.git
             cd libfreenect2
@@ -40,13 +40,50 @@ Instalación:
 
       - Instalacion libusb. la version debe ser >= 1.0.20.
 
-        - (Ubuntu 14.04 only)
+        - Ubuntu 14.04 only:
 
               sudo dpkg -i debs/libusb*deb
           
-        - (Otra)
+        - Otras:
       
-                sudo apt-get install libusb-1.0-0-dev
+              sudo apt-get install libusb-1.0-0-dev
+          
+      - Instalar TurboJPEG
+        
+        - Ubuntu 14.04 a 16.04:
+          
+              sudo apt-get install libturbojpeg libjpeg-turbo8-dev
+
+        - Debian/Ubuntu 17.10 y nuevas:
+        
+              sudo apt-get install libturbojpeg0-dev
+          
+      - Instalar OpenGL:
+        
+        - Ubuntu 14.04 only:
+          
+              sudo dpkg -i debs/libglfw3*deb; sudo apt-get install -f
+          
+        - (Odroid XU4) OpenGL 3.1 no tiene soporte para esta plataforma. Usa:
+
+              cmake -DENABLE_OPENGL=OFF later.
+        
+        - Otras:
+          
+              sudo apt-get install libglfw3-dev
+
+        - Instalacion OpenCL (opcional)
+
+            - Intel GPU:
+
+              - Ubuntu 14.04 only:
+            
+                     sudo apt-add-repository ppa:floe/beignet; sudo apt-get update; sudo apt-get install beignet-dev; sudo dpkg -i debs/ocl-icd*deb
+                
+              - Otras:
+                 
+                      sudo apt-get install beignet-dev
+              
 
       
   - MacOS:
