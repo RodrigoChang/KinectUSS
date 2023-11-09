@@ -22,6 +22,22 @@ Instalación:
             vcpkg install libfreenect2
       
   - Linux:
+
+    Nota: Ubuntu 12.04 es demasiado antigua para utilizarla. Debian jessie puede ser tambien demasiado antigua y Debian stretch esta incluida en las instrucciones.
+
+      - Descarga libfreenect2
+    
+            git clone https://github.com/OpenKinect/libfreenect2.git
+            cd libfreenect2
+
+      - (Ubuntu 14.04 only) Descarga actualizacion archivos deb:
+        
+            cd depends; ./download_debs_trusty.sh
+
+      - Instalacion "build tools":
+
+            sudo apt-get install build-essential cmake pkg-config
+
   
       
   - MacOS:
