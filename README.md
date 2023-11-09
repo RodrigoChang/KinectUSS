@@ -149,8 +149,30 @@ Instalación:
           make
           make install
     
-  Paso 2:
-    - bbb
+Paso 2: Istalacion Media Pipe en Python
+  
+  - Antes de iniciar Mediapipe en alguna tarea en python, instala el package de Mediapipe:
+
+        $ python -m pip install mediapipe
+    
+  - Luego de la instalacion importa a tu proyecto lo siguiente:
+    
+        import mediapipe as mp
+    
+  - Para dependencias:
+
+    - Vision:
+      
+          from mediapipe.tasks.python import vision
+      
+    - Texto:
+   
+          from mediapipe.tasks.python import text
+
+    - Audio:
+    
+          from mediapipe.tasks.python import audio
+
     
   Paso 3:
     - cccc
