@@ -16,6 +16,7 @@ Como instalar:
     - bbb
   Paso 3:
     - cccc
+
 Librerias utilizadas:
   - https://github.com/google/mediapipe
   - https://github.com/CMU-Perceptual-Computing-Lab/openpose
