@@ -9,18 +9,22 @@ https://github.com/ctellol/KinectUSS/assets/102624847/12ddbc10-a729-4def-8c80-80
 ![Streaming test1](https://github.com/ctellol/KinectUSS/assets/102624847/6f5eb25e-3ece-4048-81cd-e88291db8ca3)
 ![Streaming test 2](https://github.com/ctellol/KinectUSS/assets/102624847/f193925a-3bed-455d-a1b7-77558fa4f862)
 
-Como instalar:
+Instalación:
 
-  Paso 1 Instalacion libfreenect2:
+  Paso 1: Instalacion libfreenect2:
   
   - Windows/Visual Studio:
+      - Utilizando "vcpkg" se realiza una instalacion mucho mas sencilla y limpia:
 
-        git clone https://github.com/Microsoft/vcpkg.git
-        cd vcpkg
-        ./vcpkg integrate install
-        vcpkg install libfreenect2
-    
+            git clone https://github.com/Microsoft/vcpkg.git
+            cd vcpkg
+            ./vcpkg integrate install
+            vcpkg install libfreenect2
+      
   - Linux:
+  
+      
+  - MacOS:
     
     - Descarga de libfreenect2:
     
@@ -32,15 +36,13 @@ Como instalar:
           brew update
           brew install libusb
           brew install glfw3
+      
     - Build:
 
           mkdir build && cd build
           cmake ..
           make
           make install
-      
-  - MacOS:
-       
     
   Paso 2:
     - bbb
