@@ -1,13 +1,10 @@
 # KinectUSS
 Proyecto basado en el bodytracking, utilizando la Kinect como cámara junto a diversas librerias tales como OpenCV, MediaPipe y Python.
 
-https://github.com/ctellol/KinectUSS/assets/102624847/41322640-7e7e-413f-93eb-2cd17a45c634
+https://github.com/ctellol/KinectUSS/assets/102624847/979460d9-7f28-452d-a14e-0bf865e7de0c
 
-https://github.com/ctellol/KinectUSS/assets/102624847/a0ca7da8-0845-48e4-8688-4899033bba21
+https://github.com/ctellol/KinectUSS/assets/102624847/12ddbc10-a729-4def-8c80-8088356c3c58
 
-(https://github.com/ctellol/KinectUSS/assets/102624847/35d607c4-0403-4738-b19e-51698a07cec5)
-
-![WhatsApp Image 2023-11-09 at 12 36 22 PM](https://github.com/ctellol/KinectUSS/assets/102624847/18edf198-a8a3-484f-9ddb-9018225dd5b4)
-
-![WhatsApp Image 2023-11-09 at 12 36 22 PM (1)](https://github.com/ctellol/KinectUSS/assets/102624847/92d4fca3-2164-416e-b0cb-0134d4d82b9a)
-
+![BodyTracking 1](https://github.com/ctellol/KinectUSS/assets/102624847/56c49979-c6c3-4082-bf60-5368d564162f)
+![Streaming test1](https://github.com/ctellol/KinectUSS/assets/102624847/6f5eb25e-3ece-4048-81cd-e88291db8ca3)
+![Streaming test 2](https://github.com/ctellol/KinectUSS/assets/102624847/f193925a-3bed-455d-a1b7-77558fa4f862)
