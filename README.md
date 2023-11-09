@@ -21,11 +21,24 @@ Como instalar:
         vcpkg install libfreenect2
     
   - Linux:
+    
     - Descarga de libfreenect2:
     
-        git clone https://github.com/OpenKinect/libfreenect2.git
-        cd libfreenect2
-    - 
+          git clone https://github.com/OpenKinect/libfreenect2.git
+          cd libfreenect2
+      
+    - Instalación dependencias:
+
+          brew update
+          brew install libusb
+          brew install glfw3
+    - Build:
+
+           mkdir build && cd build
+          cmake ..
+          make
+          make install
+      
   - MacOS:
        
     
