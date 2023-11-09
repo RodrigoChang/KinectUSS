@@ -11,9 +11,23 @@ https://github.com/ctellol/KinectUSS/assets/102624847/12ddbc10-a729-4def-8c80-80
 
 Como instalar:
 
-  Paso 1:
+  Paso 1 Instalacion libfreenect2:
   
-  - aaa
+  - Windows/Visual Studio:
+
+        git clone https://github.com/Microsoft/vcpkg.git
+        cd vcpkg
+        ./vcpkg integrate install
+        vcpkg install libfreenect2
+    
+  - Linux:
+    - Descarga de libfreenect2:
+    
+        git clone https://github.com/OpenKinect/libfreenect2.git
+        cd libfreenect2
+    - 
+  - MacOS:
+       
     
   Paso 2:
     - bbb
