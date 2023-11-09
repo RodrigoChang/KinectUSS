@@ -10,10 +10,13 @@ https://github.com/ctellol/KinectUSS/assets/102624847/12ddbc10-a729-4def-8c80-80
 ![Streaming test 2](https://github.com/ctellol/KinectUSS/assets/102624847/f193925a-3bed-455d-a1b7-77558fa4f862)
 
 Como instalar:
+
   Paso 1:
     - aaa
+    
   Paso 2:
     - bbb
+    
   Paso 3:
     - cccc
 
