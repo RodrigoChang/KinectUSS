@@ -16,7 +16,7 @@ https://github.com/ctellol/KinectUSS/assets/102624847/12ddbc10-a729-4def-8c80-80
 El proyecto sigue este funcionamiento:
 
 <div align="center">
-    <img src="doc/Modelo.png" width="300">
+    <img src="doc/Modelo.png" width="500">
 </div>
 
 El funcionamiento se basa en 2 computadores, uno en conectado a la Kinect, y otro usando el MediaPipe, demostrando el uso remoto que se le puede dar a este proyecto.
