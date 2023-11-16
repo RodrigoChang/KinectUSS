@@ -12,6 +12,7 @@
 using namespace cv;
 using namespace std;
 using namespace libfreenect2;
+int* lel;
 
 void updateParameterFile() {
     ofstream paramFile("parameters.txt");
@@ -61,27 +62,46 @@ void menu() {
 
     Mat menus(400, 800, CV_8UC3, Scalar(255, 255, 255));
 
-    createTrackbar("fx", "ColorCameraParams", reinterpret_cast<int*>(&colorParams.fx), 100, onColorSlider, &colorParams);
-    createTrackbar("fy", "ColorCameraParams", reinterpret_cast<int*>(&colorParams.fy), 100, onColorSlider, &colorParams);
-    createTrackbar("cx", "ColorCameraParams", reinterpret_cast<int*>(&colorParams.cx), 100, onColorSlider, &colorParams);
-    createTrackbar("cy", "ColorCameraParams", reinterpret_cast<int*>(&colorParams.cy), 100, onColorSlider, &colorParams);
+    /*createTrackbar("fx", "ColorCameraParams", reinterpret_cast<int*>(cvRound(colorParams.fx)), 100, onColorSlider, &colorParams);
+    createTrackbar("fx", "ColorCameraParams", reinterpret_cast<int*>(cvRound(colorParams.fy)), 100, onColorSlider, &colorParams);
+    createTrackbar("cx", "ColorCameraParams", reinterpret_cast<int*>(cvRound(colorParams.cx)), 100, onColorSlider, &colorParams);
+    createTrackbar("cy", "ColorCameraParams", reinterpret_cast<int*>(cvRound(colorParams.cy)), 100, onColorSlider, &colorParams);
 
-
-    createTrackbar("Min Depth", "DepthConfig", reinterpret_cast<int*>(&depthParams.minDepth), 1000, onDepthSlider, &depthParams);
-    createTrackbar("Max Depth", "DepthConfig", reinterpret_cast<int*>(&depthParams.maxDepth), 5000, onDepthSlider, &depthParams);
+    createTrackbar("Min Depth", "DepthConfig", reinterpret_cast<int*>(cvRound(depthParams.minDepth)), 1000, onDepthSlider, &depthParams);
+    createTrackbar("Max Depth", "DepthConfig", reinterpret_cast<int*>(cvRound(depthParams.maxDepth)), 5000, onDepthSlider, &depthParams);
     createTrackbar("Enable Bilateral Filter", "DepthConfig", reinterpret_cast<int*>(&depthParams.enableBilateralFilter), 1, onDepthSlider, &depthParams);
     createTrackbar("Enable Edge Aware Filter", "DepthConfig", reinterpret_cast<int*>(&depthParams.enableEdgeAwareFilter), 1, onDepthSlider, &depthParams);
 
-    createTrackbar("fx", "IRCameraParams", reinterpret_cast<int*>(&irParams.fx), 100, onIRSlider, &irParams);
-    createTrackbar("fy", "IRCameraParams", reinterpret_cast<int*>(&irParams.fy), 100, onIRSlider, &irParams);
-    createTrackbar("cx", "IRCameraParams", reinterpret_cast<int*>(&irParams.cx), 100, onIRSlider, &irParams);
-    createTrackbar("cy", "IRCameraParams", reinterpret_cast<int*>(&irParams.cy), 100, onIRSlider, &irParams);
-    createTrackbar("k1", "IRCameraParams", reinterpret_cast<int*>(&irParams.k1), 100, onIRSlider, &irParams);
-    createTrackbar("k2", "IRCameraParams", reinterpret_cast<int*>(&irParams.k2), 100, onIRSlider, &irParams);
-    createTrackbar("k3", "IRCameraParams", reinterpret_cast<int*>(&irParams.k3), 100, onIRSlider, &irParams);
-    createTrackbar("p1", "IRCameraParams", reinterpret_cast<int*>(&irParams.p1), 100, onIRSlider, &irParams);
-    createTrackbar("p2", "IRCameraParams", reinterpret_cast<int*>(&irParams.p2), 100, onIRSlider, &irParams);
+    createTrackbar("fx", "IRCameraParams", reinterpret_cast<int*>(cvRound(irParams.fx)), 100, onIRSlider, &irParams);
+    createTrackbar("fy", "IRCameraParams", reinterpret_cast<int*>(cvRound(irParams.fy)), 100, onIRSlider, &irParams);
+    createTrackbar("cx", "IRCameraParams", reinterpret_cast<int*>(cvRound(irParams.cx)), 100, onIRSlider, &irParams);
+    createTrackbar("cy", "IRCameraParams", reinterpret_cast<int*>(cvRound(irParams.cy)), 100, onIRSlider, &irParams);
+    createTrackbar("k1", "IRCameraParams", reinterpret_cast<int*>(cvRound(irParams.k1)), 100, onIRSlider, &irParams);
+    createTrackbar("k2", "IRCameraParams", reinterpret_cast<int*>(cvRound(irParams.k2)), 100, onIRSlider, &irParams);
+    createTrackbar("k3", "IRCameraParams", reinterpret_cast<int*>(cvRound(irParams.k3)), 100, onIRSlider, &irParams);
+    createTrackbar("p1", "IRCameraParams", reinterpret_cast<int*>(cvRound(irParams.p1)), 100, onIRSlider, &irParams);
+    createTrackbar("p2", "IRCameraParams", reinterpret_cast<int*>(cvRound(irParams.p2)), 100, onIRSlider, &irParams);
+    */
+   createTrackbar("sus", "Menu", lel, 100, 0);
+    createTrackbar("fx", "Menu", reinterpret_cast<int*>(&colorParams.fx), 100, onColorSlider, &colorParams);
+createTrackbar("fy", "Menu", reinterpret_cast<int*>(&colorParams.fy), 100, onColorSlider, &colorParams);
+createTrackbar("cx", "Menu", reinterpret_cast<int*>(&colorParams.cx), 100, onColorSlider, &colorParams);
+createTrackbar("cy", "Menu", reinterpret_cast<int*>(&colorParams.cy), 100, onColorSlider, &colorParams);
 
+createTrackbar("Min Depth", "Menu", reinterpret_cast<int*>(&depthParams.minDepth), 1000, onDepthSlider, &depthParams);
+createTrackbar("Max Depth", "Menu", reinterpret_cast<int*>(&depthParams.maxDepth), 5000, onDepthSlider, &depthParams);
+createTrackbar("Enable Bilateral Filter", "Menu", reinterpret_cast<int*>(&depthParams.enableBilateralFilter), 1, onDepthSlider, &depthParams);
+createTrackbar("Enable Edge Aware Filter", "Menu", reinterpret_cast<int*>(&depthParams.enableEdgeAwareFilter), 1, onDepthSlider, &depthParams);
+
+createTrackbar("fx", "Menu", reinterpret_cast<int*>(&irParams.fx), 100, onIRSlider, &irParams);
+createTrackbar("fy", "Menu", reinterpret_cast<int*>(&irParams.fy), 100, onIRSlider, &irParams);
+createTrackbar("cx", "Menu", reinterpret_cast<int*>(&irParams.cx), 100, onIRSlider, &irParams);
+createTrackbar("cy", "Menu", reinterpret_cast<int*>(&irParams.cy), 100, onIRSlider, &irParams);
+createTrackbar("k1", "Menu", reinterpret_cast<int*>(&irParams.k1), 100, onIRSlider, &irParams);
+createTrackbar("k2", "Menu", reinterpret_cast<int*>(&irParams.k2), 100, onIRSlider, &irParams);
+createTrackbar("k3", "Menu", reinterpret_cast<int*>(&irParams.k3), 100, onIRSlider, &irParams);
+createTrackbar("p1", "Menu", reinterpret_cast<int*>(&irParams.p1), 100, onIRSlider, &irParams);
+createTrackbar("p2", "Menu", reinterpret_cast<int*>(&irParams.p2), 100, onIRSlider, &irParams);
     imshow("Menu", menus);
     //waitKey(0);
 
