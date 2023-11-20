@@ -1,3 +1,4 @@
+// Este es el main.cpp que junto a menu.cpp menu.h camera_params.h crea un menu bonito que hace config.
 #include <csignal>
 #include <iostream>
 #include <string>
@@ -7,15 +8,12 @@
 #include <libfreenect2/frame_listener_impl.h>
 #include <libfreenect2/registration.h>
 #include <libfreenect2/logger.h>
-#include "camera_params.h"
+#include "utils.h"
 #include "menu.h"
-
+#include <fstream>
 
 using namespace std;
 using namespace cv;
-ColorCameraParams colorParams; 
-Config depthParams;
-IrCameraParams irParams;
 
 bool protonect_shutdown = false;
 bool displayDepthValue = false;
@@ -38,15 +36,15 @@ void onMouseCallback(int event, int x, int y, int flags, void* userdata)
     }
 }
 
+int main() {
 
-int main()
-{
     cout << "S2" << endl;
 
     libfreenect2::Freenect2 freenect2;
     libfreenect2::Freenect2Device* dev = 0;
     libfreenect2::PacketPipeline* pipeline = 0;
 
+    
     if (freenect2.enumerateDevices() == 0)
     {
         cout << "No device connected!" << endl;
@@ -71,16 +69,10 @@ int main()
         return -1;
     }
 
+    menu(dev); 
+
     signal(SIGINT, sigint_handler);
     protonect_shutdown = false;
-
-    // Use the parameters from configuration classes
-    //libfreenect2::Registration* registration = new libfreenect2::Registration(
-    //    irParams.fx, irParams.fy, irParams.cx, irParams.cy,
-    //    irParams.k1, irParams.k2, irParams.k3, irParams.p1, irParams.p2,
-    //    colorParams.fx, colorParams.fy, colorParams.cx, colorParams.cy
-    //);
-
      // Initialize OpenCV window for the Kinect stream
     namedWindow("registered");
     setMouseCallback("registered", onMouseCallback);
@@ -90,7 +82,7 @@ int main()
     socket.bind("tcp://0.0.0.0:5555");
 
     // Initialize the menu
-    menu(); // Run the menu application
+    
     
     libfreenect2::SyncMultiFrameListener listener(libfreenect2::Frame::Color |
                                                   libfreenect2::Frame::Depth |
@@ -105,9 +97,10 @@ int main()
     cout << "Device serial: " << dev->getSerialNumber() << endl;
     cout << "Device firmware: " << dev->getFirmwareVersion() << endl;
     
+    getParams(dev);
+
     libfreenect2::Registration* registration = new libfreenect2::Registration(dev->getIrCameraParams(), dev->getColorCameraParams());
     libfreenect2::Frame undistorted(512, 424, 4), registered(512, 424, 4), depth2rgb(1920, 1080 + 2, 4);
-
 
     while (!protonect_shutdown)
     {   
@@ -119,6 +112,7 @@ int main()
         cv::Mat(rgb->height, rgb->width, CV_8UC4, rgb->data).copyTo(rgbmat);
         cv::Mat(ir->height, ir->width, CV_32FC1, ir->data).copyTo(irmat);
         cv::Mat(depth->height, depth->width, CV_32FC1, depth->data).copyTo(depthmat);
+        cv::Mat(depth->height, depth->width, CV_8UC2, depth->data).copyTo(prof);
 
         registration->apply(rgb, depth, &undistorted, &registered, true, &depth2rgb);
 
@@ -132,28 +126,19 @@ int main()
             {
                 pixelValue = depthmatUndistorted.at<float>(clickedY, clickedX);
                 cout << "Profundidad pixel (" << clickedX << ", " << clickedY << "): " << pixelValue << " mm" << endl;
-                
-                // Reset the flag and coordinates
             }
         }
 
         putText(rgbd, to_string(pixelValue) + " mm", Point(clickedX, clickedY), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(205, 255, 0), 2, LINE_AA);
-
+        libfreenect2::COLOR_SETTING_SET_ANALOG_GAIN;
         imshow("rgb", rgbmat);
         imshow("ir", irmat / 4096.0f);
         imshow("depth", depthmat / 4096.0f);
         imshow("undistorted", depthmatUndistorted / 4096.0f);
         imshow("registered", rgbd);
         imshow("depth2RGB", rgbd2 / 4096.0f);
-
-            // Reading the image through opencv package
-        cv::Mat(depth->height, depth->width, CV_8UC2, depth->data).copyTo(prof);
+        
         socket.send(prof.data, prof.total() * prof.elemSize() * prof.channels());
-        //std::vector<uchar> buffer; , zmq::send_flags::none
-       // cv::imencode(".png", prof, buffer);
-        //zmq::message_t message(buffer.size());
-        //memcpy(message.data(), buffer.data(), buffer.size());
-        //socket.send(message, zmq::send_flags::none);
 
         int key = cv::waitKey(1);
         protonect_shutdown = protonect_shutdown || (key > 0 && ((key & 0xFF) == 27));
