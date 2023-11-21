@@ -28,7 +28,7 @@ void sigint_handler(int s)
 
 void onMouseCallback(int event, int x, int y, int flags, void* userdata)
 {
-    if (event == EVENT_LBUTTONDOWN)
+    if (event == cv::EVENT_LBUTTONDOWN)
     {
         clickedX = x;
         clickedY = y;
@@ -98,7 +98,6 @@ int main() {
     cout << "Device firmware: " << dev->getFirmwareVersion() << endl;
     
     getParams(dev);
-
     libfreenect2::Registration* registration = new libfreenect2::Registration(dev->getIrCameraParams(), dev->getColorCameraParams());
     libfreenect2::Frame undistorted(512, 424, 4), registered(512, 424, 4), depth2rgb(1920, 1080 + 2, 4);
 
@@ -109,16 +108,16 @@ int main() {
         libfreenect2::Frame* ir = frames[libfreenect2::Frame::Ir];
         libfreenect2::Frame* depth = frames[libfreenect2::Frame::Depth];
 
-        cv::Mat(rgb->height, rgb->width, CV_8UC4, rgb->data).copyTo(rgbmat);
-        cv::Mat(ir->height, ir->width, CV_32FC1, ir->data).copyTo(irmat);
-        cv::Mat(depth->height, depth->width, CV_32FC1, depth->data).copyTo(depthmat);
-        cv::Mat(depth->height, depth->width, CV_8UC2, depth->data).copyTo(prof);
+        Mat(rgb->height, rgb->width, CV_8UC4, rgb->data).copyTo(rgbmat);
+        Mat(ir->height, ir->width, CV_32FC1, ir->data).copyTo(irmat);
+        Mat(depth->height, depth->width, CV_32FC1, depth->data).copyTo(depthmat);
+        Mat(depth->height, depth->width, CV_8UC2, depth->data).copyTo(prof);
 
         registration->apply(rgb, depth, &undistorted, &registered, true, &depth2rgb);
 
-        cv::Mat(undistorted.height, undistorted.width, CV_32FC1, undistorted.data).copyTo(depthmatUndistorted);
-        cv::Mat(registered.height, registered.width, CV_8UC4, registered.data).copyTo(rgbd);
-        cv::Mat(depth2rgb.height, depth2rgb.width, CV_32FC1, depth2rgb.data).copyTo(rgbd2);
+        Mat(undistorted.height, undistorted.width, CV_32FC1, undistorted.data).copyTo(depthmatUndistorted);
+        Mat(registered.height, registered.width, CV_8UC4, registered.data).copyTo(rgbd);
+        Mat(depth2rgb.height, depth2rgb.width, CV_32FC1, depth2rgb.data).copyTo(rgbd2);
 
         if (displayDepthValue)
         {
@@ -129,18 +128,19 @@ int main() {
             }
         }
 
-        putText(rgbd, to_string(pixelValue) + " mm", Point(clickedX, clickedY), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(205, 255, 0), 2, LINE_AA);
         libfreenect2::COLOR_SETTING_SET_ANALOG_GAIN;
+
+        putText(rgbd, to_string(pixelValue) + " mm", Point(clickedX, clickedY), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(205, 255, 0), 2, LINE_AA);
         imshow("rgb", rgbmat);
         imshow("ir", irmat / 4096.0f);
         imshow("depth", depthmat / 4096.0f);
-        imshow("undistorted", depthmatUndistorted / 4096.0f);
+        //imshow("undistorted", depthmatUndistorted / 4096.0f);
         imshow("registered", rgbd);
-        imshow("depth2RGB", rgbd2 / 4096.0f);
+        //imshow("depth2RGB", rgbd2 / 4096.0f);
         
         socket.send(prof.data, prof.total() * prof.elemSize() * prof.channels());
 
-        int key = cv::waitKey(1);
+        int key = waitKey(1);
         protonect_shutdown = protonect_shutdown || (key > 0 && ((key & 0xFF) == 27));
 
         listener.release(frames);

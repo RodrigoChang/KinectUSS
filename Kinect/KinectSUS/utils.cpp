@@ -9,8 +9,8 @@
 #include <libfreenect2/registration.h>
 
 //libfreenect2::Freenect2Device* dev = nullptr;
-libfreenect2::Freenect2Device::ColorCameraParams ColorCameraParams;
-libfreenect2::Freenect2Device::IrCameraParams IrCameraParams;
+//libfreenect2::Freenect2Device::ColorCameraParams ColorCameraParams;
+//libfreenect2::Freenect2Device::IrCameraParams IrCameraParams;
 
 
 void rgbdSocket(cv::Mat rgbd) {

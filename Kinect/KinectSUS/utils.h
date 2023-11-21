@@ -9,6 +9,7 @@ extern libfreenect2::Registration* registration;
 extern libfreenect2::Freenect2Device* dev;
 extern libfreenect2::Freenect2Device::ColorCameraParams ColorCameraParams;
 extern libfreenect2::Freenect2Device::IrCameraParams IrCameraParams;
+extern libfreenect2::Freenect2Device::Config config;
 
 void readIni();
 
