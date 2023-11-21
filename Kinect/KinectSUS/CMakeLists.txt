@@ -29,11 +29,12 @@ SET(freenect2_LIBRARIES freenect2)
 
 
 #INCLUDE_DIRECTORIES(${freenect2_DIR}) #Deberia funcionar pero no po
-#SET (KinectSUS_DIR main.cpp menu.cpp camera_params.h menu.h)
-SET (KinectSUS_DIR kinect.cpp)
+SET (KinectSUS_DIR main.cpp menu.cpp menu.h utils.cpp utils.h)
+#SET (KinectSUS_DIR main.cpp menu.cpp menu.h utils.cpp utils.h cloud.cpp)
 
 # Add OpenCV package dependency for udp-image-streaming
 FIND_PACKAGE(OpenCV REQUIRED)
+FIND_PACKAGE(PCL REQUIRED)
 INCLUDE_DIRECTORIES(${OpenCV_INCLUDE_DIRS})
 LIST(APPEND KinectSUS_LIBRARIES
   ${OpenCV_LIBS}
