@@ -1,12 +1,25 @@
 #include "utils.h"
+#include <string>
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <zmq.hpp>
+#include <opencv2/opencv.hpp>
 #include <libfreenect2/libfreenect2.hpp>
+#include <libfreenect2/registration.h>
 
 //libfreenect2::Freenect2Device* dev = nullptr;
 libfreenect2::Freenect2Device::ColorCameraParams ColorCameraParams;
 libfreenect2::Freenect2Device::IrCameraParams IrCameraParams;
+
+
+void rgbdSocket(cv::Mat rgbd) {
+    
+    zmq::context_t context(1);
+    zmq::socket_t sockets(context, ZMQ_PUB);
+    sockets.bind("tcp://0.0.0.0:5556");
+    sockets.send(rgbd.data, rgbd.total() * rgbd.elemSize() * rgbd.channels());
+}
 
 void readIni() {
 
@@ -95,7 +108,7 @@ void readIni() {
     }
 }
 
-void writeInI() {
+void writeIni() {
 
     // Write updated parameters to INI file
     std::ofstream outfile("../config.ini");
