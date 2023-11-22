@@ -7,47 +7,18 @@
 #include "utils.h"
 #include <nlohmann/json.hpp>
 #include <chrono>
+#include <thread>
 
 //libfreenect2::Frame* undistorted;
 
-void cloud(libfreenect2::Frame undistorted, libfreenect2::Registration* registration) {
-   // undistorted = undF;
-    //using namespace std::chrono_literals;
-    //std::chrono::steady_clock::time_point lastUpdate = std::chrono::steady_clock::now();
-    bool value = true;
-    int r = 0 , c = 0;
-
-    pcl::PointCloud<pcl::PointXYZ>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZ>);
-
-    while (value && r < 512 && c < 424) {
-        // Extract the x, y, z coordinates for the current pixel
-        float x, y, z;
-
-        registration->getPointXYZ(&undistorted, r, c, x, y, z);
-
-        // Create a point and add it to the cloud
-        pcl::PointXYZ point;
-        point.x = x;
-        point.y = y;
-        point.z = z;
-        cloud->points.push_back(point);
-
-        if (r == 512 && c == 424) {
-            value = false;
-        }
-
-        c++;
-        if (c >= 424) {
-            c = 0;
-            r++;
-        }
-    }
-
+void visualizePointCloud(pcl::PointCloud<pcl::PointXYZ>::Ptr cloud) {
     pcl::visualization::PCLVisualizer::Ptr viewer(new pcl::visualization::PCLVisualizer("Point Cloud Viewer"));
 
     // Add the point cloud to the viewer
     viewer->addPointCloud(cloud, "cloud");
-
+    std::cout << "agredado" << endl;
     // Set the viewer to display the point cloud
-    viewer->spin();
+    viewer->spinOnce();
+    std::cout << "visualizado" << endl;
+    //std::this_thread::sleep_for(std::chrono::milliseconds(50));
 }

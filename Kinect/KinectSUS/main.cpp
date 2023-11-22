@@ -11,6 +11,9 @@
 #include "utils.h"
 #include "menu.h"
 #include <fstream>
+#include <thread>
+#include <pcl/point_cloud.h>
+#include <pcl/point_types.h>
 
 using namespace std;
 using namespace cv;
@@ -19,6 +22,7 @@ bool protonect_shutdown = false;
 bool displayDepthValue = false;
 int clickedX = -1, clickedY = -1;
 float pixelValue;
+bool cloudOpened = false;
 Mat rgbmat, depthmat, depthmatUndistorted, irmat, rgbd, rgbd2, prof;
 
 void sigint_handler(int s)
@@ -44,6 +48,7 @@ int main() {
     libfreenect2::Freenect2Device* dev = 0;
     libfreenect2::PacketPipeline* pipeline = 0;
 
+    pcl::PointCloud<pcl::PointXYZ>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZ>);
     
     if (freenect2.enumerateDevices() == 0)
     {
@@ -115,6 +120,30 @@ int main() {
 
         registration->apply(rgb, depth, &undistorted, &registered, true, &depth2rgb);
 
+        int r = 0, c = 0;
+
+        while (r < 512 && c < 424) {
+            // Extract the x, y, z coordinates for the current pixel
+            float x, y, z;
+            registration->getPointXYZ(&undistorted, r, c, x, y, z);
+
+        // Create a point and add it to the cloud
+            pcl::PointXYZ point;
+            point.x = x;
+            point.y = y;
+            point.z = z;
+            cloud->points.push_back(point);
+
+            r++;
+            if (r >= 512) {
+                r = 0;
+                c++;
+            }
+        }
+        std::cout << "creado" << endl;
+        visualizePointCloud(cloud);
+        cloud->clear();
+
         Mat(undistorted.height, undistorted.width, CV_32FC1, undistorted.data).copyTo(depthmatUndistorted);
         Mat(registered.height, registered.width, CV_8UC4, registered.data).copyTo(rgbd);
         Mat(depth2rgb.height, depth2rgb.width, CV_32FC1, depth2rgb.data).copyTo(rgbd2);
@@ -128,15 +157,14 @@ int main() {
             }
         }
 
-        cloud(undistorted, registration);
         libfreenect2::COLOR_SETTING_SET_ANALOG_GAIN;
-
-        putText(rgbd, to_string(pixelValue) + " mm", Point(clickedX, clickedY), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(205, 255, 0), 2, LINE_AA);
-        imshow("rgb", rgbmat);
-        imshow("ir", irmat / 4096.0f);
-        imshow("depth", depthmat / 4096.0f);
+        
+        //putText(rgbd, to_string(pixelValue) + " mm", Point(clickedX, clickedY), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(205, 255, 0), 2, LINE_AA);
+        //imshow("rgb", rgbmat);
+        //imshow("ir", irmat / 4096.0f);
+        //imshow("depth", depthmat / 4096.0f);
         //imshow("undistorted", depthmatUndistorted / 4096.0f);
-        imshow("registered", rgbd);
+        //imshow("registered", rgbd);
         //imshow("depth2RGB", rgbd2 / 4096.0f);
         
         socket.send(prof.data, prof.total() * prof.elemSize() * prof.channels());
