@@ -18,7 +18,7 @@ using namespace cv;
 bool protonect_shutdown = false;
 bool displayDepthValue = false;
 int clickedX = -1, clickedY = -1;
-float pixelValue, x_cloud, y_cloud, z_cloud;
+float pixelValue;
 Mat rgbmat, depthmat, depthmatUndistorted, irmat, rgbd, rgbd2, prof;
 
 void sigint_handler(int s)
@@ -128,7 +128,7 @@ int main() {
             }
         }
 
-        cloud(undistorted);
+        cloud(undistorted, registration);
         libfreenect2::COLOR_SETTING_SET_ANALOG_GAIN;
 
         putText(rgbd, to_string(pixelValue) + " mm", Point(clickedX, clickedY), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(205, 255, 0), 2, LINE_AA);

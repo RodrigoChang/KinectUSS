@@ -21,6 +21,6 @@ void setParams(libfreenect2::Freenect2Device* dev);
 
 void rgbdSocket(cv::Mat rgbd);
 
-void cloud(libfreenect2::Frame undistorted);
+void cloud(libfreenect2::Frame undistorted, libfreenect2::Registration* registration);
 
 #endif // UTILS_H
