@@ -1,3 +1,0 @@
-/home/gabriel/Proyectos/Kinect/KinectSUS/test/CMakeFiles/KinectSUS.dir
-/home/gabriel/Proyectos/Kinect/KinectSUS/test/CMakeFiles/edit_cache.dir
-/home/gabriel/Proyectos/Kinect/KinectSUS/test/CMakeFiles/rebuild_cache.dir
