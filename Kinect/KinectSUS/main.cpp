@@ -118,6 +118,9 @@ int main() {
         Mat(depth->height, depth->width, CV_32FC1, depth->data).copyTo(depthmat);
         Mat(depth->height, depth->width, CV_8UC2, depth->data).copyTo(prof);
 
+        flip(rgbmat, rgbmat, 1); 
+		flip(depthmat, depthmat, 1);
+
         registration->apply(rgb, depth, &undistorted, &registered, true, &depth2rgb);
 
         int r = 0, c = 0;
