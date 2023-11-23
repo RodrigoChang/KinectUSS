@@ -14,7 +14,6 @@
 #include <thread>
 #include <chrono>
 #include <curl/curl.h>
-#include "frame.pb.h"
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
 #include <pcl/visualization/pcl_visualizer.h>
@@ -98,7 +97,6 @@ int main() {
 
     // Initialize the menu
     
-    
     libfreenect2::SyncMultiFrameListener listener(libfreenect2::Frame::Color |
                                                   libfreenect2::Frame::Depth |
                                                   libfreenect2::Frame::Ir);
@@ -127,11 +125,13 @@ int main() {
         Mat(ir->height, ir->width, CV_32FC1, ir->data).copyTo(irmat);
         Mat(depth->height, depth->width, CV_32FC1, depth->data).copyTo(depthmat);
         Mat(depth->height, depth->width, CV_8UC2, depth->data).copyTo(prof);
-        Mat(rgb->height, rgb->width, CV_8UC4, rgb->data).copyTo(color);
     
         flip(rgbmat, rgbmat, 1); 
 		flip(depthmat, depthmat, 1);
         flip(irmat, irmat, 1);
+
+        Mat ROI(rgbmat, Rect(703,327,512,424));
+        ROI.copyTo(color);
 
         auto t1 = high_resolution_clock::now();
   
@@ -171,8 +171,8 @@ int main() {
         }
         
         auto t2 = high_resolution_clock::now();
-        //visualizePointCloud(cloud, viewer);
-        //cloud->clear();
+        visualizePointCloud(cloud, viewer);
+        cloud->clear();
         
         auto ms_int = duration_cast<milliseconds>(t2 - t1);
 
@@ -199,23 +199,23 @@ int main() {
         
         //putText(rgbd, to_string(pixelValue) + " mm", Point(clickedX, clickedY), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(205, 255, 0), 2, LINE_AA);
         imshow("rgb", rgbmat);
-        //imshow("ir", irmat / 4096.0f);
-        //imshow("depth", depthmat / 4096.0f);
+        imshow("ir", irmat / 4096.0f);
+        imshow("depth", depthmat / 4096.0f);
         //imshow("undistorted", depthmatUndistorted / 4096.0f);
         imshow("registered", rgbd);
         //imshow("depth2RGB", rgbd2 / 4096.0f);
+        imshow("cropped", color);
         
-        socket.send(prof.data, prof.total() * prof.elemSize() * prof.channels(), ZMQ_DONTWAIT);
+        //socket.send(prof.data, prof.total() * prof.elemSize() * prof.channels(), ZMQ_DONTWAIT);
+        zmq::message_t message(depth->data, depth->width * depth->height * depth->bytes_per_pixel);
+        zmq::message_t message2(rgb->data, rgb->width * rgb->height * rgb->bytes_per_pixel);
+        socket.send(message);
         cout << "depth sent" << endl;
-        //this_thread::sleep_for(20ms);
-        try {
-            socket2.send(color.data, color.total() * color.elemSize() * color.channels(), ZMQ_DONTWAIT);
-        }
-        catch (zmq::error_t& e) {
-            cerr << "error: " << e.what() << endl;
-        }
-        
+        socket2.send(message);
         cout << "color sent" << endl;
+        //thread sendColor(socketsend, color);
+        //this_thread::sleep_for(20ms);
+        
         int key = waitKey(1);
         protonect_shutdown = protonect_shutdown || (key > 0 && ((key & 0xFF) == 27));
 
