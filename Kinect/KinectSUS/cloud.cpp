@@ -5,20 +5,24 @@
 #include <libfreenect2/libfreenect2.hpp>
 #include <libfreenect2/registration.h>
 #include "utils.h"
-#include <nlohmann/json.hpp>
 #include <chrono>
 #include <thread>
 
-//libfreenect2::Frame* undistorted;
+void visualizePointCloud(pcl::PointCloud<pcl::PointXYZ>::Ptr cloud, pcl::visualization::PCLVisualizer::Ptr viewer) {
+        // Flip the point cloud data
+    for (size_t i = 0; i < cloud->points.size(); ++i) {
+        cloud->points[i].y = -cloud->points[i].y;
+    }
 
-void visualizePointCloud(pcl::PointCloud<pcl::PointXYZ>::Ptr cloud) {
-    pcl::visualization::PCLVisualizer::Ptr viewer(new pcl::visualization::PCLVisualizer("Point Cloud Viewer"));
+    // Set visualization properties
+    pcl::visualization::PointCloudColorHandlerCustom<pcl::PointXYZ> single_color(cloud, 0, 255, 0); // Green points
+    viewer->addPointCloud<pcl::PointXYZ>(cloud, single_color, "cloud");
 
-    // Add the point cloud to the viewer
-    viewer->addPointCloud(cloud, "cloud");
-    std::cout << "agredado" << endl;
+    // Set point size
+    viewer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 2, "cloud");
+
     // Set the viewer to display the point cloud
     viewer->spinOnce();
-    std::cout << "visualizado" << endl;
-    //std::this_thread::sleep_for(std::chrono::milliseconds(50));
+    viewer->removePointCloud("cloud");
+
 }
