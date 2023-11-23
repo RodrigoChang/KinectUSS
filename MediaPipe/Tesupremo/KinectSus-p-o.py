@@ -1,50 +1,68 @@
 # Version 3.0
 
-#Distance detecion hands 2.7 mt
 import cv2
 import mediapipe as mp
 from threading import Thread
 import time
-#import susweb as sus
 import numpy as np
 from math import acos, degrees
 
 mp_drawing = mp.solutions.drawing_utils
 mp_pose = mp.solutions.pose
 mp_hands = mp.solutions.hands
-resolution =(800,600)
+
+resolution = (800, 600)
 
 class ThreadedCamera(object):
     def __init__(self, src=0):
-        #Capturar por camara ,descomentar para usar camara.., comentar para usar streaming 
-        #self.capture = cv2.VideoCapture(src, cv2.CAP_V4L)
-        #Capturar camara Kinect via streaming, descomentar para usar streaming,comentar para usar camara, 
-        self.capture = cv2.VideoCapture(src)
+        self.capture = cv2.VideoCapture(src, cv2.CAP_V4L)
         self.FPS = 1/100
         self.FPS_MS = int(self.FPS * 1000)
         self.thread = Thread(target=self.update, args=())
         self.thread.daemon = True
         self.thread.start()
-        #Parametros body
-        #model_complexity=1 default model_complexity=2 da error investiga esto Carlos  
-        self.pose =  mp_pose.Pose(static_image_mode=False, min_detection_confidence=0.9,min_tracking_confidence=0.9,model_complexity=2, smooth_landmarks= True)
-        #Parametros Hands
-        self.hands = mp_hands.Hands(static_image_mode=False, min_detection_confidence=0.9,min_tracking_confidence=0.9,model_complexity=1)
+        self.pose = mp_pose.Pose(static_image_mode=False, min_detection_confidence=0.9, min_tracking_confidence=0.9, model_complexity=2, smooth_landmarks=True)
+        self.hands = mp_hands.Hands(static_image_mode=False, min_detection_confidence=0.9, min_tracking_confidence=0.9, model_complexity=1)
+        self.frame = None
+        # Crear dos threads para procesar pose y manos
+        self.pose_thread = Thread(target=self.process_pose_thread, args=())
+        self.hands_thread = Thread(target=self.process_hands_thread, args=())
+        self.angles_thread = Thread(target=self.calculate_angles_thread, args=())
+
+        # Iniciar los threads
+        self.pose_thread.start()
+        self.hands_thread.start()
+        self.angles_thread.start()
+        
 
     def update(self):
         while True:
             if self.capture is not None and self.capture.isOpened():
                 (self.status, self.frame) = self.capture.read()
             time.sleep(self.FPS)
-    
-    # Nico aqui esta la funcion del cuerpo 
+            
+
+    def process_pose_thread(self):
+        while True:
+            if self.frame is not None:
+                self.process_pose(self.frame)
+
+    def process_hands_thread(self):
+        while True:
+            if self.frame is not None:
+                self.process_hands(self.frame)
+    def process_angles_thread(self):
+        while True:
+            if self.frame is not None:
+                with self.frame_lock:
+                    self.calculate_angles(self.frame)            
+
     def process_pose(self, frame):
         frame_resized = cv2.resize(frame, resolution)
         frame_rgb = cv2.cvtColor(frame_resized, cv2.COLOR_BGR2RGB)
         results_skeleto = self.pose.process(frame_rgb)
-        
+
         if results_skeleto.pose_landmarks is not None:
-            if results_skeleto.pose_landmarks is not None:
                 #aqui dentro debes poner tu codigo 
                 #Dibujo de body
                 #Obtencion de nodos lado izquierdo
@@ -146,9 +164,31 @@ class ThreadedCamera(object):
                 Angle_incline_R=[[x_right_shoulder,y_right_shoulder],[x_right_hip,y_right_hip],[x_right_ankle,y_right_ankle]]
                 Angle_incline_L=[[x_left_shoulder,y_left_shoulder],[x_left_hip,y_left_hip],[x_left_ankle,y_left_ankle]]
                 
-                # Calculo de angulos 
-                for landmark in zip([Angle_leg_R,Angle_leg_L,Angle_foot_R,Angle_foot_L,Angle_arm_R,Angle_arm_L,Angle_incline_R,Angle_incline_L]):
-                    for i in landmark:
+                # Crear un sub-hilo para el cálculo de ángulos
+                angles_thread = Thread(target=self.calculate_angles, args=(frame_resized,zip([Angle_leg_R,Angle_leg_L,Angle_foot_R,Angle_foot_L,Angle_arm_R,Angle_arm_L,Angle_incline_R,Angle_incline_L])))
+                angles_thread.start()         
+                #Visualizacion de datos 
+                """for name, landmark in zip(["left_shoulder", "left_elbow", "left_wrist", "left_hip", "left_knee", "left_ankle", "left_heel", "left_foot_index",
+                                       "right_shoulder", "right_elbow", "right_wrist", "right_hip", "right_knee", "right_ankle", "right_heel", "right_foot_index"],
+                                      [left_shoulder_landmark, left_elbow_landmark, left_wrist_landmark,
+                                       left_hip_landmark, left_knee_landmark, left_ankle_landmark,
+                                       left_heel_landmark, left_foot_index_landmark,
+                                       right_shoulder_landmark, right_elbow_landmark, right_wrist_landmark,
+                                       right_hip_landmark, right_knee_landmark, right_ankle_landmark,
+                                       right_heel_landmark, right_foot_index_landmark]):
+                    x, y, z = landmark.x, landmark.y, landmark.z
+                    cv2.putText(frame_resized, f"({x},{y},{z})", (int(x * frame_resized.shape[1]), int(y * frame_resized.shape[0])),
+                                cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 0), 1, cv2.LINE_AA)"""
+                #Obtencion de z mediante susweb  entreganto x e y de punto seleccionado 
+                #print (f"right_shoulder x: {x_right_shoulder} Y: {y_right_shoulder} z: {sus.position_frame(x_right_shoulder, y_right_shoulder)}")
+                
+        return frame_resized
+    
+
+    def calculate_angles(self, frame_resized, landmarks_list):
+        # Calculo de angulos 
+        for landmark in landmarks_list:
+                for i in landmark:
                         p1 = np.array(i[0])
                         p2 = np.array(i[1])            
                         p3 = np.array(i[2]) 
@@ -177,29 +217,13 @@ class ThreadedCamera(object):
                             text_position = ((i[1][0] + i[2][0]) // 2, min(i[1][1], i[2][1]) - 10)
                             cv2.putText(frame_resized, text, text_position, cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0,0,0), 1, cv2.LINE_AA)
                         else:
-                            continue
+                            continue   
 
-                #Visualizacion de datos 
-                """for name, landmark in zip(["left_shoulder", "left_elbow", "left_wrist", "left_hip", "left_knee", "left_ankle", "left_heel", "left_foot_index",
-                                       "right_shoulder", "right_elbow", "right_wrist", "right_hip", "right_knee", "right_ankle", "right_heel", "right_foot_index"],
-                                      [left_shoulder_landmark, left_elbow_landmark, left_wrist_landmark,
-                                       left_hip_landmark, left_knee_landmark, left_ankle_landmark,
-                                       left_heel_landmark, left_foot_index_landmark,
-                                       right_shoulder_landmark, right_elbow_landmark, right_wrist_landmark,
-                                       right_hip_landmark, right_knee_landmark, right_ankle_landmark,
-                                       right_heel_landmark, right_foot_index_landmark]):
-                    x, y, z = landmark.x, landmark.y, landmark.z
-                    cv2.putText(frame_resized, f"({x},{y},{z})", (int(x * frame_resized.shape[1]), int(y * frame_resized.shape[0])),
-                                cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 0), 1, cv2.LINE_AA)"""
-                #Obtencion de z mediante susweb  entreganto x e y de punto seleccionado 
-                #print (f"right_shoulder x: {x_right_shoulder} Y: {y_right_shoulder} z: {sus.position_frame(x_right_shoulder, y_right_shoulder)}")
-                
-        return frame_resized
-    
     def process_hands(self, frame):
         frame_resized = cv2.resize(frame, resolution)
         frame_rgb = cv2.cvtColor(frame_resized, cv2.COLOR_BGR2RGB)
         results = self.hands.process(frame_rgb)
+
         if results.multi_hand_landmarks:
             for hand_landmarks in results.multi_hand_landmarks:
                 
@@ -213,8 +237,8 @@ class ThreadedCamera(object):
                 mp_drawing.DrawingSpec(color=(0, 0, 0), thickness=2),
                 mp_drawing.DrawingSpec(color=(0, 0, 0), thickness=2))
             
-        return frame_resized
 
+        return frame_resized
 
     def show_frame(self):
         if self.frame is not None:
@@ -224,8 +248,7 @@ class ThreadedCamera(object):
             cv2.waitKey(self.FPS_MS)
 
 if __name__ == '__main__':
-    #src = 0
-    src = 'udp://0.0.0.0:6000?overrun_nonfatal=1'
+    src = 0
     threaded_camera = ThreadedCamera(src)
     while True:
         try:
