@@ -205,8 +205,17 @@ int main() {
         imshow("registered", rgbd);
         //imshow("depth2RGB", rgbd2 / 4096.0f);
         
-        socket.send(prof.data, prof.total() * prof.elemSize() * prof.channels());
-        socket2.send(color.data, color.total() * color.elemSize() * color.channels());
+        socket.send(prof.data, prof.total() * prof.elemSize() * prof.channels(), ZMQ_DONTWAIT);
+        cout << "depth sent" << endl;
+        //this_thread::sleep_for(20ms);
+        try {
+            socket2.send(color.data, color.total() * color.elemSize() * color.channels(), ZMQ_DONTWAIT);
+        }
+        catch (zmq::error_t& e) {
+            cerr << "error: " << e.what() << endl;
+        }
+        
+        cout << "color sent" << endl;
         int key = waitKey(1);
         protonect_shutdown = protonect_shutdown || (key > 0 && ((key & 0xFF) == 27));
 
