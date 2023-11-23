@@ -5,6 +5,7 @@ import cv2
 import mediapipe as mp
 from threading import Thread
 import time
+#Comentar para que parta sin socket
 #import susweb as sus
 import numpy as np
 from math import acos, degrees
@@ -12,24 +13,24 @@ from math import acos, degrees
 mp_drawing = mp.solutions.drawing_utils
 mp_pose = mp.solutions.pose
 mp_hands = mp.solutions.hands
+#resolution =(512,424)
 resolution =(800,600)
-
 class ThreadedCamera(object):
     def __init__(self, src=0):
         #Capturar por camara ,descomentar para usar camara.., comentar para usar streaming 
-        #self.capture = cv2.VideoCapture(src, cv2.CAP_V4L)
+        self.capture = cv2.VideoCapture(src, cv2.CAP_V4L)
         #Capturar camara Kinect via streaming, descomentar para usar streaming,comentar para usar camara, 
-        self.capture = cv2.VideoCapture(src)
+        #self.capture = cv2.VideoCapture(src)
         self.FPS = 1/100
         self.FPS_MS = int(self.FPS * 1000)
         self.thread = Thread(target=self.update, args=())
         self.thread.daemon = True
         self.thread.start()
         #Parametros body
-        #model_complexity=1 default model_complexity=2 da error investiga esto Carlos  
-        self.pose =  mp_pose.Pose(static_image_mode=False, min_detection_confidence=0.9,min_tracking_confidence=0.9,model_complexity=2, smooth_landmarks= True)
+        confianza = 0.9
+        self.pose =  mp_pose.Pose(static_image_mode=False, min_detection_confidence=confianza,min_tracking_confidence=confianza,model_complexity=2, smooth_landmarks= True)
         #Parametros Hands
-        self.hands = mp_hands.Hands(static_image_mode=False, min_detection_confidence=0.9,min_tracking_confidence=0.9,model_complexity=1)
+        self.hands = mp_hands.Hands(static_image_mode=False, min_detection_confidence=confianza,min_tracking_confidence=confianza,model_complexity=1)
 
     def update(self):
         while True:
@@ -44,11 +45,11 @@ class ThreadedCamera(object):
         results_skeleto = self.pose.process(frame_rgb)
         
         if results_skeleto.pose_landmarks is not None:
-            if results_skeleto.pose_landmarks is not None:
                 #aqui dentro debes poner tu codigo 
                 #Dibujo de body
                 #Obtencion de nodos lado izquierdo
                 #numbers of landmarks 11,13,15,23,25,27,29,31
+                
                 left_shoulder_landmark = results_skeleto.pose_landmarks.landmark[11]
                 left_elbow_landmark = results_skeleto.pose_landmarks.landmark[13]
                 left_wrist_landmark = results_skeleto.pose_landmarks.landmark[15]
@@ -177,8 +178,7 @@ class ThreadedCamera(object):
                             text_position = ((i[1][0] + i[2][0]) // 2, min(i[1][1], i[2][1]) - 10)
                             cv2.putText(frame_resized, text, text_position, cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0,0,0), 1, cv2.LINE_AA)
                         else:
-                            continue
-
+                            continue    
                 #Visualizacion de datos 
                 """for name, landmark in zip(["left_shoulder", "left_elbow", "left_wrist", "left_hip", "left_knee", "left_ankle", "left_heel", "left_foot_index",
                                        "right_shoulder", "right_elbow", "right_wrist", "right_hip", "right_knee", "right_ankle", "right_heel", "right_foot_index"],
@@ -200,6 +200,7 @@ class ThreadedCamera(object):
         frame_resized = cv2.resize(frame, resolution)
         frame_rgb = cv2.cvtColor(frame_resized, cv2.COLOR_BGR2RGB)
         results = self.hands.process(frame_rgb)
+        
         if results.multi_hand_landmarks:
             for hand_landmarks in results.multi_hand_landmarks:
                 
@@ -224,8 +225,8 @@ class ThreadedCamera(object):
             cv2.waitKey(self.FPS_MS)
 
 if __name__ == '__main__':
-    #src = 0
-    src = 'udp://0.0.0.0:6000?overrun_nonfatal=1'
+    src = 0
+    #src = 'udp://0.0.0.0:6000?overrun_nonfatal=1'
     threaded_camera = ThreadedCamera(src)
     while True:
         try:
