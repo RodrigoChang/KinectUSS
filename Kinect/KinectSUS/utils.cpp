@@ -3,22 +3,30 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <chrono>
 #include <zmq.hpp>
 #include <opencv2/opencv.hpp>
 #include <libfreenect2/libfreenect2.hpp>
 #include <libfreenect2/registration.h>
 
-//libfreenect2::Freenect2Device* dev = nullptr;
-//libfreenect2::Freenect2Device::ColorCameraParams ColorCameraParams;
-//libfreenect2::Freenect2Device::IrCameraParams IrCameraParams;
+using namespace cv;
 
-
-void rgbdSocket(cv::Mat rgbd) {
-    
-    zmq::context_t context(1);
-    zmq::socket_t sockets(context, ZMQ_PUB);
-    sockets.bind("tcp://0.0.0.0:5556");
-    sockets.send(rgbd.data, rgbd.total() * rgbd.elemSize() * rgbd.channels());
+void send_zmq(Mat& frame, zmq::socket_t&& socket, bool encodeado, std::string tipo) {
+    auto t1 = std::chrono::high_resolution_clock::now();
+    if (encodeado) {
+        std::vector<uchar> encodedFrame;
+        cv::imencode(".jpg", frame, encodedFrame);
+        zmq::message_t message(encodedFrame.size());
+        memcpy(message.data(), encodedFrame.data(), encodedFrame.size());
+        socket.send(message, ZMQ_DONTWAIT);
+    }
+    else {
+        zmq::message_t message(frame.data, frame.total() * frame.elemSize() * frame.channels());
+        socket.send(message, ZMQ_DONTWAIT);
+    }
+    auto t2 = std::chrono::high_resolution_clock::now();
+    auto ms_int = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1);
+    std::cout << tipo << " demoro " << ms_int.count() << "ms\n";
 }
 
 void readIni() {

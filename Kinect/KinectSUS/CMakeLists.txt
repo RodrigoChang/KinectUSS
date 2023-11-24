@@ -25,9 +25,9 @@ ENDIF()
 # compiler flags
 if (CMAKE_COMPILER_IS_GNUCXX)
     # si esta en debug
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wformat-security -O -D_FORTIFY_SOURCE=2 -D_GLIBCXX_ASSERTIONS -fstack-clash-protection -g -pipe")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wformat-security -pthread -O -D_FORTIFY_SOURCE=2 -D_GLIBCXX_ASSERTIONS -fstack-clash-protection -g -pipe")
   # si esta en produccion
-  #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -O2")
+  #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -O3 -pthread")
 endif()
 
 #Dependencias
@@ -46,10 +46,6 @@ INCLUDE_DIRECTORIES(${OpenCV_INCLUDE_DIRS} ${PCL_INCLUDE_DIRS})
 LIST(APPEND KinectSUS_LIBRARIES
   ${OpenCV_LIBS} ${PCL_LIBRARIES}
 )
-# OpenCV requires exception.
-IF(UNIX AND NOT APPLE)
-  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions")
-ENDIF()
 
 ## load in pkg-config support
 find_package(PkgConfig)
