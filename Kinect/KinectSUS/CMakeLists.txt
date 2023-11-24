@@ -22,22 +22,29 @@ IF(POLICY CMP0042)
   cmake_policy(SET CMP0042 NEW)
 ENDIF()
 
+# compiler flags
+if (CMAKE_COMPILER_IS_GNUCXX)
+    # si esta en debug
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wformat-security -O -D_FORTIFY_SOURCE=2 -D_GLIBCXX_ASSERTIONS -fstack-clash-protection -g -pipe")
+  # si esta en produccion
+  #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -O2")
+endif()
+
 #Dependencias
 
 FIND_PACKAGE(freenect2 REQUIRED)
 SET(freenect2_LIBRARIES freenect2)
 
-
 #INCLUDE_DIRECTORIES(${freenect2_DIR}) #Deberia funcionar pero no po
-SET (KinectSUS_DIR main.cpp menu.cpp menu.h utils.cpp utils.h)
-#SET (KinectSUS_DIR main.cpp menu.cpp menu.h utils.cpp utils.h cloud.cpp)
+#SET (KinectSUS_DIR main.cpp menu.cpp menu.h utils.cpp utils.h)
+SET (KinectSUS_DIR main.cpp menu.cpp menu.h utils.cpp utils.h cloud.cpp)
 
 # Add OpenCV package dependency for udp-image-streaming
 FIND_PACKAGE(OpenCV REQUIRED)
 FIND_PACKAGE(PCL REQUIRED)
-INCLUDE_DIRECTORIES(${OpenCV_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${OpenCV_INCLUDE_DIRS} ${PCL_INCLUDE_DIRS})
 LIST(APPEND KinectSUS_LIBRARIES
-  ${OpenCV_LIBS}
+  ${OpenCV_LIBS} ${PCL_LIBRARIES}
 )
 # OpenCV requires exception.
 IF(UNIX AND NOT APPLE)
