@@ -124,16 +124,16 @@ int main() {
         Mat(rgb->height, rgb->width, CV_8UC4, rgb->data).copyTo(rgbmat);
         Mat(ir->height, ir->width, CV_32FC1, ir->data).copyTo(irmat);
         Mat(depth->height, depth->width, CV_32FC1, depth->data).copyTo(depthmat);
-        Mat(depth->height, depth->width, CV_8UC2, depth->data).copyTo(prof);
+        Mat(depth->height, depth->width, CV_8UC4, depth->data).copyTo(prof);
     
         flip(rgbmat, rgbmat, 1); 
 		flip(depthmat, depthmat, 1);
         flip(irmat, irmat, 1);
 
-        Mat ROI(rgbmat, Rect(703,327,512,424));
+        Mat ROI(rgbmat, Rect(308,0,1304,1080));
         ROI.copyTo(color);
 
-        auto t1 = high_resolution_clock::now();
+        
   
         registration->apply(rgb, depth, &undistorted, &registered, true, &depth2rgb);
 
@@ -170,17 +170,9 @@ int main() {
             }
         }
         
-        auto t2 = high_resolution_clock::now();
         visualizePointCloud(cloud, viewer);
         cloud->clear();
         
-        auto ms_int = duration_cast<milliseconds>(t2 - t1);
-
-        /* Getting number of milliseconds as a double. */
-        duration<double, std::milli> ms_double = t2 - t1;
-
-        cout << ms_int.count() << "ms\n";
-        cout << ms_double.count() << "ms\n";
 
         Mat(undistorted.height, undistorted.width, CV_32FC1, undistorted.data).copyTo(depthmatUndistorted);
         Mat(registered.height, registered.width, CV_8UC4, registered.data).copyTo(rgbd);
@@ -208,11 +200,22 @@ int main() {
         
         //socket.send(prof.data, prof.total() * prof.elemSize() * prof.channels(), ZMQ_DONTWAIT);
         zmq::message_t message(depth->data, depth->width * depth->height * depth->bytes_per_pixel);
-        zmq::message_t message2(rgb->data, rgb->width * rgb->height * rgb->bytes_per_pixel);
+        //zmq::message_t message2(color.data, color.rotal() * color.channels());
+       // zmq::message_t message2(rgb->data, rgb->width * rgb->height * rgb->bytes_per_pixel);
         socket.send(message);
+        //socket.send(prof.data, prof.total() * prof.elemSize() * prof.channels());
         cout << "depth sent" << endl;
-        socket2.send(message);
-        cout << "color sent" << endl;
+        auto t1 = high_resolution_clock::now();
+    
+        vector<uchar> encodedFrame;
+        cv::imencode(".png", color, encodedFrame);
+
+        // Send encoded frame via ZeroMQ
+        zmq::message_t message2(encodedFrame.size());
+        memcpy(message2.data(), encodedFrame.data(), encodedFrame.size());
+        socket2.send(message2);
+ 
+        auto t2 = high_resolution_clock::now();
         //thread sendColor(socketsend, color);
         //this_thread::sleep_for(20ms);
         
@@ -220,6 +223,14 @@ int main() {
         protonect_shutdown = protonect_shutdown || (key > 0 && ((key & 0xFF) == 27));
 
         listener.release(frames);
+
+        auto ms_int = duration_cast<milliseconds>(t2 - t1);
+
+        /* Getting number of milliseconds as a double. */
+        duration<double, std::milli> ms_double = t2 - t1;
+
+        cout << ms_int.count() << "ms\n";
+        cout << ms_double.count() << "ms\n";
     }
 
     dev->stop();
