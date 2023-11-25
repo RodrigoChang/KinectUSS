@@ -10,7 +10,6 @@
 
 using namespace cv;
 using namespace std;
-using namespace libfreenect2;
 using namespace std::this_thread; // sleep_for, sleep_until
 using namespace std::chrono; 
 
@@ -21,13 +20,8 @@ bool bFilter, eFilter = true;
 libfreenect2::Freenect2Device::Config config;
 libfreenect2::Freenect2Device::ColorCameraParams ColorCameraParams;
 libfreenect2::Freenect2Device::IrCameraParams IrCameraParams;
-libfreenect2::Freenect2Device* dev = 0;
-
-//unsigned int cSetting = dev->getColorSetting;
-//float ex = dev->getColorSettingFloat;
-//cout << "Color setting: " << cSetting << endl;
-//cout << "Color setting float: " << ex << endl;
-//libfreenect2::Freenect2Device::ColorCameraParams ColorCameraParams;
+libfreenect2::Registration* registration;
+libfreenect2::Freenect2Device* dev;
 
 // depth menu
 
@@ -65,6 +59,13 @@ void onCallbackButton2(int state, void* userdata) {
         config.EnableEdgeAwareFilter = true;
     }
     dev->setConfiguration(config);
+}
+
+// reiniciar registration
+
+void onCallbackButton3(int state, void* userdata) {
+
+    registration = new libfreenect2::Registration(IrCameraParams, ColorCameraParams);
 }
 
 // Color Camera Menu
@@ -144,9 +145,8 @@ void onIrSliderK3(int pos, void* userdata) {
     dev->setIrCameraParams(IrCameraParams);
 }  
 
-void menu(libfreenect2::Freenect2Device* device) {
+void menu() {
 
-    dev = device;
     namedWindow("Menu", WINDOW_NORMAL);
     Mat menus(400, 800, CV_8UC3, Scalar(255, 255, 255));
     // depth
@@ -154,6 +154,7 @@ void menu(libfreenect2::Freenect2Device* device) {
     createTrackbar("MaxDepth", "Menu", &maxD, 8500, onMaxDepthSlider);
     createButton("Bilateral Filtering", onCallbackButton1, NULL, QT_CHECKBOX, 1);
     createButton("Edge Aware Filtering", onCallbackButton2, NULL, QT_CHECKBOX, 1);
+    createButton("Reiniciar Registration", onCallbackButton3, NULL, QT_PUSH_BUTTON);
     // Color
     createTrackbar("Punto Focal X Color Camara", "Menu", &Cfx, 1920, onColorSliderFx);
     createTrackbar("Punto Focal Y Color Camara", "Menu", &Cfy, 1080, onColorSliderFy);

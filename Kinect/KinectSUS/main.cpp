@@ -20,9 +20,6 @@ Actualmente entrega el frame de rgb y depth a traves de una transmision de openc
 #include "menu.h"
 #include <thread>
 #include <chrono>
-#include <pcl/point_cloud.h>
-#include <pcl/point_types.h>
-#include <pcl/visualization/pcl_visualizer.h>
 
 using namespace std;
 using namespace cv;
@@ -55,9 +52,6 @@ int main() {
     libfreenect2::Freenect2 freenect2;
     libfreenect2::Freenect2Device* dev = 0;
     libfreenect2::PacketPipeline* pipeline = 0;
-    //point cloud nube y viewer
-    pcl::PointCloud<pcl::PointXYZ>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZ>);
-    pcl::visualization::PCLVisualizer::Ptr viewer(new pcl::visualization::PCLVisualizer("Point Cloud Viewer"));
     
     if (freenect2.enumerateDevices() == 0) {
         cout << "Conecta la kinect po!" << endl;
@@ -69,21 +63,17 @@ int main() {
     //Abriendo la kiect basado en el n serie
     if (pipeline) {
         dev = freenect2.openDevice(serial, pipeline);
-        cout << "Abriendo Menu" << endl;
-        menu(dev); //Inicilizamos el menu
     }
     else {
-        dev = freenect2.openDevice(serial);
-        cout << "Abriendo Menu" << endl;
-        menu(dev); //Inicilizamos el menu
-        
+        dev = freenect2.openDevice(serial);      
     }
-
     if (dev == 0) {
         cout << "No se pudo abrir la kinect" << endl;
         return -1;
     }
 
+    cout << "Abriendo Menu" << endl;
+    menu(); //Inicilizamos el menu
     cout << "No de serie: " << dev->getSerialNumber() << endl;
     cout << "Firmware de la Kinect : " << dev->getFirmwareVersion() << endl;
 
@@ -138,25 +128,9 @@ int main() {
         ROI.copyTo(cropped);
 
         registration->apply(rgb, depth, &undistorted, &registered, true, &depth2rgb);
-        int r = 0, c = 0;
-
-        while (r < 512 && c < 424) {
-            float x, y, z;
-            registration->getPointXYZ(&undistorted, r, c, x, y, z); // usando el mismo registration por tema de corrupcion de memoria ***TO DO*** refrescarlo con los nuevos parametros
-            pcl::PointXYZ points; // Creamos el point cloud
-            points.x = x;
-            points.y = y;
-            points.z = z;
-            cloud->points.push_back(points);
-            r++;
-            if (r >= 512) {
-                r = 0;
-                c++;
-            }
-        }
-        
-        visualizePointCloud(cloud, viewer);
-        cloud->clear();
+        //point cloud
+        getCloudData(registration, &undistorted);
+        visualizePointCloud();
         //Matrices para ver los frames de la registration
         Mat(undistorted.height, undistorted.width, CV_32FC1, undistorted.data).copyTo(depthmatUndistorted);
         Mat(registered.height, registered.width, CV_8UC4, registered.data).copyTo(rgbd);
@@ -201,6 +175,7 @@ int main() {
         thread sendDepth(send_zmq, make_tuple(depthmat, depth_socket, false, "depth"));
         thread sendRegistered(send_zmq, registered, registered_socket, false, "registered");
         */
+        //momento parece que no es thread safe el zmq xd
         send_zmq(cropped, move(rgb_socket), true, "rgb");
         send_zmq(irmat, move(ir_socket), true, "ir");
         send_zmq(depthmat, move(depth_socket), false, "depth");
@@ -216,10 +191,16 @@ int main() {
         auto ms_int = duration_cast<milliseconds>(t2 - t1);
         cout << ms_int.count() << "ms\n";
     }
-
+    cout << "Deteniendose" << endl;
     dev->stop();
     dev->close();
     delete registration;
+    //Deleteamos los sockets, y nos piteamos las windows para hacer un cierre mas bonito
+    zmq_close(rgb_socket);
+    zmq_close(ir_socket);
+    zmq_close(depth_socket);
+    zmq_close(registered_socket);
+    destroyAllWindows();
 
     cout << "Noh Vimoh!" << endl;
     return 0;

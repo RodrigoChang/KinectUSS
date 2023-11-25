@@ -16,6 +16,8 @@ extern libfreenect2::Freenect2Device* dev;
 extern libfreenect2::Freenect2Device::ColorCameraParams ColorCameraParams;
 extern libfreenect2::Freenect2Device::IrCameraParams IrCameraParams;
 extern libfreenect2::Freenect2Device::Config config;
+extern pcl::PointCloud<pcl::PointXYZ>::Ptr cloud;
+extern pcl::visualization::PCLVisualizer::Ptr viewer;
 
 void readIni();
 
@@ -27,7 +29,7 @@ void setParams(libfreenect2::Freenect2Device* dev);
 
 void send_zmq(cv::Mat& frame, zmq::socket_t&& socket, bool encodeado, std::string tipo);
 
-//void generatePointCloud(libfreenect2::Frame undistorted, libfreenect2::Registration* registration, pcl::PointCloud<pcl::PointXYZ>::Ptr cloud);
-void visualizePointCloud(pcl::PointCloud<pcl::PointXYZ>::Ptr cloud, pcl::visualization::PCLVisualizer::Ptr viewer);
+void getCloudData(libfreenect2::Registration* registration, libfreenect2::Frame* undistorted_frame);
+void visualizePointCloud();
 
 #endif // UTILS_H
