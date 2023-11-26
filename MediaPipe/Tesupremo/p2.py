@@ -5,7 +5,7 @@ import cv2
 import mediapipe as mp
 from threading import Thread
 import time
-#import susweb as sus
+import susweb as sus
 import numpy as np
 from math import acos, degrees
 
@@ -17,9 +17,9 @@ resolution =(800,600)
 class ThreadedCamera(object):
     def __init__(self, src=0):
         #Capturar por camara ,descomentar para usar camara.., comentar para usar streaming 
-        #self.capture = cv2.VideoCapture(src, cv2.CAP_V4L)
+        self.capture = cv2.VideoCapture(src, cv2.CAP_V4L)
         #Capturar camara Kinect via streaming, descomentar para usar streaming,comentar para usar camara, 
-        self.capture = cv2.VideoCapture(src)
+        #self.capture = cv2.VideoCapture(src)
         self.FPS = 1/100
         self.FPS_MS = int(self.FPS * 1000)
         self.thread = Thread(target=self.update, args=())
@@ -27,7 +27,7 @@ class ThreadedCamera(object):
         self.thread.start()
         #Parametros body
         #model_complexity=1 default model_complexity=2 da error investiga esto Carlos  
-        self.pose =  mp_pose.Pose(static_image_mode=False, min_detection_confidence=0.9,min_tracking_confidence=0.9,model_complexity=2, smooth_landmarks= True)
+        self.pose =  mp_pose.Pose(static_image_mode=False, min_detection_confidence=0.9,min_tracking_confidence=0.9,model_complexity=1, smooth_landmarks= True)
         #Parametros Hands
         self.hands = mp_hands.Hands(static_image_mode=False, min_detection_confidence=0.9,min_tracking_confidence=0.9,model_complexity=1)
 
@@ -156,28 +156,22 @@ class ThreadedCamera(object):
                         l1 = np.linalg.norm(p2 - p3)
                         l2 = np.linalg.norm(p1 - p3)
                         l3 = np.linalg.norm(p1 - p2)
-                        # Tomar el valor absoluto de las longitudes
-                        l1 = abs(l1)
-                        l2 = abs(l2)
-                        l3 = abs(l3)
                         
                         #Calcular el ángulo utilizando arcoseno 
-                        
                         angle = degrees(acos((l1**2 + l3**2 - l2**2) / (2 * l1 * l3)))
-                        if angle !=181 and angle != -1:
-                            #Visualizacion de lineas
-                            x=0
-                            y=1
-                            cv2.line(frame_resized, (i[0][x],i[0][y]), (i[1][x],i[1][y]), (255, 255, 0), 5)
-                            cv2.line(frame_resized, (i[1][x],i[1][y]), (i[2][x],i[2][y]), (255, 255, 0), 5)
-                            cv2.line(frame_resized, (i[0][x],i[0][y]), (i[2][x],i[2][y]), (255, 255, 0), 5)
+                        #print( angle)
+                        
+                        #Visualizacion de lineas
+                        x=0
+                        y=1
+                        cv2.line(frame_resized, (i[0][x],i[0][y]), (i[1][x],i[1][y]), (255, 255, 0), 5)
+                        cv2.line(frame_resized, (i[1][x],i[1][y]), (i[2][x],i[2][y]), (255, 255, 0), 5)
+                        cv2.line(frame_resized, (i[0][x],i[0][y]), (i[2][x],i[2][y]), (255, 255, 0), 5)
 
-                            # agregar el texto sobre la linea 
-                            text = str(int(angle))
-                            text_position = ((i[1][0] + i[2][0]) // 2, min(i[1][1], i[2][1]) - 10)
-                            cv2.putText(frame_resized, text, text_position, cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0,0,0), 1, cv2.LINE_AA)
-                        else:
-                            continue
+                        # agregar el texto sobre la linea 
+                        text = str(int(angle))
+                        text_position = ((i[1][0] + i[2][0]) // 2, min(i[1][1], i[2][1]) - 10)
+                        cv2.putText(frame_resized, text, text_position, cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0,0,0), 1, cv2.LINE_AA)
 
                 #Visualizacion de datos 
                 """for name, landmark in zip(["left_shoulder", "left_elbow", "left_wrist", "left_hip", "left_knee", "left_ankle", "left_heel", "left_foot_index",
@@ -224,8 +218,8 @@ class ThreadedCamera(object):
             cv2.waitKey(self.FPS_MS)
 
 if __name__ == '__main__':
-    #src = 0
-    src = 'udp://0.0.0.0:6000?overrun_nonfatal=1'
+    src = 0
+    #src = 'udp://0.0.0.0:6000?overrun_nonfatal=1'
     threaded_camera = ThreadedCamera(src)
     while True:
         try:
