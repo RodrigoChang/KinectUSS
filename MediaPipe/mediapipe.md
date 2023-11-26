@@ -11,10 +11,10 @@ MediaPipe en una libreria de google en python3.x, asi que lo primero que haremos
 # Crear un entorno python
 Conda create --name <Nombre del entorno> python=<3.8 o 3.9>
 # Inicializar
+´´´bash
 Conda activate <Nombre del entorno>
+´´´
 # Librerias necesarias
-pip install opencv-python numpy mediapipe 
-
 
 Instalar python y ffmpeg.
 ```bash
@@ -27,7 +27,7 @@ sudo pacman -S python3 ffmpeg
 ```
 Instalar librerias de python.
 ```bash
-pip install mediapipe opencv-python
+pip install opencv-python numpy mediapipe 
 ```
 
 ## En Windows
