@@ -1,0 +1,3 @@
+/home/fabian/Documents/Python codes/kinect/kinectcpp/KinectTacking/build/CMakeFiles/captura_camara.dir
+/home/fabian/Documents/Python codes/kinect/kinectcpp/KinectTacking/build/CMakeFiles/edit_cache.dir
+/home/fabian/Documents/Python codes/kinect/kinectcpp/KinectTacking/build/CMakeFiles/rebuild_cache.dir
