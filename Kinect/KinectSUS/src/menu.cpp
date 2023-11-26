@@ -1,5 +1,5 @@
 #include "utils.h"
-#include "menu.h"
+//#include "menu.h"
 #include <opencv2/opencv.hpp>
 #include <string>
 #include <iostream>
@@ -26,38 +26,28 @@ libfreenect2::Freenect2Device* dev;
 // depth menu
 
 void onMinDepthSlider(int pos, void* userdata) {
-    if (pos >= maxD) {
-        pos = 0;
-    }
+    if (pos >= maxD) pos = 0;
     config.MinDepth = static_cast<float>(minD) / 1000;
     dev->setConfiguration(config);
 }
 
 void onMaxDepthSlider(int pos, void* userdata) {
-    if (maxD <= minD) {
-        maxD = minD + 1;
-    }
+    if (maxD <= minD) maxD = minD + 1;
     config.MaxDepth = static_cast<float>(maxD) / 1000;
     dev->setConfiguration(config);
 }
 
 void onCallbackButton1(int state, void* userdata) {
-    if (state == 0) {
+    if (state == 0) 
         config.EnableBilateralFilter = false;
-    }
-    else if (state == 1) {
-        config.EnableBilateralFilter = true;
-    }
+    else config.EnableBilateralFilter = true;
     dev->setConfiguration(config);
 }
 
 void onCallbackButton2(int state, void* userdata) {
-    if (state == 0) {
+    if (state == 0) 
         config.EnableEdgeAwareFilter = false;
-    }
-    else if (state == 1) {
-        config.EnableEdgeAwareFilter = true;
-    }
+    else config.EnableEdgeAwareFilter = true;
     dev->setConfiguration(config);
 }
 

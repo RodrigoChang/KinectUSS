@@ -17,7 +17,7 @@ Actualmente entrega el frame de rgb y depth a traves de una transmision de openc
 #include <libfreenect2/registration.h>
 #include <libfreenect2/logger.h>
 #include "utils.h"
-#include "menu.h"
+//#include "menu.h"
 #include <thread>
 #include <chrono>
 
@@ -33,6 +33,8 @@ bool displayDepthValue = false;
 int clickedX = -1, clickedY = -1;
 float pixelValue;
 Mat rgbmat, depthmat, depthmatUndistorted, irmat, rgbd, rgbd2, cropped;
+
+void menu();
 
 void sigint_handler(int s) {
     protonect_shutdown = true;
@@ -50,8 +52,8 @@ int main() {
     cout << "Inicializando" << endl;
     //libfreenect values
     libfreenect2::Freenect2 freenect2;
-    libfreenect2::Freenect2Device* dev = 0;
-    libfreenect2::PacketPipeline* pipeline = 0;
+    libfreenect2::Freenect2Device *dev = 0;
+    libfreenect2::PacketPipeline *pipeline = 0;
     
     if (freenect2.enumerateDevices() == 0) {
         cout << "Conecta la kinect po!" << endl;
@@ -61,19 +63,16 @@ int main() {
     string serial = freenect2.getDefaultDeviceSerialNumber();
     cout << "Iniciando Kinect default" << endl;
     //Abriendo la kiect basado en el n serie
-    if (pipeline) {
-        dev = freenect2.openDevice(serial, pipeline);
-    }
-    else {
-        dev = freenect2.openDevice(serial);      
-    }
+    pipeline = new libfreenect2::CpuPacketPipeline();
+    if (pipeline) dev = freenect2.openDevice(serial, pipeline);
+    else dev = freenect2.openDevice(serial);      
     if (dev == 0) {
         cout << "No se pudo abrir la kinect" << endl;
         return -1;
     }
 
     cout << "Abriendo Menu" << endl;
-    menu(); //Inicilizamos el menu
+    thread menu_thread(menu); //Inicilizamos el menu
     cout << "No de serie: " << dev->getSerialNumber() << endl;
     cout << "Firmware de la Kinect : " << dev->getFirmwareVersion() << endl;
 

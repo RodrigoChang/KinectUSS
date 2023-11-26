@@ -8,13 +8,13 @@ PROJECT(KinectSUS)
 SET (CMAKE_CONFIGURATION_TYPES "Debug")
 # Compiler flags
 # si esta en debug
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wformat-security -pthread -O -D_FORTIFY_SOURCE=2 -D_GLIBCXX_ASSERTIONS -fstack-clash-protection -g -pipe")
+#et(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wformat-security -pthread -O -D_FORTIFY_SOURCE=2 -D_GLIBCXX_ASSERTIONS -fstack-clash-protection -g -pipe")
 # si esta en produccion
-#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -O4 -pthread")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Ofast -pthread")
 
-SET (source_dir "{PROJECT_SOURCE_DIR}")
-FILE (GLOB KinectSUS_DIR "${source_dir}/*.cpp *.h")
-SET (KinectSUS_DIR main.cpp menu.cpp menu.h utils.cpp utils.h cloud.cpp)
+SET (source_dir "${PROJECT_SOURCE_DIR}/src/")
+FILE (GLOB KinectSUS_SRC "${source_dir}/*.cpp")
+#SET (KinectSUS_DIR main.cpp menu.cpp utils.cpp utils.h cloud.cpp)
 
 #Dependencias
 
@@ -25,7 +25,7 @@ SET(freenect2_LIBRARIES freenect2)
 FIND_PACKAGE(OpenCV REQUIRED)
 FIND_PACKAGE(PCL REQUIRED)
 FIND_PACKAGE(jsoncpp REQUIRED)
-INCLUDE_DIRECTORIES(${OpenCV_INCLUDE_DIRS} ${PCL_INCLUDE_DIRS} /usr/include)
+INCLUDE_DIRECTORIES(${OpenCV_INCLUDE_DIRS} ${PCL_INCLUDE_DIRS} ${PROJECT_SOURCE_DIR}/headers /usr/include)
 LIST(APPEND KinectSUS_LIBRARIES
   ${OpenCV_LIBS} ${PCL_LIBRARIES} jsoncpp
 )
@@ -47,7 +47,7 @@ find_library(ZeroMQ_LIBRARY
 
 #Ejecutable
 
-ADD_EXECUTABLE(KinectSUS ${KinectSUS_DIR})
+ADD_EXECUTABLE(KinectSUS ${KinectSUS_SRC})
 
 TARGET_LINK_LIBRARIES(KinectSUS
   ${KinectSUS_LIBRARIES} 

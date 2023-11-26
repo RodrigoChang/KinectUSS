@@ -144,13 +144,13 @@ void writeIni() {
     }
 }
 
-void getParams(libfreenect2::Freenect2Device* dev) {
+void getParams(libfreenect2::Freenect2Device *dev) {
 
     ColorCameraParams = dev->getColorCameraParams();
     IrCameraParams = dev->getIrCameraParams();
 }   
 
-void setParams(libfreenect2::Freenect2Device* dev) {
+void setParams(libfreenect2::Freenect2Device *dev) {
 
     dev->setColorCameraParams(ColorCameraParams);
     dev->setIrCameraParams(IrCameraParams);
