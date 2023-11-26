@@ -5,9 +5,10 @@ MediaPipe en una libreria de google en python3.x, asi que lo primero que haremos
 ## En Linux
 
 # Descargar Anaconda para linux:
-
+´´´bash
 "Anaconda": https://repo.anaconda.com/archive/Anaconda3-2023.09-0-Linux-x86_64.sh
 "usar en terminal": bash Anaconda-latest-Linux-x86_64.sh
+´´´
 # Crear un entorno python
 Conda create --name <Nombre del entorno> python=<3.8 o 3.9>
 # Inicializar
