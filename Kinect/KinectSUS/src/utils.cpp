@@ -21,8 +21,11 @@ void send_zmq(Mat& frame, zmq::socket_t&& socket, bool encodeado, std::string ti
         socket.send(message, ZMQ_DONTWAIT);
     }
     else {
-        zmq::message_t message(frame.data, frame.total() * frame.elemSize() * frame.channels());
-        socket.send(message, ZMQ_DONTWAIT);
+        zmq::message_t message(frame.total() * frame.elemSize());
+        memcpy(message.data(), frame.data, message.size());
+        socket.send(message);
+        //zmq::message_t message(frame.data, frame.total() * frame.elemSize() * frame.channels());
+        //socket.send(message, ZMQ_DONTWAIT);
     }
     auto t2 = std::chrono::high_resolution_clock::now();
     auto ms_int = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1);
