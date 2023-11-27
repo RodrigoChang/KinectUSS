@@ -48,7 +48,7 @@ libfreenect2::Freenect2Device *dev = 0;
 libfreenect2::PacketPipeline *pipeline = 0;
 
 void menu();
-
+void mainMenu();
 void sigint_handler(int s) {
     protonect_shutdown = true;
 }
@@ -100,7 +100,6 @@ bool kinectSearch() {
         return true;
     }
 }
-void mainMenu();
 
 int main(int argc, char *argv[]) {
 
@@ -154,9 +153,9 @@ int main(int argc, char *argv[]) {
             }       
             cout << "No de serie: " << dev->getSerialNumber() << endl;
             cout << "Firmware de la Kinect : " << dev->getFirmwareVersion() << endl;
-            thread menuThread(mainMenu);
+            mainMenu();
             cout << "Abriendo Menu" << endl;
-            thread menu_thread(menu); //Inicilizamos el menu
+            menu(); //Inicilizamos el menu
             if (enable_stream) socket_intit(); //seteando el socket
             //seteando el listener de libfreenect2
             int types = 0;
@@ -196,6 +195,9 @@ int main(int argc, char *argv[]) {
                 Mat(undistorted.height, undistorted.width, CV_32FC1, undistorted.data).copyTo(depthmatUndistorted);
                 Mat(registered.height, registered.width, CV_8UC4, registered.data).copyTo(rgbd);
                 Mat(depth2rgb.height, depth2rgb.width, CV_32FC1, depth2rgb.data).copyTo(rgbd2);
+                flip(depthmatUndistorted, depthmatUndistorted, 1); 
+                flip(rgbd, rgbd, 1);
+                flip(rgbd2, rgbd2, 1);
                 //Display de profundidad ***TO DO*** Hacer algo mas bonito
                 if (displayDepthValue) {
                     if (clickedX >= 0 && clickedY >= 0 && clickedX < depthmat.cols && clickedY < depthmat.rows) {
@@ -212,23 +214,7 @@ int main(int argc, char *argv[]) {
                 //imshow("registered", rgbd);
                 //imshow("depth2RGB", rgbd2 / 4096.0f);
                 imshow("cropped", cropped);
-                
-                /*
-                //socket.send(prof.data, prof.total() * prof.elemSize() * prof.channels(), ZMQ_DONTWAIT);
-                zmq::message_t message(depth->data, depth->width * depth->height * depth->bytes_per_pixel);
-                //zmq::message_t message2(cropped.data, cropped.rotal() * cropped.channels());
-                socket.send(message);
-                //socket.send(prof.data, prof.total() * prof.elemSize() * prof.channels());
-                cout << "depth sent" << endl;
-                
-                vector<uchar> encodedFrame;
-                cv::imencode(".jpg", cropped, encodedFrame);
 
-                // Send encoded frame via ZeroMQ
-                zmq::message_t message2(encodedFrame.size());
-                memcpy(message2.data(), encodedFrame.data(), encodedFrame.size());
-                rgb_socket.send(message2);
-                */
                 auto t1 = high_resolution_clock::now();
                 /*
                 thread sendColor(send_zmq, make_tuple(cropped, rgb_socket, true, "rgb"));
@@ -240,7 +226,7 @@ int main(int argc, char *argv[]) {
                 if (enable_stream) {
                     auto t1 = high_resolution_clock::now();
                     send_zmq(cropped, move(rgb_socket), true, "rgb");
-                    send_zmq(irmat, move(ir_socket), true, "ir");
+                    send_zmq(irmat, move(ir_socket), false, "ir");
                     send_zmq(depthmat, move(depth_socket), false, "depth");
                     send_zmq(rgbd, move(registered_socket), true, "registered");
                     auto t2 = high_resolution_clock::now();
@@ -275,10 +261,4 @@ int main(int argc, char *argv[]) {
             cout << "Noh Vimoh!" << endl;
         }
     }
-        // Initialize OpenCV window for the Kinect stream
-        //namedWindow("registered");
-        //setMouseCallback("registered", onMouseCallback);
-
-        // Creando los frames para registration
-
 }
