@@ -154,7 +154,9 @@ int main(int argc, char *argv[]) {
             }       
             cout << "No de serie: " << dev->getSerialNumber() << endl;
             cout << "Firmware de la Kinect : " << dev->getFirmwareVersion() << endl;
-            mainMenu();
+            thread menuThread(mainMenu);
+            cout << "Abriendo Menu" << endl;
+            thread menu_thread(menu); //Inicilizamos el menu
             if (enable_stream) socket_intit(); //seteando el socket
             //seteando el listener de libfreenect2
             int types = 0;
@@ -207,7 +209,7 @@ int main(int argc, char *argv[]) {
                 imshow("ir", irmat / 4096.0f);
                 imshow("depth", depthmat / 4096.0f);
                 //imshow("undistorted", depthmatUndistorted / 4096.0f);
-                imshow("registered", rgbd);
+                //imshow("registered", rgbd);
                 //imshow("depth2RGB", rgbd2 / 4096.0f);
                 imshow("cropped", cropped);
                 
@@ -273,11 +275,6 @@ int main(int argc, char *argv[]) {
             cout << "Noh Vimoh!" << endl;
         }
     }
-    
-        cout << "Abriendo Menu" << endl;
-        thread menu_thread(menu); //Inicilizamos el menu
-    
-
         // Initialize OpenCV window for the Kinect stream
         //namedWindow("registered");
         //setMouseCallback("registered", onMouseCallback);
