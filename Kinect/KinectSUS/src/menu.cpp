@@ -18,7 +18,7 @@ bool bFilter, eFilter = true;
 libfreenect2::Freenect2Device::Config config;
 libfreenect2::Freenect2Device::ColorCameraParams ColorCameraParams;
 libfreenect2::Freenect2Device::IrCameraParams IrCameraParams;
-libfreenect2::Registration* registration;
+//libfreenect2::Registration* registration;
 //libfreenect2::Freenect2Device* dev;
 
 // depth menu

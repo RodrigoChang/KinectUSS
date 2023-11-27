@@ -32,14 +32,13 @@ void getCloudData(libfreenect2::Registration* registration, libfreenect2::Frame*
                 c++;
             }
         }
-
     for (size_t i = 0; i < cloud->points.size(); ++i) {
         cloud->points[i].y = -cloud->points[i].y;
     }
-}
+}   
 
 void visualizePointCloud() {
-    // Calculate min and max Z values
+   // Calculate min and max Z values
     float min_z = std::numeric_limits<float>::infinity();
     float max_z = -std::numeric_limits<float>::infinity();
 
@@ -51,11 +50,11 @@ void visualizePointCloud() {
     // Open the output CSV file
     outputFile.open("point_cloud.csv");
 
-    // Save each point to the CSV file
+    // Save each point to the CSV file 
     for (size_t i = 0; i < cloud->points.size(); ++i) {
         outputFile << cloud->points[i].x << "," << cloud->points[i].y << "," << cloud->points[i].z << "\n";
     }
-
+    
     pcl::visualization::PointCloudColorHandlerGenericField<pcl::PointXYZ> color_handler(cloud, "z");
     pcl::visualization::PointCloudColorHandlerCustom<pcl::PointXYZ> color_handler_custom(cloud, 0, 255, 0); // Default color if colormap fails
     viewer->addPointCloud<pcl::PointXYZ>(cloud, color_handler, "cloud");

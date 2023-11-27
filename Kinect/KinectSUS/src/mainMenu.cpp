@@ -93,7 +93,7 @@ void onIrSliderK3(int pos, void* userdata) {
 }  
 
 void onCallbackButton3(int state, void* userdata) {
-    registration = new libfreenect2::Registration(IrCameraParams, ColorCameraParams);
+    //registration = new libfreenect2::Registration(IrCameraParams, ColorCameraParams);
 }
 
 void mainMenu() {

@@ -10,7 +10,7 @@
 #include <pcl/visualization/pcl_visualizer.h>
 
 
-extern libfreenect2::Registration* registration;
+//extern libfreenect2::Registration* registration;
 extern libfreenect2::Freenect2Device *dev;
 extern libfreenect2::Freenect2Device::ColorCameraParams ColorCameraParams;
 extern libfreenect2::Freenect2Device::IrCameraParams IrCameraParams;
@@ -30,3 +30,4 @@ void send_zmq(cv::Mat& frame, zmq::socket_t&& socket, bool encodeado, std::strin
 
 void getCloudData(libfreenect2::Registration* registration, libfreenect2::Frame* undistorted_frame);
 void visualizePointCloud();
+//void visualizePointCloud(pcl::PointCloud<pcl::PointXYZ>::Ptr cloud);

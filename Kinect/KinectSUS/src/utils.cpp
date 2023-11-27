@@ -12,13 +12,16 @@
 using namespace cv;
 
 void send_zmq(Mat& frame, zmq::socket_t&& socket, bool encodeado, std::string tipo) {
-    auto t1 = std::chrono::high_resolution_clock::now();
     if (encodeado) {
+        auto t1 = std::chrono::high_resolution_clock::now();
         std::vector<uchar> encodedFrame;
         cv::imencode(".jpg", frame, encodedFrame);
         zmq::message_t message(encodedFrame.size());
         memcpy(message.data(), encodedFrame.data(), encodedFrame.size());
         socket.send(message, ZMQ_DONTWAIT);
+        auto t2 = std::chrono::high_resolution_clock::now();
+        auto ms_int = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1);
+        std::cout << tipo << " demoro " << ms_int.count() << "ms\n";
     }
     else {
         zmq::message_t message(frame.total() * frame.elemSize());
@@ -27,9 +30,6 @@ void send_zmq(Mat& frame, zmq::socket_t&& socket, bool encodeado, std::string ti
         //zmq::message_t message(frame.data, frame.total() * frame.elemSize() * frame.channels());
         //socket.send(message, ZMQ_DONTWAIT);
     }
-    auto t2 = std::chrono::high_resolution_clock::now();
-    auto ms_int = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1);
-    std::cout << tipo << " demoro " << ms_int.count() << "ms\n";
 }
 
 void readIni() {
