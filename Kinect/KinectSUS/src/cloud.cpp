@@ -12,6 +12,7 @@
 #include <thread>
 
 pcl::PointCloud<pcl::PointXYZ>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZ>);
+pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_rgb(new pcl::PointCloud<pcl::PointXYZRGB>);
 pcl::visualization::PCLVisualizer::Ptr viewer(new pcl::visualization::PCLVisualizer("Point Cloud Viewer"));
 std::ofstream outputFile;
 
@@ -19,7 +20,7 @@ void getCloudData(libfreenect2::Registration* registration, libfreenect2::Frame*
     int r = 0, c = 0;
 
         while (r < 512 && c < 424) {
-            float x, y, z;
+            static float x, y, z;
             registration->getPointXYZ(undistorted_frame, r, c, x, y, z); // usando el mismo registration por tema de corrupcion de memoria ***TO DO*** refrescarlo con los nuevos parametros
             pcl::PointXYZ points; // Creamos el point cloud
             points.x = x;
@@ -35,7 +36,33 @@ void getCloudData(libfreenect2::Registration* registration, libfreenect2::Frame*
     for (size_t i = 0; i < cloud->points.size(); ++i) {
         cloud->points[i].y = -cloud->points[i].y;
     }
+    for (size_t i = 0; i < cloud->points.size(); ++i) {
+        cloud->points[i].z = -cloud->points[i].z;
+    }
 }   
+
+void getCloudDataRGB(libfreenect2::Registration* registration, 
+                    libfreenect2::Frame* undistorted_frame, 
+                    libfreenect2::Frame* registered_frame) {
+
+    cloud_rgb->header.frame_id = "world";
+    cloud_rgb->reserve(512 * 424);
+    for(int r = 0; r < 424; ++r) {
+        for(int c = 0; c < 512; ++c) {
+            pcl::PointXYZRGB pt;
+            registration->getPointXYZ(undistorted_frame, r, c, pt.x, pt.y, pt.z);
+            pt.rgb = *reinterpret_cast<float*>(registered_frame->data + 4 * (r * 512 + c));
+            cloud_rgb->push_back(pt);
+        }
+    }
+
+    for (size_t i = 0; i < cloud_rgb->points.size(); ++i) {
+        cloud_rgb->points[i].y = -cloud_rgb->points[i].y;
+    }
+    for (size_t i = 0; i < cloud_rgb->points.size(); ++i) {
+        cloud_rgb->points[i].z = -cloud_rgb->points[i].z;
+    }
+}  
 
 void visualizePointCloud() {
    // Calculate min and max Z values
@@ -66,4 +93,25 @@ void visualizePointCloud() {
 
     viewer->removePointCloud("cloud");
     cloud->clear();
+}
+void visualizePointCloudRGB() {
+    // Open the output CSV file
+    outputFile.open("point_cloud.csv");
+
+    // Save each point to the CSV file 
+    for (size_t i = 0; i < cloud_rgb->points.size(); ++i) {
+        outputFile << cloud_rgb->points[i].x << "," << cloud_rgb->points[i].y << "," << cloud_rgb->points[i].z << "\n";
+    }
+    
+    //pcl::visualization::PointCloudColorHandlerCustom<pcl::PointXYZRGB> color_handler_c(cloud_rgb, 0, 255, 0); // Default color if colormap fails
+    pcl::visualization::PointCloudColorHandlerRGBField<pcl::PointXYZRGB> color_handler(cloud_rgb);
+    viewer->addPointCloud<pcl::PointXYZRGB>(cloud_rgb, color_handler, "cloud");
+    // Set point size
+    viewer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 2, "cloud");
+
+    // Set the viewer to display the point cloud
+    viewer->spinOnce();
+
+    viewer->removePointCloud("cloud");
+    cloud_rgb->clear();
 }

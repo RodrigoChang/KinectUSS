@@ -10,6 +10,23 @@
 #include <libfreenect2/registration.h>
 
 using namespace cv;
+int confirmacion() {
+    int numb;
+    while (true) {
+        char resp;
+        std::cout << "Intentar de nuevo? [S/n]" << std::endl;
+        std::cin >> resp;
+            if(resp == 's' || resp == 'S') {
+                numb = 1;
+                break;
+            }
+            else if (resp == 'n' || resp == 'N') {
+                numb = 0;
+                break;
+            }
+    }
+    return numb;
+}
 
 void send_zmq(Mat& frame, zmq::socket_t&& socket, bool encodeado, std::string tipo) {
     if (encodeado) {
@@ -27,8 +44,6 @@ void send_zmq(Mat& frame, zmq::socket_t&& socket, bool encodeado, std::string ti
         zmq::message_t message(frame.total() * frame.elemSize());
         memcpy(message.data(), frame.data, message.size());
         socket.send(message);
-        //zmq::message_t message(frame.data, frame.total() * frame.elemSize() * frame.channels());
-        //socket.send(message, ZMQ_DONTWAIT);
     }
 }
 
