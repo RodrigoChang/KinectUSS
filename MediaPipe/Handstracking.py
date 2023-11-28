@@ -1,71 +1,150 @@
-# Version 3.0
-
-#Distance detecion hands 2.7 mt
-import cv2
 import mediapipe as mp
-from threading import Thread
-import time
+import cv2
 import numpy as np
-from math import acos, degrees
+import uuid
+import os
+import math
 
 mp_drawing = mp.solutions.drawing_utils
 mp_hands = mp.solutions.hands
-resolution =(512,424)
-#resolution =(800,600)
-class ThreadedCamera(object):
-    def __init__(self, src=0):
-        #Capturar por camara ,descomentar para usar camara.., comentar para usar streaming 
-        self.capture = cv2.VideoCapture(src, cv2.CAP_V4L)
-        #Capturar camara Kinect via streaming, descomentar para usar streaming,comentar para usar camara, 
-        #self.capture = cv2.VideoCapture(src)
-        self.FPS = 1/100
-        self.FPS_MS = int(self.FPS * 1000)
-        self.thread = Thread(target=self.update, args=())
-        self.thread.daemon = True
-        self.thread.start()
-        confianza = 0.9
-        #Parametros Hands
-        self.hands = mp_hands.Hands(static_image_mode=False, min_detection_confidence=confianza,min_tracking_confidence=confianza,model_complexity=1)
 
-    def update(self):
+import zmq
+import numpy as np
+import cv2
+
+
+def Hands_proces(Mode):
+    ip = Mode
+    context = zmq.Context()
+    socket = context.socket(zmq.SUB)
+    socket.connect(f"tcp://{ip}:5555")  # Match the address used in the C++ program
+
+    # Subscribe to all topics
+    socket.setsockopt_string(zmq.SUBSCRIBE, "")
+    def calculate_angle(x1, y1, x2, y2, x3, y3):
+        """Calcula el ángulo entre tres puntos (en grados)."""
+        angle_rad = math.atan2(y3 - y2, x3 - x2) - math.atan2(y1 - y2, x1 - x2)
+        angle_deg = math.degrees(angle_rad)
+        return angle_deg
+
+    # Crear ventanas
+    cv2.namedWindow('Hand Tracking', cv2.WINDOW_AUTOSIZE)
+    cv2.namedWindow('Angle Data', cv2.WINDOW_AUTOSIZE)
+
+    # Crear frame_resizedn para mostrar ángulos
+    angle_data = np.zeros((800, 600, 3), dtype=np.uint8)
+    angle_data.fill(255)  # Fondo blanco
+
+    # Crear tablas y textos de nombres de dedos
+    cv2.putText(angle_data, 'Ángulos - Izquierda', (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)
+    cv2.putText(angle_data, 'Dedo', (10, 80), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)
+    cv2.putText(angle_data, 'Ángulo', (110, 80), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)
+
+    cv2.putText(angle_data, 'Ángulos - Derecha', (310, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)
+    cv2.putText(angle_data, 'Dedo', (310, 80), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)
+    cv2.putText(angle_data, 'Ángulo', (410, 80), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)
+
+    with mp_hands.Hands(min_detection_confidence=0.9, min_tracking_confidence=0.9, max_num_hands=2) as hands: 
         while True:
-            if self.capture is not None and self.capture.isOpened():
-                (self.status, self.frame) = self.capture.read()
-            time.sleep(self.FPS)
-    
-    def process_hands(self, frame):
-        frame_resized = cv2.resize(frame, resolution)
-        frame_rgb = cv2.cvtColor(frame_resized, cv2.COLOR_BGR2RGB)
-        results = self.hands.process(frame_rgb)
-        
-        if results.multi_hand_landmarks:
-            for hand_landmarks in results.multi_hand_landmarks:
+                # Receive the message
+                message = socket.recv()
+                #print(message)
+                # Convert the received bytes to a NumPy array
+                frame_data = np.frombuffer(message, dtype=np.uint8)
+                frame = cv2.imdecode(frame_data, cv2.IMREAD_COLOR)
+                frame = cv2.resize(frame,(512,424))
+                frame_resized = frame
                 
-                """for index, landmark in enumerate(hand_landmarks.landmark):
-                    x, y, z = landmark.x, landmark.y, landmark.z
-                    cv2.putText(frame_resized, f"({x:.2f},{y:.2f},{z:.2f})", (int(x * frame_resized.shape[1]), int(y * frame_resized.shape[0])),
-                                cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 0), 2, cv2.LINE_AA)"""
+                # BGR 2 RGB
+                frame_resized = cv2.cvtColor(frame_resized, cv2.COLOR_BGR2RGB)
+                
+                # Flip on horizontal
+                frame_resized = cv2.flip(frame_resized, 1)
+                
+                # Set flag
+                frame_resized.flags.writeable = False
+                
+                # Detections
+                results = hands.process(frame_resized)
+                
+                # Set flag to true
+                frame_resized.flags.writeable = True
+                
+                # RGB 2 BGR
+                frame_resized = cv2.cvtColor(frame_resized, cv2.COLOR_RGB2BGR)
+                
+                # Variables para almacenar ángulos
+                angle_thumb_left, angle_thumb_right = 0, 0
+                angle_left, angle_right = 0, 0
+
+                # Borrar contenido anterior en la ventana de datos
+                angle_data.fill(255)
+                cv2.putText(angle_data, 'Ángulos - Izquierda', (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)
+                cv2.putText(angle_data, 'Dedo', (10, 80), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)
+                cv2.putText(angle_data, 'Ángulo', (110, 80), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)
+                cv2.putText(angle_data, 'Ángulos - Derecha', (310, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)
+                cv2.putText(angle_data, 'Dedo', (310, 80), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)
+                cv2.putText(angle_data, 'Ángulo', (410, 80), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)
+
+                # Rendering results
+                if results.multi_hand_landmarks:
+                    for num, hand in enumerate(results.multi_hand_landmarks):
+                        mp_drawing.draw_landmarks(frame_resized, hand, mp_hands.HAND_CONNECTIONS, 
+                                                mp_drawing.DrawingSpec(color=(121, 22, 76), thickness=2, circle_radius=4),
+                                                mp_drawing.DrawingSpec(color=(250, 44, 250), thickness=2, circle_radius=2),
+                                                )
+                        
+                        # Calcular ángulos para cada dedo
+                        if len(hand.landmark) == 21:
+                            # Determinar si la mano es izquierda o derecha
+                            if hand.landmark[0].x < hand.landmark[9].x:
+                                side = 'Izquierda'
+                                angle_text_position = (10, 80)
+                                table_start_position = (10, 110)
+                            else:
+                                side = 'Derecha'
+                                angle_text_position = (310, 80)
+                                table_start_position = (310, 110)
+
+                            # Dedo pulgar
+                            if side == 'Izquierda':
+                                angle_thumb_left = calculate_angle(hand.landmark[0].x, hand.landmark[0].y,
+                                                                hand.landmark[1].x, hand.landmark[1].y,
+                                                                hand.landmark[2].x, hand.landmark[2].y)
+                            else:
+                                angle_thumb_right = calculate_angle(hand.landmark[0].x, hand.landmark[0].y,
+                                                                    hand.landmark[1].x, hand.landmark[1].y,
+                                                                    hand.landmark[2].x, hand.landmark[2].y)
+
+                            # Otros dedos
+                            for i in range(4, 21):
+                                if i % 4 == 0:
+                                    angle = calculate_angle(hand.landmark[i].x, hand.landmark[i].y,
+                                                            hand.landmark[i-1].x, hand.landmark[i-1].y,
+                                                            hand.landmark[i-2].x, hand.landmark[i-2].y)
+                                    if side == 'Izquierda':
+                                        angle_left = angle
+                                        cv2.putText(angle_data, f'Dedo {i//4}', (table_start_position[0], table_start_position[1] + (i//4 - 1) * 30), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)
+                                        cv2.putText(angle_data, f'{int(angle)}', (table_start_position[0] + 200, table_start_position[1] + (i//4 - 1) * 30), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)
+                                    else:
+                                        angle_right = angle
+                                        cv2.putText(angle_data, f'Dedo {i//4}', (table_start_position[0], table_start_position[1] + (i//4 - 1) * 30), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)
+                                        cv2.putText(angle_data, f'{int(angle)}', (table_start_position[0] + 200, table_start_position[1] + (i//4 - 1) * 30), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)
                     
-            mp_drawing.draw_landmarks(
-                frame_resized, hand_landmarks, mp_hands.HAND_CONNECTIONS,
-                mp_drawing.DrawingSpec(color=(0, 0, 0), thickness=2),
-                mp_drawing.DrawingSpec(color=(0, 0, 0), thickness=2))
-            
-        return frame_resized
+                # Mostrar resultados en la ventana de tracking
+                cv2.imshow('Hand Tracking', frame_resized)
+                
+                # Mostrar ángulos en la ventana de datos
+                cv2.imshow('Angle Data', angle_data)
 
+                if cv2.waitKey(10) & 0xFF == ord('q'):
+                    break   
+    
+    cv2.destroyAllWindows()
 
-    def show_frame(self):
-        if self.frame is not None:
-            processed_frame = self.process_hands(processed_frame)
-            cv2.imshow('frame', processed_frame)
-            cv2.waitKey(self.FPS_MS)
-
-if __name__ == '__main__':
-    src = 0
-    #src = 'udp://0.0.0.0:6000?overrun_nonfatal=1'
-    threaded_camera = ThreadedCamera(src)
-    while True:
-        try:
-            threaded_camera.show_frame()
-        except AttributeError:
-            pass
+def Hands(Mode):
+        while True:
+            try:
+                Hands_proces(Mode)
+            except AttributeError:
+                continue

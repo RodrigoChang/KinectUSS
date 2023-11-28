@@ -5,19 +5,19 @@ import cv2
 import mediapipe as mp
 from threading import Thread
 import time
+import zmq
+import socket
 #Comentar para que parta sin socket
 #import susweb as sus
 import numpy as np
 from math import acos, degrees
 
 mp_pose = mp.solutions.pose
-#resolution =(512,424)
-resolution =(800,600)
 class ThreadedCamera(object):
-    def __init__(self, src=0):
-        #Capturar Camara o Streaming 
-        self.capture = src 
-        self.FPS = 1/100
+    def __init__(self,mode =0):
+        self.ip = mode
+        self.frame_cam = None
+        self.FPS = 1 / 110
         self.FPS_MS = int(self.FPS * 1000)
         self.thread = Thread(target=self.update, args=())
         self.thread.daemon = True
@@ -25,19 +25,44 @@ class ThreadedCamera(object):
         #Parametros body
         confianza = 0.9
         self.pose =  mp_pose.Pose(static_image_mode=False, min_detection_confidence=confianza,min_tracking_confidence=confianza,model_complexity=2, smooth_landmarks= True)
-        
+
     def update(self):
+        context = zmq.Context()
+        socket = context.socket(zmq.SUB)
+        socket.connect(f"tcp://{self.ip}:5555")
+        socket.setsockopt_string(zmq.SUBSCRIBE, "")
+        
         while True:
-            if self.capture is not None and self.capture.isOpened():
-                (self.status, self.frame) = self.capture.read()
+            message = socket.recv()
+            frame_data = np.frombuffer(message, dtype=np.uint8)
+            frame = cv2.imdecode(frame_data, cv2.IMREAD_COLOR)
+            frame = cv2.resize(frame, (512, 424))
+            self.frame_cam = frame
             time.sleep(self.FPS)
     
-    def process_pose(self, frame):
-        frame_resized = cv2.resize(frame, resolution)
-        frame_rgb = cv2.cvtColor(frame_resized, cv2.COLOR_BGR2RGB)
+    # Nico aqui esta la funcion del cuerpo 
+    def process_pose(self, frame_cam):
+        #frame_resized = cv2.resize(frame, resolution)
+        frame_resized = frame_cam
+        frame_rgb = cv2.cvtColor(frame_cam, cv2.COLOR_BGR2RGB)
         results_skeleto = self.pose.process(frame_rgb)
+        listaPosicion = [28, 27, 26, 25, 24, 23, 16, 15, 14, 13, 12, 11]
+        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        """serverAddressPort = ("10.171.18.167", 5052)
+        results = results_skeleto.process(frame_rgb)
+        data = []"""
         
         if results_skeleto.pose_landmarks is not None:
+
+                """ for i in listaPosicion:
+                    new_data = []
+                    new_data.append(int(results.pose_landmarks.landmark[i].x * 512))
+                    new_data.append(int(results.pose_landmarks.landmark[i].y * 424))
+                    new_data.append(round(float(results.pose_landmarks.landmark[i].z), 2))
+                    data.extend([new_data[0],new_data[1], new_data[2]])
+                    
+            
+                sock.sendto(str.encode(str(data)), serverAddressPort)"""
                 #aqui dentro debes poner tu codigo 
                 #Dibujo de body
                 #Obtencion de nodos lado izquierdo
@@ -129,21 +154,31 @@ class ThreadedCamera(object):
                 cv2.line(frame_resized, (x_right_ankle, y_right_ankle), (x_right_heel, y_right_heel), (0,0,0), 2)
                 cv2.line(frame_resized, (x_right_heel, y_right_heel), (x_right_foot_index, y_right_foot_index), (0,0,0), 2)
                 cv2.line(frame_resized, (x_right_foot_index, y_right_foot_index), (x_right_ankle, y_right_ankle), (0,0,0), 2)
-                
                 #Obtencion de z mediante susweb  entreganto x e y de punto seleccionado 
                 #print (f"right_shoulder x: {x_right_shoulder} Y: {y_right_shoulder} z: {sus.position_frame(x_right_shoulder, y_right_shoulder)}")
-                
+                """for name, landmark in zip(["left_shoulder", "left_elbow", "left_wrist", "left_hip", "left_knee", "left_ankle", "left_heel", "left_foot_index",
+                                       "right_shoulder", "right_elbow", "right_wrist", "right_hip", "right_knee", "right_ankle", "right_heel", "right_foot_index"],
+                                      [left_shoulder_landmark, left_elbow_landmark, left_wrist_landmark,
+                                       left_hip_landmark, left_knee_landmark, left_ankle_landmark,
+                                       left_heel_landmark, left_foot_index_landmark,
+                                       right_shoulder_landmark, right_elbow_landmark, right_wrist_landmark,
+                                       right_hip_landmark, right_knee_landmark, right_ankle_landmark,
+                                       right_heel_landmark, right_foot_index_landmark]):
+                    x, y, z = landmark.x, landmark.y, landmark.z"""
+                    
+                    
         return frame_resized
-    
+
+
     def show_frame(self):
-        if self.frame is not None:
-            processed_frame = self.process_pose(self.frame)
+        if self.frame_cam is not None:
+            processed_frame = self.process_pose(self.frame_cam)
             cv2.imshow('frame', processed_frame)
             cv2.waitKey(self.FPS_MS)
 
-def Bodytracking(Mode):
-    src = Mode
-    threaded_camera = ThreadedCamera(src)
+def Bodytracking(mode):
+    
+    threaded_camera = ThreadedCamera(mode)
     while True:
         try:
             threaded_camera.show_frame()
