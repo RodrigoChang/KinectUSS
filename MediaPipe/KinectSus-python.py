@@ -6,7 +6,7 @@ import mediapipe as mp
 from threading import Thread
 import time
 #Comentar para que parta sin socket
-import suswebtest as sus
+#import suswebtest as sus
 import numpy as np
 from math import acos, degrees
 
@@ -18,9 +18,9 @@ resolution =(512,424)
 class ThreadedCamera(object):
     def __init__(self, src=0):
         #Capturar por camara ,descomentar para usar camara.., comentar para usar streaming 
-        self.capture = cv2.VideoCapture(src, cv2.CAP_V4L)
+        #self.capture = cv2.VideoCapture(src, cv2.CAP_V4L)
         #Capturar camara Kinect via streaming, descomentar para usar streaming,comentar para usar camara, 
-        #self.capture = cv2.VideoCapture(src)
+        self.capture = cv2.VideoCapture(src)
         self.FPS = 1/100
         self.FPS_MS = int(self.FPS * 1000)
         self.thread = Thread(target=self.update, args=())
@@ -192,7 +192,7 @@ class ThreadedCamera(object):
                     cv2.putText(frame_resized, f"({x},{y},{z})", (int(x * frame_resized.shape[1]), int(y * frame_resized.shape[0])),
                                 cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 0), 1, cv2.LINE_AA)"""
                 #Obtencion de z mediante susweb  entreganto x e y de punto seleccionado 
-                print (f"right_shoulder x: {x_right_shoulder} Y: {y_right_shoulder} z: {sus.position_frame(x_right_shoulder, y_right_shoulder)}")
+                #print (f"right_shoulder x: {x_right_shoulder} Y: {y_right_shoulder} z: {sus.position_frame(x_right_shoulder, y_right_shoulder)}")
                 
         return frame_resized
     
@@ -225,8 +225,8 @@ class ThreadedCamera(object):
             cv2.waitKey(self.FPS_MS)
 
 if __name__ == '__main__':
-    src = 0
-    #src = 'udp://0.0.0.0:6000?overrun_nonfatal=1'
+    #src = 0
+    src = 'udp://0.0.0.0:6000?overrun_nonfatal=1'
     threaded_camera = ThreadedCamera(src)
     while True:
         try:

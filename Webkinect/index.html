@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualizador de Video</title>
+</head>
+<body>
+    <video id="videoFeed" autoplay playsinline style="width: 640px; height: 480px;"></video>
+    <p id="mensaje">Esperando el video...</p>
+
+    <script>
+        const videoFeed = document.getElementById('videoFeed');
+        const mensajeElemento = document.getElementById('mensaje');
+        const socket = new WebSocket('ws://localhost:3000');
+
+        socket.binaryType = 'arraybuffer';  // Asegúrate de que el tipo de datos binarios sea 'arraybuffer'
+
+        socket.onmessage = (event) => {
+            const videoBlob = new Blob([event.data], { type: 'video/webm' });
+
+            // Reemplace la URL anterior por la nueva creación de URL
+            videoFeed.src = URL.createObjectURL(videoBlob);
+
+            // Muestra el mensaje cuando se recibe un frame
+            mensajeElemento.textContent = '¡Video recibido!';
+        };
+
+        socket.onclose = () => {
+            console.error('Conexión WebSocket cerrada');
+        };
+    </script>
+</body>
+</html>

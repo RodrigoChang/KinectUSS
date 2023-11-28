@@ -4,18 +4,104 @@ import cv2
 import mediapipe as mp
 from threading import Thread
 import time
-#Comentar para que parta sin socket
-import susweb as sus
 import numpy as np
 from math import acos, degrees
 import Bodytracking as BT
+import Bodyanglecalculator as BTA
+import Handstracking as HT
+import zmq
+
 #Linux
 Video= cv2.VideoCapture(0, cv2.CAP_V4L)
-Streaming= cv2.VideoCapture('udp://0.0.0.0:6000?overrun_nonfatal=1', cv2.CAP_V4L)
-Mode=Video
-BT.Bodytracking(Mode)
+Input_IP= input("IP: ")
+Input_mode = input("Mode streaming or video: ")
+#Menu Streaming Enable
+if Input_mode == "streaming":
+    View=input("View Body or Hands: ")
+    if View == "Body":
+        model=input("Model: ")
+        if model == "bt":
+            BT.Bodytracking(Input_IP)
+        if model == "bta":    
+            BTA.Bodyanglecalculator(Input_IP)
+    if View == "Hands":
+        HT.Hands(Input_IP)
+#Menu Video Disable    
+if Input_mode == "video":   
+    Mode=Video
+    View=input("View: ")
+    if View == "Body":
+        model=input("Model: ")
+        if model == "bt":
+            BT.Bodytracking(Mode)
+        if model == "bta":    
+            BTA.Bodyanglecalculator(Mode)
+    if View == "Hands":
+        HT.Hands(Mode)
 
 
+    
+
+  
+
+
+
+"""rom tkinter import *
+from tkinter import filedialog
+from PIL import Image
+from PIL import ImageTk
+import cv2
+import imutils
+import p2
+def visualizar():
+    global cap
+    if cap is not None:
+        ret, frame = cap.read()
+        if ret == True:
+            frame = imutils.resize(frame, width=640)
+            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+
+            im = Image.fromarray(frame)
+            img = ImageTk.PhotoImage(image=im)
+
+            lblVideo.configure(image=img)
+            lblVideo.image = img
+            lblVideo.after(10, visualizar)
+        else:
+            lblVideo.image = ""
+            cap.release()
+
+
+def Body():
+    global cap
+    #cap = BT.Bodytracking(Mode)
+    visualizar()
+def Hands():
+    global cap
+    #cap = HT.HandsTracking(Mode)     
+    visualizar()
+def Finalizar():
+    root.quit()
+
+
+
+root = Tk()
+cap = None
+
+btnInicio = Button(root, text="Body", command=Body)
+btnInicio.grid(column=0, row=0, padx=5, pady=5)
+
+btnInicio = Button(root, text="Hands", command=Hands)
+btnInicio.grid(column=1, row=0, padx=5, pady=5)
+
+btnFinal = Button(root, text="Finalizar", command=Finalizar)
+btnFinal.grid(column=2, row=0, padx=5, pady=5)
+
+lblVideo = Label(root)
+lblVideo.grid(column=0, row=1, columnspan=3)
+
+root.mainloop()
 
 
 #llamar a los modelos 
+"""
