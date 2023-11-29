@@ -180,6 +180,7 @@ int main(int argc, char *argv[]) {
                 //point cloud
                 //getCloudData(registration, &undistorted);
                 getCloudDataRGB(registration, &undistorted, &registered);
+                //getCloudDataRGB2(registration, &undistorted, &registered);
                 //visualizePointCloud();
                 visualizePointCloudRGB();
                 cloud_rgb->clear();

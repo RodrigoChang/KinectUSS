@@ -31,5 +31,6 @@ void menu();
 //cloud
 void getCloudData(libfreenect2::Registration* registration, libfreenect2::Frame* undistorted_frame);
 void getCloudDataRGB(libfreenect2::Registration* registration, libfreenect2::Frame* undistorted_frame, libfreenect2::Frame* registered_frame);
+void getCloudDataRGB2(libfreenect2::Registration* registration, libfreenect2::Frame* undistorted_frame, libfreenect2::Frame* registered_frame);
 void visualizePointCloud();
 void visualizePointCloudRGB();
