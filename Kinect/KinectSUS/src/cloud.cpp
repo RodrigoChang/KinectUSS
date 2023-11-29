@@ -64,6 +64,28 @@ void getCloudDataRGB(libfreenect2::Registration* registration,
     }
 }  
 
+void getCloudDataRGB2(libfreenect2::Registration* registration, 
+                    libfreenect2::Frame* undistorted_frame, 
+                    libfreenect2::Frame* registered_frame) {
+
+    cloud_rgb->header.frame_id = "world";
+    cloud_rgb->reserve(512 * 424);
+    for(int r = 0; r < 424; ++r) {
+        for(int c = 0; c < 512; ++c) {
+            pcl::PointXYZRGB pt;
+            registration->getPointXYZRGB(undistorted_frame, registered_frame, r, c, pt.x, pt.y, pt.z, pt.rgb);
+            cloud_rgb->push_back(pt);
+    }
+}   
+
+    for (size_t i = 0; i < cloud_rgb->points.size(); ++i) {
+        cloud_rgb->points[i].y = -cloud_rgb->points[i].y;
+    }
+    for (size_t i = 0; i < cloud_rgb->points.size(); ++i) {
+        cloud_rgb->points[i].z = -cloud_rgb->points[i].z;
+    }
+} 
+
 void visualizePointCloud() {
    // Calculate min and max Z values
     float min_z = std::numeric_limits<float>::infinity();
