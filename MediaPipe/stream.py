@@ -21,8 +21,10 @@ def receive_depth_frame(socket):
 def receive_frame(socket):
     frame_bytes = socket.recv()
     frame = np.frombuffer(frame_bytes, dtype='uint8')
-    frame = frame.reshape((height, width))
+    frame = cv2.imdecode(frame, cv2.IMREAD_COLOR)
+    #frame = frame.reshape((height, width, 4))
     return frame
+
 
 def mouse_callback(event, x, y, flags, param):
     if event == cv2.EVENT_LBUTTONDOWN:
@@ -35,8 +37,8 @@ def main():
 
     context = zmq.Context()
     socketrgb = context.socket(zmq.SUB)
-    socketir = context.socket(zmq.SUB)
-    socketdepth = context.socket(zmq.SUB)
+    socketir = context.socket(zmq.PULL)
+    socketdepth = context.socket(zmq.PULL)
     socketreg = context.socket(zmq.SUB)
 
     socketrgb.connect(f'tcp://{IP}:5555') 
@@ -45,8 +47,8 @@ def main():
     socketreg.connect(f'tcp://{IP}:5558') 
 
     socketrgb.subscribe(b'')
-    socketir.subscribe(b'')
-    socketdepth.subscribe(b'')
+    #socketir.subscribe(b'')
+    #socketdepth.subscribe(b'')
     socketreg.subscribe(b'')
 
     cv2.namedWindow("Depth")
@@ -54,13 +56,13 @@ def main():
 
     while True:
         rgb_frame = receive_frame(socketrgb)
-        ir_frame = receive_frame(socketir)
+        ir_frame = receive_depth_frame(socketir)
         depth_frame = receive_depth_frame(socketdepth)
         reg_frame = receive_frame(socketreg)
         cv2.imshow("RGB", rgb_frame)
         cv2.imshow("IR", ir_frame / 4096.0)
         cv2.imshow("Depth", depth_frame / 4096.0)
-        cv2.imshow("Depth", reg_frame)
+        cv2.imshow("Registered", reg_frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
