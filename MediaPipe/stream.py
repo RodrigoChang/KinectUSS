@@ -9,7 +9,7 @@ IR = True
 DEPTH = True
 REGISTERED = True
 
-IP = "127.0.0.1"
+IP = "10.171.23.91"
 
 def receive_depth_frame(socket):
     global depth_frame
@@ -39,11 +39,11 @@ def main():
     socketdepth = context.socket(zmq.SUB)
     socketreg = context.socket(zmq.SUB)
 
-    socketrgb.connect(f'tcp://{IP}:5555') 
-    socketir.connect(f'tcp://{IP}:5556')
+    #socketrgb.connect(f'tcp://{IP}:5555') 
+    #socketir.connect(f'tcp://{IP}:5556')
     socketdepth.connect(f'tcp://{IP}:5557')  
-    socketreg.connect(f'tcp://{IP}:5558') 
-
+    #socketreg.connect(f'tcp://{IP}:5558') 
+    socketdepth.setsockopt_string(zmq.SUBSCRIBE, "")
     socketrgb.subscribe(b'')
     socketir.subscribe(b'')
     socketdepth.subscribe(b'')
@@ -53,14 +53,14 @@ def main():
     cv2.setMouseCallback("Depth", mouse_callback)
 
     while True:
-        rgb_frame = receive_frame(socketrgb)
-        ir_frame = receive_frame(socketir)
+        #rgb_frame = receive_frame(socketrgb)
+        #ir_frame = receive_frame(socketir)
         depth_frame = receive_depth_frame(socketdepth)
-        reg_frame = receive_frame(socketreg)
-        cv2.imshow("RGB", rgb_frame)
-        cv2.imshow("IR", ir_frame / 4096.0)
+        #reg_frame = receive_frame(socketreg)
+        #cv2.imshow("RGB", rgb_frame)
+        #cv2.imshow("IR", ir_frame / 4096.0)
         cv2.imshow("Depth", depth_frame / 4096.0)
-        cv2.imshow("Depth", reg_frame)
+        #cv2.imshow("Depth", reg_frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
@@ -72,5 +72,5 @@ def main():
     cv2.destroyAllWindows()
 
 if __name__ == "__main__":
-    height, width = 424, 512
+    height, width = 512, 424
     main()
