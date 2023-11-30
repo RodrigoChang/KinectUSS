@@ -1,24 +1,50 @@
-#include "utils.h"
+#include "../include/utils.h"
 #include <string>
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <chrono>
 #include <zmq.hpp>
 #include <opencv2/opencv.hpp>
 #include <libfreenect2/libfreenect2.hpp>
 #include <libfreenect2/registration.h>
 
-//libfreenect2::Freenect2Device* dev = nullptr;
-//libfreenect2::Freenect2Device::ColorCameraParams ColorCameraParams;
-//libfreenect2::Freenect2Device::IrCameraParams IrCameraParams;
+using namespace cv;
+int confirmacion() {
+    int numb;
+    while (true) {
+        char resp;
+        std::cout << "Intentar de nuevo? [S/n]" << std::endl;
+        std::cin >> resp;
+            if(resp == 's' || resp == 'S') {
+                numb = 1;
+                break;
+            }
+            else if (resp == 'n' || resp == 'N') {
+                numb = 0;
+                break;
+            }
+    }
+    return numb;
+}
 
-
-void rgbdSocket(cv::Mat rgbd) {
-    
-    zmq::context_t context(1);
-    zmq::socket_t sockets(context, ZMQ_PUB);
-    sockets.bind("tcp://0.0.0.0:5556");
-    sockets.send(rgbd.data, rgbd.total() * rgbd.elemSize() * rgbd.channels());
+void send_zmq(Mat& frame, zmq::socket_t&& socket, bool encodeado, std::string tipo) {
+    if (encodeado) {
+        auto t1 = std::chrono::high_resolution_clock::now();
+        std::vector<uchar> encodedFrame;
+        cv::imencode(".jpg", frame, encodedFrame);
+        zmq::message_t message(encodedFrame.size());
+        memcpy(message.data(), encodedFrame.data(), encodedFrame.size());
+        socket.send(message, ZMQ_DONTWAIT);
+        auto t2 = std::chrono::high_resolution_clock::now();
+        auto ms_int = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1);
+        std::cout << tipo << " demoro " << ms_int.count() << "ms\n";
+    }
+    else {
+        zmq::message_t message(frame.total() * frame.elemSize());
+        memcpy(message.data(), frame.data, message.size());
+        socket.send(message);
+    }
 }
 
 void readIni() {
@@ -136,13 +162,13 @@ void writeIni() {
     }
 }
 
-void getParams(libfreenect2::Freenect2Device* dev) {
+void getParams(libfreenect2::Freenect2Device *dev) {
 
     ColorCameraParams = dev->getColorCameraParams();
     IrCameraParams = dev->getIrCameraParams();
 }   
 
-void setParams(libfreenect2::Freenect2Device* dev) {
+void setParams(libfreenect2::Freenect2Device *dev) {
 
     dev->setColorCameraParams(ColorCameraParams);
     dev->setIrCameraParams(IrCameraParams);
