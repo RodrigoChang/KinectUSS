@@ -202,17 +202,22 @@ class ThreadedCamera(object):
         return frame_resized
 
 
-    def show_frame(self):
+    def show_frame(self,socket):
         if self.frame_cam is not None:
             processed_frame = self.process_pose(self.frame_cam)
-            cv2.imshow('frame', processed_frame)
+            _, img_encoded = cv2.imencode('.jpg', processed_frame)
+            msg = base64.b64encode(img_encoded.tobytes())
+            socket.send(msg)
+            #cv2.imshow('frame', processed_frame)
             cv2.waitKey(self.FPS_MS)
 
 def Bodytracking(mode):
-    
+    context = zmq.Context()
+    socket = context.socket(zmq.PUB)
+    socket.bind("tcp://0.0.0.0:3002")
     threaded_camera = ThreadedCamera(mode)
     while True:
         try:
-            threaded_camera.show_frame()
+            threaded_camera.show_frame(socket)
         except AttributeError:
             pass

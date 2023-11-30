@@ -5,7 +5,8 @@ import numpy as np
 
 context = zmq.Context()
 socket = context.socket(zmq.SUB)
-socket.connect("tcp://0.0.0.0:3001")  # Asegúrate de usar la misma dirección y puerto que el servidor
+#socket.connect("tcp://10.170.53.71:3002")  # Asegúrate de usar la misma dirección y puerto que el servidor
+socket.connect("tcp://0.0.0.0:3002")
 socket.setsockopt_string(zmq.SUBSCRIBE, '')
 
 while True:
