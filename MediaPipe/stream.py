@@ -11,53 +11,47 @@ REGISTERED = True
 
 IP = "127.0.0.1"
 context = zmq.Context()
+socketrgb = context.socket(zmq.SUB)
+socketir = context.socket(zmq.SUB)
+socketdepth = context.socket(zmq.SUB)
+socketreg = context.socket(zmq.SUB)
+
+socketrgb.connect(f'tcp://{IP}:5555')
+socketir.connect(f'tcp://{IP}:5556') 
+socketdepth.connect(f'tcp://{IP}:5557') 
+socketreg.connect(f'tcp://{IP}:5558')
 
 def receive_rgb_frame():
-    socketrgb = context.socket(zmq.SUB)
     socketrgb.setsockopt(zmq.SUBSCRIBE, b"")
-    socketrgb.connect(f'tcp://{IP}:5555')
     frame_bytes = socketrgb.recv()
     rgb_frame = np.frombuffer(frame_bytes, dtype='uint8')
     rgb_frame = cv2.imdecode(rgb_frame, cv2.IMREAD_COLOR)
-    socketrgb.close()
+    socketrgb.setsockopt(zmq.UNSUBSCRIBE, b"")
     return rgb_frame
-
-def receive_32bit_frame(socket):
-    frame_bytes = socket.recv()
-    frame = np.frombuffer(frame_bytes, dtype='float32')
-    frame = frame.reshape((height, width))
-    socket.close()
-    return frame
 
 def receive_ir_frame():
     global depth_frame
-    socketir = context.socket(zmq.SUB)
     socketir.setsockopt(zmq.SUBSCRIBE, b"")
-    socketir.connect(f'tcp://{IP}:5556') 
     frame_bytes = socketir.recv()
     ir_frame = np.frombuffer(frame_bytes, dtype='float32')
     ir_frame = ir_frame.reshape((height, width))
-    socketir.close()
+    socketir.setsockopt(zmq.UNSUBSCRIBE, b"")
     return ir_frame
 
 def receive_depth_frame():
-    socketdepth = context.socket(zmq.SUB)
     socketdepth.setsockopt(zmq.SUBSCRIBE, b"")
-    socketdepth.connect(f'tcp://{IP}:5557') 
     frame_bytes = socketdepth.recv()
     depth_frame = np.frombuffer(frame_bytes, dtype='float32')
     depth_frame = depth_frame.reshape((height, width))
-    socketdepth.close()
+    socketdepth.setsockopt(zmq.UNSUBSCRIBE, b"")
     return depth_frame
 
 def receive_reg_frame():
-    socketreg = context.socket(zmq.SUB)
     socketreg.setsockopt(zmq.SUBSCRIBE, b"")
-    socketreg.connect(f'tcp://{IP}:5558')
     frame_bytes = socketreg.recv()
     reg_frame = np.frombuffer(frame_bytes, dtype='uint8')
     reg_frame = cv2.imdecode(reg_frame, cv2.IMREAD_COLOR)
-    socketreg.close()
+    socketreg.setsockopt(zmq.UNSUBSCRIBE, b"")
     return reg_frame
 
 def mouse_callback(event, x, y, flags, param):
