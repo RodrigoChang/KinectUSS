@@ -2,7 +2,10 @@ import cv2
 import zmq
 import numpy as np
 
+rgb_frame = None
+ir_frame = None
 depth_frame = None
+reg_frame = None
 
 RGB = True
 IR = True
@@ -16,42 +19,47 @@ socketir = context.socket(zmq.SUB)
 socketdepth = context.socket(zmq.SUB)
 socketreg = context.socket(zmq.SUB)
 
+"""socketrgb.setsockopt(zmq.CONFLATE, 2)
+socketir.setsockopt(zmq.CONFLATE, 2)
+socketdepth.setsockopt(zmq.CONFLATE, 2)
+socketreg.setsockopt(zmq.CONFLATE, 2)"""
+
+socketrgb.subscribe(b'')
+socketir.subscribe(b'')
+socketdepth.subscribe(b'')
+socketreg.subscribe(b'')
+
 socketrgb.connect(f'tcp://{IP}:5555')
 socketir.connect(f'tcp://{IP}:5556') 
 socketdepth.connect(f'tcp://{IP}:5557') 
 socketreg.connect(f'tcp://{IP}:5558')
 
 def receive_rgb_frame():
-    socketrgb.setsockopt(zmq.SUBSCRIBE, b"")
+    global rgb_frame
     frame_bytes = socketrgb.recv()
     rgb_frame = np.frombuffer(frame_bytes, dtype='uint8')
     rgb_frame = cv2.imdecode(rgb_frame, cv2.IMREAD_COLOR)
-    socketrgb.setsockopt(zmq.UNSUBSCRIBE, b"")
     return rgb_frame
 
 def receive_ir_frame():
-    global depth_frame
-    socketir.setsockopt(zmq.SUBSCRIBE, b"")
+    global ir_frame
     frame_bytes = socketir.recv()
     ir_frame = np.frombuffer(frame_bytes, dtype='float32')
     ir_frame = ir_frame.reshape((height, width))
-    socketir.setsockopt(zmq.UNSUBSCRIBE, b"")
     return ir_frame
 
 def receive_depth_frame():
-    socketdepth.setsockopt(zmq.SUBSCRIBE, b"")
+    global depth_frame
     frame_bytes = socketdepth.recv()
     depth_frame = np.frombuffer(frame_bytes, dtype='float32')
     depth_frame = depth_frame.reshape((height, width))
-    socketdepth.setsockopt(zmq.UNSUBSCRIBE, b"")
     return depth_frame
 
 def receive_reg_frame():
-    socketreg.setsockopt(zmq.SUBSCRIBE, b"")
+    global reg_frame
     frame_bytes = socketreg.recv()
     reg_frame = np.frombuffer(frame_bytes, dtype='uint8')
     reg_frame = cv2.imdecode(reg_frame, cv2.IMREAD_COLOR)
-    socketreg.setsockopt(zmq.UNSUBSCRIBE, b"")
     return reg_frame
 
 def mouse_callback(event, x, y, flags, param):
