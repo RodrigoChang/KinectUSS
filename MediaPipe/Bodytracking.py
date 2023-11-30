@@ -6,6 +6,7 @@ from threading import Thread
 import time
 import zmq
 import numpy as np
+import base64
 from math import acos, degrees
 
 mp_pose = mp.solutions.pose
@@ -35,7 +36,9 @@ class ThreadedCamera(object):
         try:
             context = zmq.Context()
             socket = context.socket(zmq.SUB)
-            socket.connect(f"tcp://{self.ip}:5555")
+            #5555 para recibir gabo
+            #3001 para recibir mi pc
+            socket.connect(f"tcp://{self.ip}:3001")
             socket.setsockopt_string(zmq.SUBSCRIBE, "")
             socket_active = True
         except Exception as e:
@@ -48,10 +51,16 @@ class ThreadedCamera(object):
         while True:
             #zqm connection
             if socket_active == True:
-                message = socket.recv()
+                #gabo
+                """message = socket.recv()
                 frame_data = np.frombuffer(message, dtype=np.uint8)
                 frame = cv2.imdecode(frame_data, cv2.IMREAD_COLOR)
-                frame = cv2.resize(frame, (512, 424))
+                frame = cv2.resize(frame, (512, 424))"""
+                #mi pc
+                msg = socket.recv()
+                img = base64.b64decode(msg)
+                npimg = np.frombuffer(img, dtype=np.uint8)
+                frame = cv2.imdecode(npimg, 1)
                 self.frame_cam = frame
                 time.sleep(self.FPS)
             #Video conection    
