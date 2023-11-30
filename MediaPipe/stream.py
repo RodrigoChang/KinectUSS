@@ -2,15 +2,8 @@ import cv2
 import zmq
 import numpy as np
 
-#rgb_frame = None
-ir_frame = None
 depth_frame = None
-#reg_frame = None
-
-RGB = True
-IR = True
-DEPTH = True
-REGISTERED = True
+framecount = 0
 
 IP = "127.0.0.1"
 context = zmq.Context()
@@ -20,47 +13,40 @@ socketdepth = context.socket(zmq.SUB)
 socketreg = context.socket(zmq.SUB)
 
 #socketrgb.setsockopt(zmq.CONFLATE, 1)
-socketir.setsockopt(zmq.CONFLATE, 1)
-socketdepth.setsockopt(zmq.CONFLATE, 1)
+#socketir.setsockopt(zmq.CONFLATE, 1)
+#socketdepth.setsockopt(zmq.CONFLATE, 1)
 #socketreg.setsockopt(zmq.CONFLATE, 1)
-
-socketrgb.setsockopt(zmq.SUBSCRIBE, b'')
-#socketir.setsockopt(zmq.UNSUBSCRIBE)
-#socketdepth.setsockopt(zmq.UNSUBSCRIBE)
-socketreg.setsockopt(zmq.SUBSCRIBE, b'')
 
 socketrgb.connect(f'tcp://{IP}:5555')
 socketir.connect(f'tcp://{IP}:5556') 
 socketdepth.connect(f'tcp://{IP}:5557') 
 socketreg.connect(f'tcp://{IP}:5558')
 
+socketrgb.setsockopt(zmq.SUBSCRIBE, b'')
+socketir.setsockopt(zmq.SUBSCRIBE, b'')
+socketdepth.setsockopt(zmq.SUBSCRIBE, b'')
+socketreg.setsockopt(zmq.SUBSCRIBE, b'')
+
 def receive_rgb_frame():
-    #global rgb_frame
     frame_bytes = socketrgb.recv()
     rgb_frame = np.frombuffer(frame_bytes, dtype='uint8')
     rgb_frame = cv2.imdecode(rgb_frame, cv2.IMREAD_COLOR)
     return rgb_frame
 
 def receive_ir_frame():
-    #global ir_frame
-    socketir.setsockopt(zmq.SUBSCRIBE, b'')
     frame_bytes = socketir.recv()
     ir_frame = np.frombuffer(frame_bytes, dtype='float32')
     ir_frame = ir_frame.reshape((height, width))
-    socketir.setsockopt(zmq.UNSUBSCRIBE, b'')
     return ir_frame
 
 def receive_depth_frame():
-    #global depth_frame
-    socketdepth.setsockopt(zmq.SUBSCRIBE, b'')
+    global depth_frame
     frame_bytes = socketdepth.recv()
     depth_frame = np.frombuffer(frame_bytes, dtype='float32')
     depth_frame = depth_frame.reshape((height, width))
-    socketdepth.setsockopt(zmq.UNSUBSCRIBE, b'')
     return depth_frame
 
 def receive_reg_frame():
-    #global reg_frame
     frame_bytes = socketreg.recv()
     reg_frame = np.frombuffer(frame_bytes, dtype='uint8')
     reg_frame = cv2.imdecode(reg_frame, cv2.IMREAD_COLOR)
@@ -74,19 +60,35 @@ def mouse_callback(event, x, y, flags, param):
 
 def main():
     global height, width
-    
+    global framecount
     cv2.namedWindow("Depth")
     cv2.setMouseCallback("Depth", mouse_callback)
 
     while True:
+        if framecount < 1:
+            socketrgb.setsockopt(zmq.SUBSCRIBE, b'')
+            socketir.setsockopt(zmq.SUBSCRIBE, b'')
+            socketdepth.setsockopt(zmq.SUBSCRIBE, b'')
+            socketreg.setsockopt(zmq.SUBSCRIBE, b'')
+        
         rgb_frame = receive_rgb_frame()
         ir_frame = receive_ir_frame()
         depth_frame = receive_depth_frame()
         reg_frame = receive_reg_frame()
+
         cv2.imshow("RGB", rgb_frame)
         cv2.imshow("IR", ir_frame / 4096.0)
         cv2.imshow("Depth", depth_frame / 4096.0)
         cv2.imshow("Registered", reg_frame)
+
+        framecount = framecount + 1
+        if framecount == 16:
+            socketrgb.setsockopt(zmq.UNSUBSCRIBE, b'')
+            socketir.setsockopt(zmq.UNSUBSCRIBE, b'')
+            socketdepth.setsockopt(zmq.UNSUBSCRIBE, b'')
+            socketreg.setsockopt(zmq.UNSUBSCRIBE, b'')
+            framecount = 0
+
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
