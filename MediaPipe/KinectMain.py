@@ -12,11 +12,10 @@ import Handstracking as HT
 import zmq
 
 #Linux
-Video= cv2.VideoCapture(0, cv2.CAP_V4L)
-Input_IP= input("IP: ")
-Input_mode = input("Mode streaming or video: ")
+Input_mode = input("Mode streaming or video: ")   
 #Menu Streaming Enable
 if Input_mode == "streaming":
+    Input_IP= input("IP: ")
     View=input("View Body or Hands: ")
     if View == "Body":
         model=input("Model: ")
@@ -28,16 +27,16 @@ if Input_mode == "streaming":
         HT.Hands(Input_IP)
 #Menu Video Disable    
 if Input_mode == "video":   
-    Mode=Video
+    Video= cv2.VideoCapture(0, cv2.CAP_ANY)
     View=input("View: ")
     if View == "Body":
         model=input("Model: ")
         if model == "bt":
-            BT.Bodytracking(Mode)
+            BT.Bodytracking(Video)
         if model == "bta":    
-            BTA.Bodyanglecalculator(Mode)
+            BTA.Bodyanglecalculator(Video)
     if View == "Hands":
-        HT.Hands(Mode)
+        HT.Hands(Video)
 
 
     
