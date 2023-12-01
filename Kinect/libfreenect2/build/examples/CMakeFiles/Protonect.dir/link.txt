@@ -1,0 +1,1 @@
+/usr/bin/c++  -Wall -std=c++11 -O2 -g -DNDEBUG -rdynamic CMakeFiles/Protonect.dir/Protonect.cpp.o CMakeFiles/Protonect.dir/viewer.cpp.o CMakeFiles/Protonect.dir/__/src/flextGL.cpp.o -o ../bin/Protonect  -Wl,-rpath,/home/gabriel/Proyects/libfreenect2/build/lib ../lib/libfreenect2.so.0.2.0 -lglfw -lGL -lusb-1.0 -lva-drm -lva -ljpeg /usr/lib/libturbojpeg.so.0 -lglfw -lGL 
