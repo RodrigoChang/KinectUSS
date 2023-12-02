@@ -96,5 +96,5 @@ def main():
     cv2.destroyAllWindows()
 
 if __name__ == "__main__":
-    height, width = 424, 512
+    height, width = 512, 424
     main()

@@ -54,7 +54,7 @@ Es posible compilar o usar los binarios en este repositorio. Prueba tu suerte
 
 ``` bash
 git clone https://github.com/ctellol/KinectUSS.git
-cd Kinect
+cd Kinect/libfreenect2
 ```
 ## Continuando
 

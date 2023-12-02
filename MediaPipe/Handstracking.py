@@ -14,13 +14,25 @@ import cv2
 
 
 def Hands_proces(Mode):
-    ip = Mode
-    context = zmq.Context()
-    socket = context.socket(zmq.SUB)
-    socket.connect(f"tcp://{ip}:5555")  # Match the address used in the C++ program
-
-    # Subscribe to all topics
-    socket.setsockopt_string(zmq.SUBSCRIBE, "")
+    try:
+        capture = Mode
+    except ValueError:
+        pass    
+    try:
+        ip = Mode
+    except ValueError:
+        pass
+    try:
+            context = zmq.Context()
+            socket = context.socket(zmq.SUB)
+            socket.connect(f"tcp://{ip}:5555")
+            socket.setsockopt_string(zmq.SUBSCRIBE, "")
+            socket_active = True
+    except Exception as e:
+            socket_active = False
+            print(f"Excepción durante la configuración del socket: {e}")
+            # Puedes agregar más acciones aquí si es necesario
+            pass 
     def calculate_angle(x1, y1, x2, y2, x3, y3):
         """Calcula el ángulo entre tres puntos (en grados)."""
         angle_rad = math.atan2(y3 - y2, x3 - x2) - math.atan2(y1 - y2, x1 - x2)
@@ -46,18 +58,24 @@ def Hands_proces(Mode):
 
     with mp_hands.Hands(min_detection_confidence=0.9, min_tracking_confidence=0.9, max_num_hands=2) as hands: 
         while True:
-                # Receive the message
-                message = socket.recv()
-                #print(message)
-                # Convert the received bytes to a NumPy array
-                frame_data = np.frombuffer(message, dtype=np.uint8)
-                frame = cv2.imdecode(frame_data, cv2.IMREAD_COLOR)
-                frame = cv2.resize(frame,(512,424))
-                frame_resized = frame
-                
-                # BGR 2 RGB
-                frame_resized = cv2.cvtColor(frame_resized, cv2.COLOR_BGR2RGB)
-                
+                 #zqm connection
+                if socket_active == True:
+                    message = socket.recv()
+                    frame_data = np.frombuffer(message, dtype=np.uint8)
+                    frame = cv2.imdecode(frame_data, cv2.IMREAD_COLOR)
+                    frame = cv2.resize(frame, (512, 424))
+                    frame_resized= frame
+            #Video conection    
+                else:
+                    try:   
+                        if capture is not None and capture.isOpened():
+                            frame_cam = capture.read()
+                            print(frame_cam)
+                            frame_cam = cv2.resize(frame_cam, (512, 424)) 
+                            frame_resized = frame_cam
+                    except Exception as e: 
+                        print(f"Esta dando este error {e}")
+                        break
                 # Flip on horizontal
                 frame_resized = cv2.flip(frame_resized, 1)
                 
@@ -72,6 +90,7 @@ def Hands_proces(Mode):
                 
                 # RGB 2 BGR
                 frame_resized = cv2.cvtColor(frame_resized, cv2.COLOR_RGB2BGR)
+                
                 
                 # Variables para almacenar ángulos
                 angle_thumb_left, angle_thumb_right = 0, 0
@@ -143,8 +162,8 @@ def Hands_proces(Mode):
     cv2.destroyAllWindows()
 
 def Hands(Mode):
-        while True:
-            try:
-                Hands_proces(Mode)
-            except AttributeError:
-                continue
+    while True:
+        try:
+            Hands_proces(Mode)
+        except AttributeError:
+            pass

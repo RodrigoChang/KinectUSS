@@ -1,23 +1,29 @@
 # Version 3.0
-
 #Distance detecion hands 2.7 mt
 import cv2
 import mediapipe as mp
 from threading import Thread
 import time
 import zmq
-import socket
-#Comentar para que parta sin socket
-#import susweb as sus
 import numpy as np
+import base64
 from math import acos, degrees
 
 mp_pose = mp.solutions.pose
 class ThreadedCamera(object):
     def __init__(self,mode =0):
-        self.ip = mode
+        try:
+            self.capture = mode
+        except ValueError:
+            pass    
+        try:
+            self.ip = mode
+        except ValueError:
+            pass    
         self.frame_cam = None
-        self.FPS = 1 / 110
+        #Fotogramas a procesar
+        self.FPS = 1 / 100
+        # fotogramas tiempo en milisegundos 
         self.FPS_MS = int(self.FPS * 1000)
         self.thread = Thread(target=self.update, args=())
         self.thread.daemon = True
@@ -25,29 +31,55 @@ class ThreadedCamera(object):
         #Parametros body
         confianza = 0.9
         self.pose =  mp_pose.Pose(static_image_mode=False, min_detection_confidence=confianza,min_tracking_confidence=confianza,model_complexity=2, smooth_landmarks= True)
-
-    def update(self):
-        context = zmq.Context()
-        socket = context.socket(zmq.SUB)
-        socket.connect(f"tcp://{self.ip}:5555")
-        socket.setsockopt_string(zmq.SUBSCRIBE, "")
-        
-        while True:
-            message = socket.recv()
-            frame_data = np.frombuffer(message, dtype=np.uint8)
-            frame = cv2.imdecode(frame_data, cv2.IMREAD_COLOR)
-            frame = cv2.resize(frame, (512, 424))
-            self.frame_cam = frame
-            time.sleep(self.FPS)
     
+    def update(self):
+        try:
+            context = zmq.Context()
+            socket = context.socket(zmq.SUB)
+            #5555 para recibir gabo
+            #3001 para recibir mi pc
+            socket.connect(f"tcp://{self.ip}:3001")
+            socket.setsockopt_string(zmq.SUBSCRIBE, "")
+            socket_active = True
+        except Exception as e:
+            socket_active = False
+            print("No pude manito mio")
+            print(f"Excepción durante la configuración del socket: {e}")
+            # Puedes agregar más acciones aquí si es necesario
+            pass
+                    
+        while True:
+            #zqm connection
+            if socket_active == True:
+                #gabo
+                """message = socket.recv()
+                frame_data = np.frombuffer(message, dtype=np.uint8)
+                frame = cv2.imdecode(frame_data, cv2.IMREAD_COLOR)
+                frame = cv2.resize(frame, (512, 424))"""
+                #mi pc
+                msg = socket.recv()
+                img = base64.b64decode(msg)
+                npimg = np.frombuffer(img, dtype=np.uint8)
+                frame = cv2.imdecode(npimg, 1)
+                self.frame_cam = frame
+                time.sleep(self.FPS)
+            #Video conection    
+            else:
+                try:    
+                    if self.capture is not None and self.capture.isOpened():
+                        (self.status, self.frame_cam) = self.capture.read()
+                    time.sleep(self.FPS)
+                except Exception as e: 
+                    print(f"Esta dando este error {e}")
+                    break
     # Nico aqui esta la funcion del cuerpo 
     def process_pose(self, frame_cam):
         #frame_resized = cv2.resize(frame, resolution)
         frame_resized = frame_cam
         frame_rgb = cv2.cvtColor(frame_cam, cv2.COLOR_BGR2RGB)
         results_skeleto = self.pose.process(frame_rgb)
-        listaPosicion = [28, 27, 26, 25, 24, 23, 16, 15, 14, 13, 12, 11]
-        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        #listaPosicion = [28, 27, 26, 25, 24, 23, 16, 15, 14, 13, 12, 11]
+        #sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         """serverAddressPort = ("10.171.18.167", 5052)
         results = results_skeleto.process(frame_rgb)
         data = []"""
@@ -170,17 +202,22 @@ class ThreadedCamera(object):
         return frame_resized
 
 
-    def show_frame(self):
+    def show_frame(self,socket):
         if self.frame_cam is not None:
             processed_frame = self.process_pose(self.frame_cam)
-            cv2.imshow('frame', processed_frame)
+            _, img_encoded = cv2.imencode('.jpg', processed_frame)
+            msg = base64.b64encode(img_encoded.tobytes())
+            socket.send(msg)
+            #cv2.imshow('frame', processed_frame)
             cv2.waitKey(self.FPS_MS)
 
 def Bodytracking(mode):
-    
+    context = zmq.Context()
+    socket = context.socket(zmq.PUB)
+    socket.bind("tcp://0.0.0.0:3002")
     threaded_camera = ThreadedCamera(mode)
     while True:
         try:
-            threaded_camera.show_frame()
+            threaded_camera.show_frame(socket)
         except AttributeError:
             pass

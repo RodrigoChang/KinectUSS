@@ -14,7 +14,14 @@ from math import acos, degrees
 mp_pose = mp.solutions.pose
 class ThreadedCamera(object):
     def __init__(self,mode =0):
-        self.ip = mode
+        try:
+            self.capture = mode
+        except ValueError:
+            pass    
+        try:
+            self.ip = mode
+        except ValueError:
+            pass    
         self.frame_cam = None
         self.FPS = 1 / 110
         self.FPS_MS = int(self.FPS * 1000)
@@ -26,18 +33,36 @@ class ThreadedCamera(object):
         self.pose =  mp_pose.Pose(static_image_mode=False, min_detection_confidence=confianza,min_tracking_confidence=confianza,model_complexity=2, smooth_landmarks= True)
 
     def update(self):
-        context = zmq.Context()
-        socket = context.socket(zmq.SUB)
-        socket.connect(f"tcp://{self.ip}:5555")
-        socket.setsockopt_string(zmq.SUBSCRIBE, "")
-
+        try:
+            context = zmq.Context()
+            socket = context.socket(zmq.SUB)
+            socket.connect(f"tcp://{self.ip}:5555")
+            socket.setsockopt_string(zmq.SUBSCRIBE, "")
+            socket_active = True
+        except Exception as e:
+            socket_active = False
+            print(f"Excepción durante la configuración del socket: {e}")
+            # Puedes agregar más acciones aquí si es necesario
+            pass
+                    
         while True:
-            message = socket.recv()
-            frame_data = np.frombuffer(message, dtype=np.uint8)
-            frame = cv2.imdecode(frame_data, cv2.IMREAD_COLOR)
-            frame = cv2.resize(frame, (512, 424))
-            self.frame_cam = frame
-            time.sleep(self.FPS)
+            #zqm connection
+            if socket_active == True:
+                message = socket.recv()
+                frame_data = np.frombuffer(message, dtype=np.uint8)
+                frame = cv2.imdecode(frame_data, cv2.IMREAD_COLOR)
+                frame = cv2.resize(frame, (512, 424))
+                self.frame_cam = frame
+                time.sleep(self.FPS)
+            #Video conection    
+            else:
+                try:    
+                    if self.capture is not None and self.capture.isOpened():
+                        (self.status, self.frame_cam) = self.capture.read()
+                    time.sleep(self.FPS)
+                except Exception as e: 
+                    print(f"Esta dando este error {e}")
+                    break
     
     # Nico aqui esta la funcion del cuerpo 
     def process_pose(self, frame_cam):
