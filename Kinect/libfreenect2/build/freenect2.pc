@@ -1,5 +1,5 @@
-prefix=/usr/local
-exec_prefix=/usr/local
+prefix=C:/Users/rodri/Documents/Git/KinectUSS/Kinect/libfreenect2/build/install
+exec_prefix=C:/Users/rodri/Documents/Git/KinectUSS/Kinect/libfreenect2/build/install
 libdir=${prefix}/lib
 includedir=${prefix}/include
 

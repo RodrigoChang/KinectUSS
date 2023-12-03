@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\rodri\Documents\Git\KinectUSS\Kinect\test\CMakeFiles\4988718a33717b58626bc60b5a172fb1\generate.stamp.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{58D7F9DF-519E-3A86-B7AE-F35354B7923C}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

@@ -14,8 +14,19 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Ofast -pthread")
 
 SET (source_dir "${PROJECT_SOURCE_DIR}/src/")
 FILE (GLOB KinectSUS_SRC "${source_dir}/*.cpp")
+set(CMAKE_TOOLCHAIN_FILE "C:/Users/rodri/Documents/Git/vcpkg/scripts/buildsystems/vcpkg.cmake" CACHE STRING "")
 
 #Dependencias
+# Ruta de instalación de vcpkg
+set(VCPKG_INSTALL_DIR "C:/Users/rodri/Documents/Git/vcpkg/")
+include(${VCPKG_INSTALL_DIR}/scripts/buildsystems/vcpkg.cmake)
+# Incluye las carpetas de Boost
+include_directories(${VCPKG_INSTALL_DIR}/installed/x64-windows/include)
+
+# Enlaza con las bibliotecas de Boost
+link_directories(${VCPKG_INSTALL_DIR}/installed/x64-windows/lib)
+
+
 
 FIND_PACKAGE(freenect2 REQUIRED)
 SET(freenect2_LIBRARIES freenect2)
@@ -24,7 +35,10 @@ SET(freenect2_LIBRARIES freenect2)
 FIND_PACKAGE(OpenCV REQUIRED)
 FIND_PACKAGE(PCL REQUIRED)
 FIND_PACKAGE(jsoncpp REQUIRED)
-INCLUDE_DIRECTORIES(${OpenCV_INCLUDE_DIRS} ${PCL_INCLUDE_DIRS} ${PROJECT_SOURCE_DIR}/headers /usr/include)
+find_package(PCL REQUIRED)
+FIND_PACKAGE(Boost REQUIRED COMPONENTS system filesystem iostreams)
+#target_link_libraries(KinectSUS ${Boost_LIBRARIES})
+INCLUDE_DIRECTORIES(${OpenCV_INCLUDE_DIRS} ${PCL_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS} ${PROJECT_SOURCE_DIR}/headers /usr/include)
 LIST(APPEND KinectSUS_LIBRARIES
   ${OpenCV_LIBS} ${PCL_LIBRARIES} jsoncpp
 )
@@ -48,8 +62,14 @@ find_library(ZeroMQ_LIBRARY
 
 ADD_EXECUTABLE(KinectSUS ${KinectSUS_SRC})
 
+#TARGET_INCLUDE_DIRECTORIES(KinectSUS PUBLIC ${PCL_INCLUDE_DIRS})
+#TARGET_LINK_LIBRARIES(KinectSUS PUBLIC ${PCL_LIBRARIES})
 TARGET_LINK_LIBRARIES(KinectSUS
   ${KinectSUS_LIBRARIES} 
   ${freenect2_LIBRARIES} 
-  ${ZeroMQ_LIBRARY} 
+  ${ZeroMQ_LIBRARY}
+  ${VCPKG_INSTALL_DIR}/installed/x64-windows/lib
+  ${VCPKG_INSTALL_DIR}/installed/x64-windows/lib/boost_system-vc142-mt-x64-1_65.lib
+  ${VCPKG_INSTALL_DIR}/installed/x64-windows/lib/boost_filesystem-vc142-mt-x64-1_65.lib
+  ${VCPKG_INSTALL_DIR}/installed/x64-windows/lib/boost_iostreams-vc142-mt-x64-1_65.lib
 )

@@ -3,7 +3,7 @@
 #include <iostream>
 #include <sstream>
 #include <string>
-#include <zmq.hpp>
+#include <C:/Users/rodri/Documents/Git/vcpkg/packages/zeromq_x64-windows/include/zmq.hpp>
 #include <opencv2/opencv.hpp>
 #include <libfreenect2/libfreenect2.hpp>
 #include <libfreenect2/frame_listener_impl.h>

@@ -1,0 +1,35 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ALL_BUILD", "ALL_BUILD.vcxproj", "{41FC2B4E-FC47-3FAB-B868-18352702CC66}"
+	ProjectSection(ProjectDependencies) = postProject
+		{51D8918C-35D3-38AC-A8C5-34BA2712144F} = {51D8918C-35D3-38AC-A8C5-34BA2712144F}
+		{BEBB04B0-5E80-37E4-95CD-3E80F2B279F8} = {BEBB04B0-5E80-37E4-95CD-3E80F2B279F8}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "KinectSUS", "KinectSUS.vcxproj", "{51D8918C-35D3-38AC-A8C5-34BA2712144F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BEBB04B0-5E80-37E4-95CD-3E80F2B279F8} = {BEBB04B0-5E80-37E4-95CD-3E80F2B279F8}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ZERO_CHECK", "ZERO_CHECK.vcxproj", "{BEBB04B0-5E80-37E4-95CD-3E80F2B279F8}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{41FC2B4E-FC47-3FAB-B868-18352702CC66}.Debug|x64.ActiveCfg = Debug|x64
+		{51D8918C-35D3-38AC-A8C5-34BA2712144F}.Debug|x64.ActiveCfg = Debug|x64
+		{51D8918C-35D3-38AC-A8C5-34BA2712144F}.Debug|x64.Build.0 = Debug|x64
+		{BEBB04B0-5E80-37E4-95CD-3E80F2B279F8}.Debug|x64.ActiveCfg = Debug|x64
+		{BEBB04B0-5E80-37E4-95CD-3E80F2B279F8}.Debug|x64.Build.0 = Debug|x64
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0477B107-9B41-3804-AC7F-367BFFFA618F}
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal
