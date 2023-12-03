@@ -33,16 +33,18 @@ SET(freenect2_LIBRARIES freenect2)
 
 # Add OpenCV package dependency for udp-image-streaming
 FIND_PACKAGE(OpenCV REQUIRED)
-FIND_PACKAGE(PCL REQUIRED)
+#FIND_PACKAGE(PCL REQUIRED)
 FIND_PACKAGE(jsoncpp REQUIRED)
-find_package(PCL REQUIRED)
-FIND_PACKAGE(Boost REQUIRED COMPONENTS system filesystem iostreams)
+#FIND_PACKAGE(Boost REQUIRED COMPONENTS system filesystem iostreams)
 #target_link_libraries(KinectSUS ${Boost_LIBRARIES})
-INCLUDE_DIRECTORIES(${OpenCV_INCLUDE_DIRS} ${PCL_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS} ${PROJECT_SOURCE_DIR}/headers /usr/include)
+#INCLUDE_DIRECTORIES(${OpenCV_INCLUDE_DIRS} ${PCL_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS} ${PROJECT_SOURCE_DIR}/headers /usr/include)
+INCLUDE_DIRECTORIES(${OpenCV_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS} ${PROJECT_SOURCE_DIR}/headers /usr/include)
+#LIST(APPEND KinectSUS_LIBRARIES
+#  ${OpenCV_LIBS} ${PCL_LIBRARIES} jsoncpp
+#)
 LIST(APPEND KinectSUS_LIBRARIES
-  ${OpenCV_LIBS} ${PCL_LIBRARIES} jsoncpp
+  ${OpenCV_LIBS} jsoncpp
 )
-
 ## load in pkg-config support
 find_package(PkgConfig)
 ## use pkg-config to get hints for 0mq locations
@@ -62,14 +64,8 @@ find_library(ZeroMQ_LIBRARY
 
 ADD_EXECUTABLE(KinectSUS ${KinectSUS_SRC})
 
-#TARGET_INCLUDE_DIRECTORIES(KinectSUS PUBLIC ${PCL_INCLUDE_DIRS})
-#TARGET_LINK_LIBRARIES(KinectSUS PUBLIC ${PCL_LIBRARIES})
 TARGET_LINK_LIBRARIES(KinectSUS
   ${KinectSUS_LIBRARIES} 
   ${freenect2_LIBRARIES} 
   ${ZeroMQ_LIBRARY}
-  ${VCPKG_INSTALL_DIR}/installed/x64-windows/lib
-  ${VCPKG_INSTALL_DIR}/installed/x64-windows/lib/boost_system-vc142-mt-x64-1_65.lib
-  ${VCPKG_INSTALL_DIR}/installed/x64-windows/lib/boost_filesystem-vc142-mt-x64-1_65.lib
-  ${VCPKG_INSTALL_DIR}/installed/x64-windows/lib/boost_iostreams-vc142-mt-x64-1_65.lib
 )

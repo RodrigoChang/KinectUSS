@@ -134,7 +134,8 @@ int main(int argc, char *argv[]) {
             string serial = freenect2.getDefaultDeviceSerialNumber();
             cout << "Iniciando Kinect default" << endl;
             //Abriendo la kiect basado en el n serie
-            pipeline = new libfreenect2::OpenGLPacketPipeline();
+            //pipeline = new libfreenect2::OpenGLPacketPipeline();
+            cout << "Prueba de Kinect Welcome" << endl;
             if (pipeline) dev = freenect2.openDevice(serial, pipeline);
             else dev = freenect2.openDevice(serial);      
             if (dev == 0) {
@@ -204,16 +205,16 @@ int main(int argc, char *argv[]) {
                 auto ms_reg = duration_cast<milliseconds>(reg2 - reg1);
                 cout << "registration tomo  " << ms_reg.count() << "ms\n";
                 //point cloud
-                auto cloud1 = high_resolution_clock::now();
+                //auto cloud1 = high_resolution_clock::now();
                 //getCloudData(registration, &undistorted);
-                getCloudDataRGB(registration, &undistorted, &registered);
+                //getCloudDataRGB(registration, &undistorted, &registered);
                 //getCloudDataRGB2(registration, &undistorted, &registered);
                 //visualizePointCloud();
-                visualizePointCloudRGB();
-                cloud_rgb->clear();
-                auto cloud2 = high_resolution_clock::now();
-                auto ms_cloud = duration_cast<milliseconds>(cloud2 - cloud1);
-                cout << "cloud tomo  " << ms_cloud.count() << "ms\n";
+                //visualizePointCloudRGB();
+                //cloud_rgb->clear();
+                //auto cloud2 = high_resolution_clock::now();
+                //auto ms_cloud = duration_cast<milliseconds>(cloud2 - cloud1);
+                //cout << "cloud tomo  " << ms_cloud.count() << "ms\n";
                 //Matrices para ver los frames de la registration
                 auto mat3 = high_resolution_clock::now();
                 Mat(undistorted.height, undistorted.width, CV_32FC1, undistorted.data).copyTo(depthmatUndistorted);
