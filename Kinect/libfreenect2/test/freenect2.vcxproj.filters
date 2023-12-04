@@ -1,0 +1,171 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\src\transfer_pool.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\src\event_loop.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\src\usb_control.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\src\allocator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\src\frame_listener_impl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\src\packet_pipeline.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\src\rgb_packet_stream_parser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\src\rgb_packet_processor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\src\depth_packet_stream_parser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\src\depth_packet_processor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\src\cpu_depth_packet_processor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\src\resource.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\src\command_transaction.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\src\registration.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\src\logging.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\src\libfreenect2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\src\tinythread\tinythread.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\src\turbo_jpeg_rgb_packet_processor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\src\flextGL.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\src\opengl_depth_packet_processor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\src\opencl_depth_packet_processor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\src\opencl_kde_depth_packet_processor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\include\internal\libfreenect2\protocol\command.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\include\internal\libfreenect2\protocol\command_transaction.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\include\internal\libfreenect2\protocol\response.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\include\internal\libfreenect2\protocol\usb_control.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\include\internal\libfreenect2\usb\event_loop.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\include\internal\libfreenect2\usb\transfer_pool.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\include\libfreenect2\logger.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\include\internal\libfreenect2\logging.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\include\internal\libfreenect2\async_packet_processor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\include\internal\libfreenect2\depth_packet_processor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\include\internal\libfreenect2\depth_packet_stream_parser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\include\internal\libfreenect2\allocator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\include\libfreenect2\frame_listener.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\include\libfreenect2\frame_listener_impl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\include\libfreenect2\libfreenect2.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\include\libfreenect2\color_settings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\include\libfreenect2\led_settings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\include\libfreenect2\packet_pipeline.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\include\internal\libfreenect2\packet_processor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\include\libfreenect2\registration.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\include\internal\libfreenect2\resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\include\internal\libfreenect2\rgb_packet_processor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\include\internal\libfreenect2\rgb_packet_stream_parser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\include\internal\libfreenect2\threading.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\test\resources.inc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\test\libfreenect2\config.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\test\libfreenect2\export.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\test\CMakeFiles\6aead73c75c71c7ec7e62f54b5a96350\resources.inc.h.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{CF602266-6F28-3A8A-9D8F-DFB9EDE15222}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{A56D6ED4-DF42-30C9-8E88-E79D79658493}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{1BF1C147-B7B5-3EE6-8689-2D403E79AFEF}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

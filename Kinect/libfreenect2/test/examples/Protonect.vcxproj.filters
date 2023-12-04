@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\examples\Protonect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\examples\viewer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\src\flextGL.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\examples\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{1BF1C147-B7B5-3EE6-8689-2D403E79AFEF}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,459 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="MinSizeRel|x64">
+      <Configuration>MinSizeRel</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="RelWithDebInfo|x64">
+      <Configuration>RelWithDebInfo</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{CB6C961A-8444-30EE-9081-ABFAE018F95E}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0.22621.0</WindowsTargetPlatformVersion>
+    <Platform>x64</Platform>
+    <ProjectName>Protonect</ProjectName>
+    <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\test\bin\Debug\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Protonect.dir\Debug\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Protonect</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\test\bin\Release\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Protonect.dir\Release\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Protonect</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\test\bin\MinSizeRel\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Protonect.dir\MinSizeRel\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Protonect</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\test\bin\RelWithDebInfo\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Protonect.dir\RelWithDebInfo\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Protonect</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">true</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">true</GenerateManifest>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\include;C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\include\internal;C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\test;C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\src\tinythread;C:\Users\rodri\Documents\Git\vcpkg\packages\libusb_x64-windows\include\libusb-1.0;C:\Users\rodri\Documents\Git\vcpkg\packages\libjpeg-turbo_x64-windows\include;C:\Users\rodri\Documents\Git\vcpkg\packages\glfw3_x64-windows\include\GLFW;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.3\include;C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\examples\..\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4267;4244;4200;4305;4146</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <Optimization>Disabled</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;_CRT_SECURE_NO_WARNINGS;RESOURCES_INC;EXAMPLES_WITH_OPENGL_SUPPORT=1;CMAKE_INTDIR="Debug"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;RESOURCES_INC;EXAMPLES_WITH_OPENGL_SUPPORT=1;CMAKE_INTDIR=\"Debug\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\include;C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\include\internal;C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\test;C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\src\tinythread;C:\Users\rodri\Documents\Git\vcpkg\packages\libusb_x64-windows\include\libusb-1.0;C:\Users\rodri\Documents\Git\vcpkg\packages\libjpeg-turbo_x64-windows\include;C:\Users\rodri\Documents\Git\vcpkg\packages\glfw3_x64-windows\include\GLFW;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.3\include;C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\examples\..\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\include;C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\include\internal;C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\test;C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\src\tinythread;C:\Users\rodri\Documents\Git\vcpkg\packages\libusb_x64-windows\include\libusb-1.0;C:\Users\rodri\Documents\Git\vcpkg\packages\libjpeg-turbo_x64-windows\include;C:\Users\rodri\Documents\Git\vcpkg\packages\glfw3_x64-windows\include\GLFW;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.3\include;C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\examples\..\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <PostBuildEvent>
+      <Message>		</Message>
+      <Command>setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different C:/Users/rodri/Documents/Git/vcpkg/packages/libusb_x64-windows/bin/libusb-1.0.dll C:/Users/rodri/Documents/Git/KinectUSS/Kinect/libfreenect2/test/bin/Debug
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different C:/Users/rodri/Documents/Git/vcpkg/packages/libjpeg-turbo_x64-windows/bin/turbojpeg.dll C:/Users/rodri/Documents/Git/KinectUSS/Kinect/libfreenect2/test/bin/Debug
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different C:/Users/rodri/Documents/Git/vcpkg/packages/glfw3_x64-windows/bin/glfw3.dll C:/Users/rodri/Documents/Git/KinectUSS/Kinect/libfreenect2/test/bin/Debug
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+    </PostBuildEvent>
+    <Link>
+      <AdditionalDependencies>..\lib\Debug\freenect2d.lib;C:\Users\rodri\Documents\Git\vcpkg\packages\glfw3_x64-windows\lib\glfw3dll.lib;opengl32.lib;C:\Users\rodri\Documents\Git\vcpkg\packages\libusb_x64-windows\lib\libusb-1.0.lib;C:\Users\rodri\Documents\Git\vcpkg\packages\libjpeg-turbo_x64-windows\lib\turbojpeg.lib;C:\Users\rodri\Documents\Git\vcpkg\packages\glfw3_x64-windows\lib\glfw3dll.lib;opengl32.lib;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.3\lib\x64\OpenCL.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>C:/Users/rodri/Documents/Git/KinectUSS/Kinect/libfreenect2/test/lib/Debug/Protonect.lib</ImportLibrary>
+      <ProgramDataBaseFile>C:/Users/rodri/Documents/Git/KinectUSS/Kinect/libfreenect2/test/bin/Debug/Protonect.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\include;C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\include\internal;C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\test;C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\src\tinythread;C:\Users\rodri\Documents\Git\vcpkg\packages\libusb_x64-windows\include\libusb-1.0;C:\Users\rodri\Documents\Git\vcpkg\packages\libjpeg-turbo_x64-windows\include;C:\Users\rodri\Documents\Git\vcpkg\packages\glfw3_x64-windows\include\GLFW;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.3\include;C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\examples\..\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <DisableSpecificWarnings>4267;4244;4200;4305;4146</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_CRT_SECURE_NO_WARNINGS;RESOURCES_INC;EXAMPLES_WITH_OPENGL_SUPPORT=1;CMAKE_INTDIR="Release"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_CRT_SECURE_NO_WARNINGS;RESOURCES_INC;EXAMPLES_WITH_OPENGL_SUPPORT=1;CMAKE_INTDIR=\"Release\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\include;C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\include\internal;C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\test;C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\src\tinythread;C:\Users\rodri\Documents\Git\vcpkg\packages\libusb_x64-windows\include\libusb-1.0;C:\Users\rodri\Documents\Git\vcpkg\packages\libjpeg-turbo_x64-windows\include;C:\Users\rodri\Documents\Git\vcpkg\packages\glfw3_x64-windows\include\GLFW;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.3\include;C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\examples\..\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\include;C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\include\internal;C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\test;C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\src\tinythread;C:\Users\rodri\Documents\Git\vcpkg\packages\libusb_x64-windows\include\libusb-1.0;C:\Users\rodri\Documents\Git\vcpkg\packages\libjpeg-turbo_x64-windows\include;C:\Users\rodri\Documents\Git\vcpkg\packages\glfw3_x64-windows\include\GLFW;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.3\include;C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\examples\..\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <PostBuildEvent>
+      <Message>		</Message>
+      <Command>setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different C:/Users/rodri/Documents/Git/vcpkg/packages/libusb_x64-windows/bin/libusb-1.0.dll C:/Users/rodri/Documents/Git/KinectUSS/Kinect/libfreenect2/test/bin/Release
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different C:/Users/rodri/Documents/Git/vcpkg/packages/libjpeg-turbo_x64-windows/bin/turbojpeg.dll C:/Users/rodri/Documents/Git/KinectUSS/Kinect/libfreenect2/test/bin/Release
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different C:/Users/rodri/Documents/Git/vcpkg/packages/glfw3_x64-windows/bin/glfw3.dll C:/Users/rodri/Documents/Git/KinectUSS/Kinect/libfreenect2/test/bin/Release
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+    </PostBuildEvent>
+    <Link>
+      <AdditionalDependencies>..\lib\Release\freenect2.lib;C:\Users\rodri\Documents\Git\vcpkg\packages\glfw3_x64-windows\lib\glfw3dll.lib;opengl32.lib;C:\Users\rodri\Documents\Git\vcpkg\packages\libusb_x64-windows\lib\libusb-1.0.lib;C:\Users\rodri\Documents\Git\vcpkg\packages\libjpeg-turbo_x64-windows\lib\turbojpeg.lib;C:\Users\rodri\Documents\Git\vcpkg\packages\glfw3_x64-windows\lib\glfw3dll.lib;opengl32.lib;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.3\lib\x64\OpenCL.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>C:/Users/rodri/Documents/Git/KinectUSS/Kinect/libfreenect2/test/lib/Release/Protonect.lib</ImportLibrary>
+      <ProgramDataBaseFile>C:/Users/rodri/Documents/Git/KinectUSS/Kinect/libfreenect2/test/bin/Release/Protonect.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\include;C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\include\internal;C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\test;C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\src\tinythread;C:\Users\rodri\Documents\Git\vcpkg\packages\libusb_x64-windows\include\libusb-1.0;C:\Users\rodri\Documents\Git\vcpkg\packages\libjpeg-turbo_x64-windows\include;C:\Users\rodri\Documents\Git\vcpkg\packages\glfw3_x64-windows\include\GLFW;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.3\include;C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\examples\..\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <DisableSpecificWarnings>4267;4244;4200;4305;4146</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <Optimization>MinSpace</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_CRT_SECURE_NO_WARNINGS;RESOURCES_INC;EXAMPLES_WITH_OPENGL_SUPPORT=1;CMAKE_INTDIR="MinSizeRel"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_CRT_SECURE_NO_WARNINGS;RESOURCES_INC;EXAMPLES_WITH_OPENGL_SUPPORT=1;CMAKE_INTDIR=\"MinSizeRel\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\include;C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\include\internal;C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\test;C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\src\tinythread;C:\Users\rodri\Documents\Git\vcpkg\packages\libusb_x64-windows\include\libusb-1.0;C:\Users\rodri\Documents\Git\vcpkg\packages\libjpeg-turbo_x64-windows\include;C:\Users\rodri\Documents\Git\vcpkg\packages\glfw3_x64-windows\include\GLFW;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.3\include;C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\examples\..\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\include;C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\include\internal;C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\test;C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\src\tinythread;C:\Users\rodri\Documents\Git\vcpkg\packages\libusb_x64-windows\include\libusb-1.0;C:\Users\rodri\Documents\Git\vcpkg\packages\libjpeg-turbo_x64-windows\include;C:\Users\rodri\Documents\Git\vcpkg\packages\glfw3_x64-windows\include\GLFW;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.3\include;C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\examples\..\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <PostBuildEvent>
+      <Message>		</Message>
+      <Command>setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different C:/Users/rodri/Documents/Git/vcpkg/packages/libusb_x64-windows/bin/libusb-1.0.dll C:/Users/rodri/Documents/Git/KinectUSS/Kinect/libfreenect2/test/bin/MinSizeRel
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different C:/Users/rodri/Documents/Git/vcpkg/packages/libjpeg-turbo_x64-windows/bin/turbojpeg.dll C:/Users/rodri/Documents/Git/KinectUSS/Kinect/libfreenect2/test/bin/MinSizeRel
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different C:/Users/rodri/Documents/Git/vcpkg/packages/glfw3_x64-windows/bin/glfw3.dll C:/Users/rodri/Documents/Git/KinectUSS/Kinect/libfreenect2/test/bin/MinSizeRel
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+    </PostBuildEvent>
+    <Link>
+      <AdditionalDependencies>..\lib\MinSizeRel\freenect2.lib;C:\Users\rodri\Documents\Git\vcpkg\packages\glfw3_x64-windows\lib\glfw3dll.lib;opengl32.lib;C:\Users\rodri\Documents\Git\vcpkg\packages\libusb_x64-windows\lib\libusb-1.0.lib;C:\Users\rodri\Documents\Git\vcpkg\packages\libjpeg-turbo_x64-windows\lib\turbojpeg.lib;C:\Users\rodri\Documents\Git\vcpkg\packages\glfw3_x64-windows\lib\glfw3dll.lib;opengl32.lib;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.3\lib\x64\OpenCL.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>C:/Users/rodri/Documents/Git/KinectUSS/Kinect/libfreenect2/test/lib/MinSizeRel/Protonect.lib</ImportLibrary>
+      <ProgramDataBaseFile>C:/Users/rodri/Documents/Git/KinectUSS/Kinect/libfreenect2/test/bin/MinSizeRel/Protonect.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\include;C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\include\internal;C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\test;C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\src\tinythread;C:\Users\rodri\Documents\Git\vcpkg\packages\libusb_x64-windows\include\libusb-1.0;C:\Users\rodri\Documents\Git\vcpkg\packages\libjpeg-turbo_x64-windows\include;C:\Users\rodri\Documents\Git\vcpkg\packages\glfw3_x64-windows\include\GLFW;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.3\include;C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\examples\..\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4267;4244;4200;4305;4146</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_CRT_SECURE_NO_WARNINGS;RESOURCES_INC;EXAMPLES_WITH_OPENGL_SUPPORT=1;CMAKE_INTDIR="RelWithDebInfo"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_CRT_SECURE_NO_WARNINGS;RESOURCES_INC;EXAMPLES_WITH_OPENGL_SUPPORT=1;CMAKE_INTDIR=\"RelWithDebInfo\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\include;C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\include\internal;C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\test;C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\src\tinythread;C:\Users\rodri\Documents\Git\vcpkg\packages\libusb_x64-windows\include\libusb-1.0;C:\Users\rodri\Documents\Git\vcpkg\packages\libjpeg-turbo_x64-windows\include;C:\Users\rodri\Documents\Git\vcpkg\packages\glfw3_x64-windows\include\GLFW;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.3\include;C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\examples\..\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\include;C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\include\internal;C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\test;C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\src\tinythread;C:\Users\rodri\Documents\Git\vcpkg\packages\libusb_x64-windows\include\libusb-1.0;C:\Users\rodri\Documents\Git\vcpkg\packages\libjpeg-turbo_x64-windows\include;C:\Users\rodri\Documents\Git\vcpkg\packages\glfw3_x64-windows\include\GLFW;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.3\include;C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\examples\..\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <PostBuildEvent>
+      <Message>		</Message>
+      <Command>setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different C:/Users/rodri/Documents/Git/vcpkg/packages/libusb_x64-windows/bin/libusb-1.0.dll C:/Users/rodri/Documents/Git/KinectUSS/Kinect/libfreenect2/test/bin/RelWithDebInfo
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different C:/Users/rodri/Documents/Git/vcpkg/packages/libjpeg-turbo_x64-windows/bin/turbojpeg.dll C:/Users/rodri/Documents/Git/KinectUSS/Kinect/libfreenect2/test/bin/RelWithDebInfo
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different C:/Users/rodri/Documents/Git/vcpkg/packages/glfw3_x64-windows/bin/glfw3.dll C:/Users/rodri/Documents/Git/KinectUSS/Kinect/libfreenect2/test/bin/RelWithDebInfo
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+    </PostBuildEvent>
+    <Link>
+      <AdditionalDependencies>..\lib\RelWithDebInfo\freenect2.lib;C:\Users\rodri\Documents\Git\vcpkg\packages\glfw3_x64-windows\lib\glfw3dll.lib;opengl32.lib;C:\Users\rodri\Documents\Git\vcpkg\packages\libusb_x64-windows\lib\libusb-1.0.lib;C:\Users\rodri\Documents\Git\vcpkg\packages\libjpeg-turbo_x64-windows\lib\turbojpeg.lib;C:\Users\rodri\Documents\Git\vcpkg\packages\glfw3_x64-windows\lib\glfw3dll.lib;opengl32.lib;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.3\lib\x64\OpenCL.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>C:/Users/rodri/Documents/Git/KinectUSS/Kinect/libfreenect2/test/lib/RelWithDebInfo/Protonect.lib</ImportLibrary>
+      <ProgramDataBaseFile>C:/Users/rodri/Documents/Git/KinectUSS/Kinect/libfreenect2/test/bin/RelWithDebInfo/Protonect.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\examples\CMakeLists.txt">
+      <UseUtf8Encoding>Always</UseUtf8Encoding>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule C:/Users/rodri/Documents/Git/KinectUSS/Kinect/libfreenect2/examples/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/rodri/Documents/Git/KinectUSS/Kinect/libfreenect2 -BC:/Users/rodri/Documents/Git/KinectUSS/Kinect/libfreenect2/test --check-stamp-file C:/Users/rodri/Documents/Git/KinectUSS/Kinect/libfreenect2/test/examples/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Program Files\CMake\share\cmake-3.28\Modules\FindOpenGL.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\FindPkgConfig.cmake;C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\cmake_modules\FindGLFW3.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\test\examples\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule C:/Users/rodri/Documents/Git/KinectUSS/Kinect/libfreenect2/examples/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/rodri/Documents/Git/KinectUSS/Kinect/libfreenect2 -BC:/Users/rodri/Documents/Git/KinectUSS/Kinect/libfreenect2/test --check-stamp-file C:/Users/rodri/Documents/Git/KinectUSS/Kinect/libfreenect2/test/examples/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Program Files\CMake\share\cmake-3.28\Modules\FindOpenGL.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\FindPkgConfig.cmake;C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\cmake_modules\FindGLFW3.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\test\examples\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Building Custom Rule C:/Users/rodri/Documents/Git/KinectUSS/Kinect/libfreenect2/examples/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/rodri/Documents/Git/KinectUSS/Kinect/libfreenect2 -BC:/Users/rodri/Documents/Git/KinectUSS/Kinect/libfreenect2/test --check-stamp-file C:/Users/rodri/Documents/Git/KinectUSS/Kinect/libfreenect2/test/examples/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Program Files\CMake\share\cmake-3.28\Modules\FindOpenGL.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\FindPkgConfig.cmake;C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\cmake_modules\FindGLFW3.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\test\examples\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Building Custom Rule C:/Users/rodri/Documents/Git/KinectUSS/Kinect/libfreenect2/examples/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/rodri/Documents/Git/KinectUSS/Kinect/libfreenect2 -BC:/Users/rodri/Documents/Git/KinectUSS/Kinect/libfreenect2/test --check-stamp-file C:/Users/rodri/Documents/Git/KinectUSS/Kinect/libfreenect2/test/examples/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Program Files\CMake\share\cmake-3.28\Modules\FindOpenGL.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\FindPkgConfig.cmake;C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\cmake_modules\FindGLFW3.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\test\examples\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\examples\Protonect.cpp" />
+    <ClCompile Include="C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\examples\viewer.cpp" />
+    <ClCompile Include="C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\src\flextGL.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\test\ZERO_CHECK.vcxproj">
+      <Project>{8B7A2C48-0B83-3FE7-8F65-CC5070471327}</Project>
+      <Name>ZERO_CHECK</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\test\freenect2.vcxproj">
+      <Project>{FA24948F-E7DE-38C3-BC43-95DF6F52648B}</Project>
+      <Name>freenect2</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

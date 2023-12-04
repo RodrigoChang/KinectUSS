@@ -3,12 +3,12 @@
 #include <iostream>
 #include <sstream>
 #include <string>
-#include <C:/Users/rodri/Documents/Git/vcpkg/packages/zeromq_x64-windows/include/zmq.hpp>
-#include <opencv2/opencv.hpp>
-#include <libfreenect2/libfreenect2.hpp>
-#include <libfreenect2/frame_listener_impl.h>
-#include <libfreenect2/registration.h>
-#include <libfreenect2/logger.h>
+//#include <"../include/zmq.hpp">
+//#include <"../include/opencv.hpp">
+#include <C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\include\libfreenect2\libfreenect2.hpp>
+#include <C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\include\libfreenect2\frame_listener_impl.h>
+#include <C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\include\libfreenect2\registration.h>
+#include <C:\Users\rodri\Documents\Git\KinectUSS\Kinect\libfreenect2\include\libfreenect2\logger.h>
 #include "../include/utils.h"
 #include "../include/log.h"
 #include <thread>
@@ -29,12 +29,12 @@ auto frametime = milliseconds(33);
 Mat rgbmat, depthmat, depthmatUndistorted, irmat, rgbd, rgbd2, cropped;
 
 
-zmq::context_t context(1);
-zmq::socket_t rgb_socket(context, ZMQ_PUB);
-zmq::socket_t ir_socket(context, ZMQ_PUB);
-zmq::socket_t depth_socket(context, ZMQ_PUB);
-zmq::socket_t registered_socket(context, ZMQ_PUB);
-zmq::socket_t read_socket(context, ZMQ_SUB);
+//zmq::context_t context(1);
+//zmq::socket_t rgb_socket(context, ZMQ_PUB);
+//zmq::socket_t ir_socket(context, ZMQ_PUB);
+//zmq::socket_t depth_socket(context, ZMQ_PUB);
+//zmq::socket_t registered_socket(context, ZMQ_PUB);
+//zmq::socket_t read_socket(context, ZMQ_SUB);
 
 libfreenect2::Freenect2 freenect2;
 libfreenect2::Freenect2Device* dev = 0;
@@ -53,18 +53,18 @@ void onMouseCallback(int event, int x, int y, int flags, void* userdata) {
     }
 }
 
-void socket_intit() {
+//void socket_intit() {
     //zmq, context de 1 io_thread, 4 sockets
-    cout << "Inicializando sockets" << endl;
-    rgb_socket.bind("tcp://0.0.0.0:5555");
-    ir_socket.bind("tcp://0.0.0.0:5556");
-    depth_socket.bind("tcp://0.0.0.0:5557");
-    registered_socket.bind("tcp://0.0.0.0:5558");
+//    cout << "Inicializando sockets" << endl;
+//    rgb_socket.bind("tcp://0.0.0.0:5555");
+//    ir_socket.bind("tcp://0.0.0.0:5556");
+//    depth_socket.bind("tcp://0.0.0.0:5557");
+//    registered_socket.bind("tcp://0.0.0.0:5558");
     //read_socket.connect("tcp://10.171.30.11:5558");
 
-    //read_socket.setsockopt(ZMQ_SUBSCRIBE, "", 0);
-    cout << "Sockets listos" << endl;
-}
+    //read_socket.setsockopt(ZMQ_SUBSCRIBE, "", 0);//
+//    cout << "Sockets listos" << endl;
+//}
 
 bool kinectSearch() {
     cout << "Buscando kinect" << endl;
@@ -78,31 +78,30 @@ bool kinectSearch() {
     }
 }
 
-void mensaje() {
-    zmq::message_t read_message;
-    read_socket.recv(&read_message);
+//void mensaje() {
+//    zmq::message_t read_message;
+//    read_socket.recv(&read_message);
 
     // Assuming the message is a string in the format "x,y"
-    string coordinates = std::string(static_cast<char*>(read_message.data()), read_message.size());
+//    string coordinates = std::string(static_cast<char*>(read_message.data()), read_message.size());
 
     // Parse the coordinates
-    size_t commaPos = coordinates.find(',');
-    if (commaPos != std::string::npos) {
-        int x = std::stoi(coordinates.substr(0, commaPos));
-        int y = std::stoi(coordinates.substr(commaPos + 1));
+//    size_t commaPos = coordinates.find(',');
+//    if (commaPos != std::string::npos) {
+//        int x = std::stoi(coordinates.substr(0, commaPos));
+//        int y = std::stoi(coordinates.substr(commaPos + 1));
 
         // Use x and y as needed
-        std::cout << "Received coordinates: x = " << x << ", y = " << y << std::endl;
-    }
-}
+//        std::cout << "Received coordinates: x = " << x << ", y = " << y << std::endl;
+//    }
+//}
 
-void streaming() {
-    send_zmq(cropped, move(rgb_socket), true, "rgb");
-    send_zmq(irmat, move(ir_socket), false, "ir");
-    send_zmq(depthmat, move(depth_socket), false, "depth");
-    send_zmq(rgbd, move(registered_socket), true, "registered");
-}
-
+//void streaming() {
+//    send_zmq(cropped, move(rgb_socket), true, "rgb");
+//    send_zmq(irmat, move(ir_socket), false, "ir");
+//    send_zmq(depthmat, move(depth_socket), false, "depth");
+//    send_zmq(rgbd, move(registered_socket), true, "registered");
+//}
 int main(int argc, char *argv[]) {
     cerr << "Argumentos: [-norgb | -nodepth | -nostream] " << endl;
     MyFileLogger *filelogger = new MyFileLogger(getenv("LOGFILE"));
@@ -154,7 +153,7 @@ int main(int argc, char *argv[]) {
             mainMenu();
             cout << "Abriendo Menu" << endl;
             menu(); //Inicilizamos el menu
-            if (enable_stream) socket_intit(); //seteando el socket
+            //if (enable_stream) socket_intit(); //seteando el socket
             //seteando el listener de libfreenect2
             int types = 0;
             if (enable_rgb) types |= libfreenect2::Frame::Color;
@@ -229,7 +228,7 @@ int main(int argc, char *argv[]) {
                 auto pred1 = high_resolution_clock::now();
                 //streaming thread si llego a los 30 frames
                 auto frame2 = high_resolution_clock::now();
-                if (duration_cast<milliseconds>(frame2 - frame1) >= frametime) stream_thread = thread(streaming);
+                //if (duration_cast<milliseconds>(frame2 - frame1) >= frametime) stream_thread = thread(streaming);
                 //Display de profundidad ***TO DO*** Hacer algo mas bonito
                 if (displayDepthValue) {
                     if (clickedX >= 0 && clickedY >= 0 && clickedX < depthmat.cols && clickedY < depthmat.rows) {
@@ -242,12 +241,12 @@ int main(int argc, char *argv[]) {
                 cout << "pre display tomo  " << ms_mat2.count() << "ms\n";
                 auto display1 = high_resolution_clock::now();
                 putText(rgbd, to_string(pixelValue) + " mm", Point(clickedX, clickedY), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(205, 255, 0), 2, LINE_AA);
-                //imshow("rgb", rgbmat);
-                //imshow("ir", irmat / 4096.0f);
+                imshow("rgb", rgbmat);
+                imshow("ir", irmat / 4096.0f);
                 imshow("depth", depthmat / 4096.0f);
-                //imshow("undistorted", depthmatUndistorted / 4096.0f);
+                imshow("undistorted", depthmatUndistorted / 4096.0f);
                 imshow("registered", rgbd);
-                //imshow("depth2RGB", rgbd2 / 4096.0f);
+                imshow("depth2RGB", rgbd2 / 4096.0f);
                 imshow("cropped", cropped);
                 //auto t2 = high_resolution_clock::now();
                 //this_thread::sleep_for(20ms);
