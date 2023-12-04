@@ -4,6 +4,7 @@
 #include <opencv2/opencv.hpp>
 #include <libfreenect2/libfreenect2.hpp>
 #include <libfreenect2/frame_listener_impl.h>
+#include <libfreenect2/packet_pipeline.h>
 #include <libfreenect2/registration.h>
 #include <libfreenect2/logger.h>
 #include "../include/utils.h"
@@ -18,16 +19,13 @@ using std::chrono::duration_cast;
 using std::chrono::duration;
 using std::chrono::milliseconds;
 
-bool protonect_shutdown = false, displayDepthValue = false;
-bool inMenu = true, enable_rgb = true, enable_depth = true, enable_stream = true;
+bool displayDepthValue = false;
 int clickedX = -1, clickedY = -1;
 float pixelValue;
-auto frametime = milliseconds(33);
+auto frametime = milliseconds(16);
 Mat rgbmat, depthmat, depthmatUndistorted, irmat, rgbd, rgbd2, cropped;
 
-static libfreenect2::Freenect2 freenect2;
 libfreenect2::PacketPipeline* pipeline = 0;
-
 
 void onMouseCallback(int event, int x, int y, int flags, void* userdata) {
     if (event == EVENT_LBUTTONDOWN) {
@@ -37,17 +35,21 @@ void onMouseCallback(int event, int x, int y, int flags, void* userdata) {
     }
 }
 
-void kinect() {
-
-    auto t1 = high_resolution_clock::now();
-    string serial = freenect2.getDefaultDeviceSerialNumber();
+void kinect(string serial) {
     cout << "Iniciando Kinect default" << endl;
     //Abriendo la kiect basado en el n serie
-    pipeline = new libfreenect2::OpenGLPacketPipeline();
+    pipeline = new libfreenect2::OpenGLPacketPipeline(); 
     if (pipeline) dev = freenect2.openDevice(serial, pipeline);
-    else dev = freenect2.openDevice(serial);       
-    thread stream_thread;
-    protonect_shutdown = false;
+    else dev = freenect2.openDevice(serial);      
+    dev = freenect2.openDevice(serial);
+    if (dev == 0) {
+        cout << "No se pudo abrir la kinect" << endl;
+        int conf = confirmacion();
+        if(!conf) onStreaming = false;
+    }       
+    auto t1 = high_resolution_clock::now();
+    //Abriendo la kiect basado en el n serial
+    thread zmq_streaming;
     // Initialize OpenCV window for the Kinect stream
     namedWindow("registered");
     setMouseCallback("registered", onMouseCallback);
@@ -98,8 +100,8 @@ void kinect() {
         registration->apply(rgb, depth, &undistorted, &registered, true, &depth2rgb);
 
         //point cloud
-        point_cloud_basico.getPointCloud(registration, &undistorted);
-        point_cloud_basico.visualizePointCloud();
+        //point_cloud_basico.getPointCloud(registration, &undistorted);
+       // point_cloud_basico.visualizePointCloud();
 
         //Matrices para ver los frames de la registration
         Mat(undistorted.height, undistorted.width, CV_32FC1, undistorted.data).copyTo(depthmatUndistorted);
@@ -111,7 +113,25 @@ void kinect() {
 
         //streaming thread si llego a los 30 frames
         auto frame2 = high_resolution_clock::now();
-
+        rgb_stream.encodeo_envio(cropped);
+        ir_stream.envio_plain(irmat);
+        depth_stream.envio_plain(depthmat);
+        registered_stream.encodeo_envio(rgbd);
+        if (duration_cast<milliseconds>(frame2 - frame1) >= frametime) {
+            
+            /*thread zmq_streaming([&rgb_stream, &ir_stream, &depth_stream, &registered_stream](){
+                rgb_stream.encodeo_envio(cropped);
+                ir_stream.envio_plain(irmat);
+                depth_stream.envio_plain(depthmat);
+                registered_stream.encodeo_envio(rgbd);
+            });*/
+            auto frame1 = high_resolution_clock::now();
+            if (zmq_streaming.joinable()) {
+                zmq_streaming.join();
+                
+            }
+        }
+        
         //Display de profundidad ***TO DO*** Hacer algo mas bonito
         if (displayDepthValue) {
             if (clickedX >= 0 && clickedY >= 0 && clickedX < depthmat.cols && clickedY < depthmat.rows) {
@@ -130,7 +150,6 @@ void kinect() {
         imshow("cropped", cropped);
         //auto t2 = high_resolution_clock::now();
         //this_thread::sleep_for(20ms);
-
         int key = waitKey(1);
         protonect_shutdown = protonect_shutdown || (key > 0 && ((key & 0xFF) == 27));
         listener.release(frames);
@@ -141,7 +160,6 @@ void kinect() {
     dev->close();
     delete registration;
     destroyAllWindows();
-    inMenu = false;
-    cout << "Noh Vimoh!" << endl;
+    onStreaming = false;
 }
 

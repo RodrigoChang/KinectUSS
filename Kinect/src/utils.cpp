@@ -19,20 +19,20 @@ Es mucho mejor llevarlo a clase, ya que asi solucionamos los problemas de owners
 A y tambien multithreading si es necesario encodear.
 xd
 */
+zmq::context_t zmq_stream::context(1);
+
 zmq_stream::zmq_stream(const std::string& serverAddress, int socketType)
     : serverAddress(serverAddress), socketType(socketType) {
-    context = new zmq::context_t(1);
-    socket = new zmq::socket_t(*context, socketType);
+    socket = new zmq::socket_t(context, socketType);
 
-    // Conectandose
-    socket->connect(serverAddress);
+    // Connecting
+    socket->bind(serverAddress);
 }
 
 zmq_stream::~zmq_stream() {
     // Cleanup
     socket->close();
     delete socket;
-    delete context;
 }
 
 void zmq_stream::encodeo_envio(const Mat& frame) {

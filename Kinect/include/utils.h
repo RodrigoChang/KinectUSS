@@ -10,15 +10,16 @@
 #include <pcl/visualization/pcl_visualizer.h>
 
 //extern libfreenect2::Registration* registration;
+extern libfreenect2::Freenect2 freenect2;
 extern libfreenect2::Freenect2Device *dev;
 extern libfreenect2::Freenect2Device::ColorCameraParams ColorCameraParams;
 extern libfreenect2::Freenect2Device::IrCameraParams IrCameraParams;
 extern libfreenect2::Freenect2Device::Config config;
+extern bool onStreaming, protonect_shutdown, enable_rgb, enable_depth, enable_stream;
 
 //ZMQ
 class zmq_stream {
 private:
-    zmq::context_t* context;
     zmq::socket_t* socket;
     std::string serverAddress;
     int socketType;
@@ -32,6 +33,7 @@ public:
 
 private:
     std::vector<uchar> encodeo(const cv::Mat& frame);
+    static zmq::context_t context;
 };
 
 //Cloud
@@ -71,7 +73,7 @@ private:
 };
 
 //Kinect
-void kinect();
+void kinect(std::string serial);
 
 //utils.cpp
 void readIni();

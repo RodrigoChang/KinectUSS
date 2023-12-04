@@ -16,14 +16,14 @@ using std::chrono::duration_cast;
 using std::chrono::duration;
 using std::chrono::milliseconds;
 
-static bool started = true, enable_rgb = true, enable_depth = true, enable_stream = true, streaming = true;
-
-static libfreenect2::Freenect2 freenect2;
+bool enable_rgb = true, enable_depth = true, enable_stream = true , onStreaming = true, pRunning = true;
+bool protonect_shutdown = false;
+libfreenect2::Freenect2 freenect2;
 libfreenect2::Freenect2Device* dev = 0;
 
 void mainMenu();
 void sigint_handler(int s) {
-    streaming = false;
+    protonect_shutdown = true;
 }
 
 bool kinectSearch() {
@@ -57,31 +57,25 @@ int main(int argc, char *argv[]) {
     }
 
     cout << "Inicializando sistema" << endl;
-    while(started) {
+    while(pRunning) {
         bool found = kinectSearch();
         if (!found) {
             int conf = confirmacion();
             if(!conf) return 0;
             else continue;
-        }
-        else {
+        } else {
             string serial = freenect2.getDefaultDeviceSerialNumber();
-            cout << "Iniciando Kinect default" << endl;
-            //Abriendo la kiect basado en el n serie 
-            if (dev == 0) {
-                cout << "No se pudo abrir la kinect" << endl;
-                int conf = confirmacion();
-                if(!conf) return 0;
-                else continue;
-            } 
-            thread Kinect1(kinect);
+            thread Kinect1(kinect, serial);
             signal(SIGINT, sigint_handler);
-            while(streaming)
-            mainMenu();
+            //mainMenu();
             cout << "Abriendo Menu" << endl;
-            menu(); //Inicilizamos el menu           
+            //menu(); //Inicilizamos el menu 
+            while(onStreaming) {
+                this_thread::sleep_for(milliseconds(100));
+            }
+            Kinect1.join();
+            pRunning = false;
         }
     }
-    started = false;
     cout << "Noh Vimoh!" << endl;
 }

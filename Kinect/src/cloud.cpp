@@ -21,8 +21,9 @@ xd
 void PointCloud::getPointCloud(libfreenect2::Registration* registration, 
                 libfreenect2::Frame* undistorted_frame, 
                 libfreenect2::Frame*  registered_frame = NULL, int type = 0) {
-
+    std::cout << "Partimos" << endl;                 
     if (registered_frame = NULL) {
+        std::cout << "XYZ" << endl;
         getCloudData(registration, undistorted_frame);
         fixCloud<pcl::PointXYZ>(cloud);
         visualizePointCloud();                    
