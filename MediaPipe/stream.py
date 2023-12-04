@@ -65,11 +65,10 @@ def main():
     cv2.setMouseCallback("Depth", mouse_callback)
 
     while True:
-        if framecount < 1:
-            socketrgb.setsockopt(zmq.SUBSCRIBE, b'')
-            socketir.setsockopt(zmq.SUBSCRIBE, b'')
-            socketdepth.setsockopt(zmq.SUBSCRIBE, b'')
-            socketreg.setsockopt(zmq.SUBSCRIBE, b'')
+            #socketrgb.setsockopt(zmq.SUBSCRIBE, b'')
+            #socketir.setsockopt(zmq.SUBSCRIBE, b'')
+            #socketdepth.setsockopt(zmq.SUBSCRIBE, b'')
+           # socketreg.setsockopt(zmq.SUBSCRIBE, b'')
         
         rgb_frame = receive_rgb_frame()
         ir_frame = receive_ir_frame()
@@ -80,14 +79,6 @@ def main():
         cv2.imshow("IR", ir_frame / 4096.0)
         cv2.imshow("Depth", depth_frame / 4096.0)
         cv2.imshow("Registered", reg_frame)
-
-        framecount = framecount + 1
-        if framecount == 16:
-            socketrgb.setsockopt(zmq.UNSUBSCRIBE, b'')
-            socketir.setsockopt(zmq.UNSUBSCRIBE, b'')
-            socketdepth.setsockopt(zmq.UNSUBSCRIBE, b'')
-            socketreg.setsockopt(zmq.UNSUBSCRIBE, b'')
-            framecount = 0
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
