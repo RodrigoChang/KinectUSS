@@ -11,13 +11,9 @@
 #include <chrono>
 
 using namespace std;
-using std::chrono::high_resolution_clock;
-using std::chrono::duration_cast;
-using std::chrono::duration;
-using std::chrono::milliseconds;
 
-bool enable_rgb = true, enable_depth = true, enable_stream = true , onStreaming = true, pRunning = true;
-bool protonect_shutdown = false;
+bool enable_rgb = true, enable_depth = true, enable_stream = true , onStreaming = true, protonect_shutdown = false;
+static bool pRunning = true;
 libfreenect2::Freenect2 freenect2;
 libfreenect2::Freenect2Device* dev = 0;
 
@@ -67,13 +63,15 @@ int main(int argc, char *argv[]) {
             string serial = freenect2.getDefaultDeviceSerialNumber();
             thread Kinect1(kinect, serial);
             signal(SIGINT, sigint_handler);
-            //mainMenu();
+            thread mainM_thread(mainMenu);
             cout << "Abriendo Menu" << endl;
-            //menu(); //Inicilizamos el menu 
+            thread menu_thread(menu); //Inicilizamos el menu 
             while(onStreaming) {
-                this_thread::sleep_for(milliseconds(100));
+                this_thread::sleep_for(std::chrono::milliseconds(100));
             }
             Kinect1.join();
+            mainM_thread.join();
+            menu_thread.join();
             pRunning = false;
         }
     }

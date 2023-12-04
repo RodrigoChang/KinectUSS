@@ -42,14 +42,14 @@ void zmq_stream::encodeo_envio(const Mat& frame) {
     memcpy(message.data(), encodedframe.data(), encodedframe.size());
     // envio
     socket->send(message);
-    std::cout << "Frame encodeado enviado" << std::endl;
+    //std::cout << "Frame encodeado enviado" << std::endl;
 }
 
 void zmq_stream::envio_plain(const Mat& frame) {
     zmq::message_t message(frame.total() * frame.elemSize());
     memcpy(message.data(), frame.data, message.size());
     socket->send(message);
-    std::cout << "Frame enviado" << std::endl;
+    //std::cout << "Frame enviado" << std::endl;
 }
 
 std::vector<uchar> zmq_stream::encodeo(const Mat& frame) {

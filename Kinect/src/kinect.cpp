@@ -47,7 +47,6 @@ void kinect(string serial) {
         int conf = confirmacion();
         if(!conf) onStreaming = false;
     }       
-    auto t1 = high_resolution_clock::now();
     //Abriendo la kiect basado en el n serial
     thread zmq_streaming;
     // Initialize OpenCV window for the Kinect stream
@@ -58,10 +57,8 @@ void kinect(string serial) {
     zmq_stream ir_stream("tcp://localhost:5556", ZMQ_PUB);
     zmq_stream depth_stream("tcp://localhost:5557", ZMQ_PUB);
     zmq_stream registered_stream("tcp://localhost:5558", ZMQ_PUB);
-    PointCloud point_cloud_basico;
+    //PointCloud point_cloud_basico;
 
-    cout << "Abriendo Menu" << endl;
-    menu(); //Inicilizamos el menu
     //seteando el listener de libfreenect2
     int types = 0;
     if (enable_rgb) types |= libfreenect2::Frame::Color;
@@ -83,55 +80,34 @@ void kinect(string serial) {
         libfreenect2::Frame* rgb = frames[libfreenect2::Frame::Color];
         libfreenect2::Frame* ir = frames[libfreenect2::Frame::Ir];
         libfreenect2::Frame* depth = frames[libfreenect2::Frame::Depth];
-
-        //Creamos las matrices para poder visualizarl los streams
-        Mat(rgb->height, rgb->width, CV_8UC4, rgb->data).copyTo(rgbmat);
-        Mat(ir->height, ir->width, CV_32FC1, ir->data).copyTo(irmat);
-        Mat(depth->height, depth->width, CV_32FC1, depth->data).copyTo(depthmat);
-        //por alguna razon los frames directo de la kinect salen en mirror, asi que aqui los damos vuelta
-        flip(rgbmat, rgbmat, 1); 
-        flip(depthmat, depthmat, 1);
-        flip(irmat, irmat, 1);
-        //Creamos la imagen recortada para hacer fit al mediapipe
-        Mat ROI(rgbmat, Rect(308,0,1304,1080));
-        ROI.copyTo(cropped);
-
         //registration
-        registration->apply(rgb, depth, &undistorted, &registered, true, &depth2rgb);
-
+        thread reg_apply([&registration, &rgb, &depth, &undistorted, &registered, &depth2rgb] () {registration->apply(rgb, depth, &undistorted, &registered, true, &depth2rgb);});
+        
+        thread mat1([&rgb, &ir, &depth] () {
+            //Creamos las matrices para poder visualizarl los streams
+            Mat(rgb->height, rgb->width, CV_8UC4, rgb->data).copyTo(rgbmat);
+            Mat(ir->height, ir->width, CV_32FC1, ir->data).copyTo(irmat);
+            Mat(depth->height, depth->width, CV_32FC1, depth->data).copyTo(depthmat);
+        });
+        
         //point cloud
         //point_cloud_basico.getPointCloud(registration, &undistorted);
        // point_cloud_basico.visualizePointCloud();
+        reg_apply.join();
+        thread mat2([&undistorted, &registered, &depth2rgb] () {
+            //Creamos las matrices para poder visualizarl los streams
+            Mat(undistorted.height, undistorted.width, CV_32FC1, undistorted.data).copyTo(depthmatUndistorted);
+            Mat(registered.height, registered.width, CV_8UC4, registered.data).copyTo(rgbd);
+            Mat(depth2rgb.height, depth2rgb.width, CV_32FC1, depth2rgb.data).copyTo(rgbd2);
+        });
 
-        //Matrices para ver los frames de la registration
-        Mat(undistorted.height, undistorted.width, CV_32FC1, undistorted.data).copyTo(depthmatUndistorted);
-        Mat(registered.height, registered.width, CV_8UC4, registered.data).copyTo(rgbd);
-        Mat(depth2rgb.height, depth2rgb.width, CV_32FC1, depth2rgb.data).copyTo(rgbd2);
-        flip(depthmatUndistorted, depthmatUndistorted, 1); 
-        flip(rgbd, rgbd, 1);
-        flip(rgbd2, rgbd2, 1);
+        //por alguna razon los frames directo de la kinect salen en mirror, asi que aqui los damos vuelta
+        mat1.join();
+        flip(rgbmat, rgbmat, 1); 
+        flip(depthmat, depthmat, 1);
+        flip(irmat, irmat, 1);
+        mat2.join();
 
-        //streaming thread si llego a los 30 frames
-        auto frame2 = high_resolution_clock::now();
-        rgb_stream.encodeo_envio(cropped);
-        ir_stream.envio_plain(irmat);
-        depth_stream.envio_plain(depthmat);
-        registered_stream.encodeo_envio(rgbd);
-        if (duration_cast<milliseconds>(frame2 - frame1) >= frametime) {
-            
-            /*thread zmq_streaming([&rgb_stream, &ir_stream, &depth_stream, &registered_stream](){
-                rgb_stream.encodeo_envio(cropped);
-                ir_stream.envio_plain(irmat);
-                depth_stream.envio_plain(depthmat);
-                registered_stream.encodeo_envio(rgbd);
-            });*/
-            auto frame1 = high_resolution_clock::now();
-            if (zmq_streaming.joinable()) {
-                zmq_streaming.join();
-                
-            }
-        }
-        
         //Display de profundidad ***TO DO*** Hacer algo mas bonito
         if (displayDepthValue) {
             if (clickedX >= 0 && clickedY >= 0 && clickedX < depthmat.cols && clickedY < depthmat.rows) {
@@ -140,20 +116,43 @@ void kinect(string serial) {
             }
         }
 
-        putText(rgbd, to_string(pixelValue) + " mm", Point(clickedX, clickedY), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(205, 255, 0), 2, LINE_AA);
-        //imshow("rgb", rgbmat);
-        //imshow("ir", irmat / 4096.0f);
-        imshow("depth", depthmat / 4096.0f);
-        //imshow("undistorted", depthmatUndistorted / 4096.0f);
-        imshow("registered", rgbd);
-        //imshow("depth2RGB", rgbd2 / 4096.0f);
-        imshow("cropped", cropped);
-        //auto t2 = high_resolution_clock::now();
-        //this_thread::sleep_for(20ms);
+        thread thread_show([] () {
+            //Creamos la imagen recortada para hacer fit al mediapipe
+            Mat ROI(rgbmat, Rect(308,0,1304,1080));
+            ROI.copyTo(cropped);
+            flip(depthmatUndistorted, depthmatUndistorted, 1); 
+            flip(rgbd, rgbd, 1);
+            flip(rgbd2, rgbd2, 1);
+            putText(rgbd, to_string(pixelValue) + " mm", Point(clickedX, clickedY), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(205, 255, 0), 2, LINE_AA);
+            //imshow("rgb", rgbmat);
+            //imshow("ir", irmat / 4096.0f);
+            imshow("depth", depthmat / 4096.0f);
+            //imshow("undistorted", depthmatUndistorted / 4096.0f);
+            imshow("registered", rgbd);
+            //imshow("depth2RGB", rgbd2 / 4096.0f);
+            imshow("cropped", cropped);
+        });
+
+        //streaming thread si llego a los 30 frames
+        auto frame2 = high_resolution_clock::now();
+        if (duration_cast<milliseconds>(frame2 - frame1) >= frametime) {
+            
+            thread zmq_streaming([&rgb_stream, &ir_stream, &depth_stream, &registered_stream](){
+                rgb_stream.encodeo_envio(cropped);
+                ir_stream.envio_plain(irmat);
+                depth_stream.envio_plain(depthmat);
+                registered_stream.encodeo_envio(rgbd);
+            });
+            auto frame1 = high_resolution_clock::now();
+        }
+        
         int key = waitKey(1);
         protonect_shutdown = protonect_shutdown || (key > 0 && ((key & 0xFF) == 27));
         listener.release(frames);
-
+        thread_show.join();
+        if (zmq_streaming.joinable()) {
+            zmq_streaming.join();  
+        }
     }
     cout << "Deteniendo Kinect" << endl;
     dev->stop();
