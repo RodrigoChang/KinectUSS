@@ -8,7 +8,8 @@ PROJECT(KinectSUS)
 SET (CMAKE_CONFIGURATION_TYPES "Debug")
 # Compiler flags
 # si esta en debug
-#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wformat-security -pthread -O -D_FORTIFY_SOURCE=2 -D_GLIBCXX_ASSERTIONS -fstack-clash-protection -g -pipe")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wformat-security -pthread -fpermissive -pg -O -D_FORTIFY_SOURCE=2 -D_GLIBCXX_ASSERTIONS -fstack-clash-protection -g -pipe")
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pg")
 # si esta en produccion
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Ofast -pthread")
 
@@ -21,10 +22,14 @@ FIND_PACKAGE(freenect2 REQUIRED)
 SET(freenect2_LIBRARIES freenect2)
 
 # Add OpenCV package dependency for udp-image-streaming
+find_program(VALGRIND "valgrind")
+if(VALGRIND)
+    add_custom_target(valgrind COMMAND ${VALGRIND} --tool=callgrind ./KinectSUS ARGS)
+endif()
 FIND_PACKAGE(OpenCV REQUIRED)
 FIND_PACKAGE(PCL REQUIRED)
 FIND_PACKAGE(jsoncpp REQUIRED)
-INCLUDE_DIRECTORIES(${OpenCV_INCLUDE_DIRS} ${PCL_INCLUDE_DIRS} ${PROJECT_SOURCE_DIR}/headers /usr/include)
+INCLUDE_DIRECTORIES(${OpenCV_INCLUDE_DIRS} ${PCL_INCLUDE_DIRS} ${PROJECT_SOURCE_DIR}/include /usr/include)
 LIST(APPEND KinectSUS_LIBRARIES
   ${OpenCV_LIBS} ${PCL_LIBRARIES} jsoncpp
 )
