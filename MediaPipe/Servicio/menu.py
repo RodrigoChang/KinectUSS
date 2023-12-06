@@ -3,7 +3,7 @@ import imutils
 import tkinter as tk
 from PIL import Image, ImageTk
 from tkinter import font
-from config import COLOR_BARRA_SUPERIOR, COLOR_CUERPO_PRINCIPAL,COLOR_MENU,COLOR_MENU_CURSOR_ENCIMA
+from MediaPipe.Gui.config import COLOR_BARRA_SUPERIOR, COLOR_CUERPO_PRINCIPAL,COLOR_MENU,COLOR_MENU_CURSOR_ENCIMA
 
 
 class MaestroDesign(tk.Tk):

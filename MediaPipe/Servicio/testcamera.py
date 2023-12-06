@@ -4,7 +4,7 @@ from PIL import Image
 from PIL import ImageTk
 import cv2
 import imutils
-import p2
+import MediaPipe.Servicio.p2 as p2
 def visualizar():
     global cap
     if cap is not None:

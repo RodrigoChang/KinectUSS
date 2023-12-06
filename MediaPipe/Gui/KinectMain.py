@@ -6,9 +6,11 @@ from threading import Thread
 import time
 import numpy as np
 from math import acos, degrees
-import Bodytracking as BT
-import Bodyanglecalculator as BTA
-import Handstracking as HT
+import MediaPipe.Logica.Bodytracking as BT
+import MediaPipe.Logica.Bodyanglecalculator as BTA
+import MediaPipe.Logica.Handstracking as HT
+import MediaPipe.utiles.frame as Video_Stream
+import MediaPipe.utiles.server_connect as Server_Connect
 import zmq
 
 #Linux
@@ -27,16 +29,18 @@ if Input_mode == "streaming":
         HT.Hands(Input_IP)
 #Menu Video Disable    
 if Input_mode == "video":   
-    Video= cv2.VideoCapture(0, cv2.CAP_ANY)
+    Input_IP= input("IP: ")
     View=input("View: ")
+    Video_Stream.video_streaming()
+    Server_Connect.server_connect()
     if View == "Body":
         model=input("Model: ")
         if model == "bt":
-            BT.Bodytracking(Video)
+            BT.Bodytracking(Input_IP)
         if model == "bta":    
-            BTA.Bodyanglecalculator(Video)
+            BTA.Bodyanglecalculator(Input_IP)
     if View == "Hands":
-        HT.Hands(Video)
+        HT.Hands(Input_IP)
 
 
     

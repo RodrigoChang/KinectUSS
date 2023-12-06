@@ -8,6 +8,7 @@ import zmq
 import numpy as np
 import base64
 from math import acos, degrees
+import MediaPipe.utiles.susweb as sus
 
 mp_pose = mp.solutions.pose
 class ThreadedCamera(object):
@@ -17,6 +18,7 @@ class ThreadedCamera(object):
         except ValueError:
             pass    
         try:
+            print("activando streaming")
             self.ip = mode
         except ValueError:
             pass    
@@ -36,45 +38,38 @@ class ThreadedCamera(object):
         try:
             context = zmq.Context()
             socket = context.socket(zmq.SUB)
-            #5555 para recibir gabo
-            #3001 para recibir mi pc
-            socket.connect(f"tcp://{self.ip}:3001")
-            socket.setsockopt_string(zmq.SUBSCRIBE, "")
+            socket.connect(f"tcp://{self.ip}")
+            socket.setsockopt(zmq.SUBSCRIBE, b'')
             socket_active = True
         except Exception as e:
             socket_active = False
-            print("No pude manito mio")
             print(f"Excepción durante la configuración del socket: {e}")
-            # Puedes agregar más acciones aquí si es necesario
             pass
-                    
         while True:
             #zqm connection
             if socket_active == True:
                 #gabo
-                """message = socket.recv()
+                message = socket.recv()
                 frame_data = np.frombuffer(message, dtype=np.uint8)
                 frame = cv2.imdecode(frame_data, cv2.IMREAD_COLOR)
-                frame = cv2.resize(frame, (512, 424))"""
-                #mi pc
-                msg = socket.recv()
-                img = base64.b64decode(msg)
-                npimg = np.frombuffer(img, dtype=np.uint8)
-                frame = cv2.imdecode(npimg, 1)
-                self.frame_cam = frame
-                time.sleep(self.FPS)
+                self.frame_cam = cv2.resize(frame, (512, 424))
+                
             #Video conection    
             else:
                 try:    
-                    if self.capture is not None and self.capture.isOpened():
-                        (self.status, self.frame_cam) = self.capture.read()
+                    #mi pc
+                    msg = socket.recv()
+                    img = base64.b64decode(msg)
+                    npimg = np.frombuffer(img, dtype=np.uint8)
+                    frame = cv2.imdecode(npimg, 1)
+                    self.frame_cam = frame
                     time.sleep(self.FPS)
                 except Exception as e: 
                     print(f"Esta dando este error {e}")
                     break
     # Nico aqui esta la funcion del cuerpo 
     def process_pose(self, frame_cam):
-        #frame_resized = cv2.resize(frame, resolution)
+        frame_resized = cv2.resize(frame_cam, (512, 424))
         frame_resized = frame_cam
         frame_rgb = cv2.cvtColor(frame_cam, cv2.COLOR_BGR2RGB)
         results_skeleto = self.pose.process(frame_rgb)
@@ -187,7 +182,7 @@ class ThreadedCamera(object):
                 cv2.line(frame_resized, (x_right_heel, y_right_heel), (x_right_foot_index, y_right_foot_index), (0,0,0), 2)
                 cv2.line(frame_resized, (x_right_foot_index, y_right_foot_index), (x_right_ankle, y_right_ankle), (0,0,0), 2)
                 #Obtencion de z mediante susweb  entreganto x e y de punto seleccionado 
-                #print (f"right_shoulder x: {x_right_shoulder} Y: {y_right_shoulder} z: {sus.position_frame(x_right_shoulder, y_right_shoulder)}")
+                print (f"right_shoulder x: {x_right_shoulder} Y: {y_right_shoulder} z: {sus.position_frame(x_right_shoulder, y_right_shoulder)}")
                 """for name, landmark in zip(["left_shoulder", "left_elbow", "left_wrist", "left_hip", "left_knee", "left_ankle", "left_heel", "left_foot_index",
                                        "right_shoulder", "right_elbow", "right_wrist", "right_hip", "right_knee", "right_ankle", "right_heel", "right_foot_index"],
                                       [left_shoulder_landmark, left_elbow_landmark, left_wrist_landmark,
@@ -202,22 +197,22 @@ class ThreadedCamera(object):
         return frame_resized
 
 
-    def show_frame(self,socket):
+    def show_frame(self):
         if self.frame_cam is not None:
             processed_frame = self.process_pose(self.frame_cam)
-            _, img_encoded = cv2.imencode('.jpg', processed_frame)
+            """_, img_encoded = cv2.imencode('.jpg', processed_frame)
             msg = base64.b64encode(img_encoded.tobytes())
-            socket.send(msg)
-            #cv2.imshow('frame', processed_frame)
+            socket.send(msg)"""
+            cv2.imshow('frame', processed_frame)
             cv2.waitKey(self.FPS_MS)
 
 def Bodytracking(mode):
-    context = zmq.Context()
+    """context = zmq.Context()
     socket = context.socket(zmq.PUB)
-    socket.bind("tcp://0.0.0.0:3002")
+    socket.bind("tcp://0.0.0.0:3002")"""
     threaded_camera = ThreadedCamera(mode)
     while True:
         try:
-            threaded_camera.show_frame(socket)
+            threaded_camera.show_frame()
         except AttributeError:
             pass

@@ -5,7 +5,7 @@ import cv2
 import mediapipe as mp
 from threading import Thread
 import time
-import susweb as sus
+import MediaPipe.utiles.susweb as sus
 import numpy as np
 from math import acos, degrees
 

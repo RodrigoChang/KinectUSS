@@ -1,7 +1,7 @@
 from flask import Flask, request
 import numpy as np
 import cv2
-import frame_pb2
+import MediaPipe.Servicio.frame_pb2 as frame_pb2
 import base64
 
 app = Flask(__name__)

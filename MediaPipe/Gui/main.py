@@ -3,7 +3,7 @@ import imutils
 import tkinter as tk
 from PIL import Image, ImageTk
 from tkinter import font
-from config import COLOR_BARRA_SUPERIOR, COLOR_CUERPO_PRINCIPAL,COLOR_MENU,COLOR_MENU_CURSOR_ENCIMA
+from MediaPipe.Gui.config import COLOR_BARRA_SUPERIOR, COLOR_CUERPO_PRINCIPAL,COLOR_MENU,COLOR_MENU_CURSOR_ENCIMA
 
 
 class MaestroDesign(tk.Tk):
@@ -93,7 +93,7 @@ class MaestroDesign(tk.Tk):
         button.config(bg=COLOR_MENU, fg="white")
 
     def iniciar_video(self):
-        self.video = cv2.VideoCapture(0)
+        self.video = cv2.VideoCapture(0,cv2.CAP_ANY)
         self.iniciar()
 
     def iniciar(self):

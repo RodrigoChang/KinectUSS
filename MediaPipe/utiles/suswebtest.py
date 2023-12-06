@@ -5,19 +5,21 @@ import cv2
 def receive_frames():
     context = zmq.Context()
     socket = context.socket(zmq.SUB)
-    socket.connect("tcp://10.170.22.235:5556")  # Match the address used in the C++ program
+    socket.connect("tcp://10.171.23.91:5557")  # Match the address used in the C++ program
 
     # Subscribe to all topics
-    socket.setsockopt_string(zmq.SUBSCRIBE, "")
+
 
     while True:
+        socket.setsockopt(zmq.SUBSCRIBE, b'')
         # Receive the message
         message = socket.recv()
         #print(message)
         # Convert the received bytes to a NumPy array
-        frame_data = np.frombuffer(message, dtype=np.float32)
+        frame_data = np.frombuffer(message, dtype='float32')
         #frame = cv2.imdecode(frame_data, cv2.IMREAD_COLOR)
-        frame_data = cv2.resize(frame_data,(512,424))
+        frame_data = frame_data.reshape((424,512))
+        socket.setsockopt(zmq.UNSUBSCRIBE, b'')
         
 
         # Assuming the frame is in BGR format, reshape it to the original shape
@@ -29,7 +31,8 @@ def receive_frames():
 
         # Process the received frame (for example, display it using OpenCV)
         #cv2.imshow("color", frame)
-        cv2.imshow("color", frame_data/1024)
+        cv2.imshow("color", frame_data/4096)
+        
         cv2.waitKey(1)
         #return frame
         

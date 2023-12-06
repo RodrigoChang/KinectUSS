@@ -4,15 +4,14 @@ from array import array
 import numpy as np
 context = zmq.Context()
 socket = context.socket(zmq.SUB)
-socket.connect("tcp://10.171.30.186:5557")
-socket.setsockopt_string(zmq.SUBSCRIBE, "")
+socket.connect("tcp://10.171.23.91:5557")
 #enviar x,y
-context = zmq.Context()
-socket = context.socket(zmq.PUB)
-socket.bind("tcp://0.0.0.0:5558")
+socket2 = context.socket(zmq.PUB)
+socket2.bind("tcp://0.0.0.0:5558")
 
 def position_frame(x,y):
-    socket.send_string(f"{x},{y}")    
+    socket2.send_string(f"{x},{y}")
+    socket.setsockopt_string(zmq.SUBSCRIBE, '')    
     frame_data = socket.recv()
     resolution =(512,424)
     depth_frame = array("f",frame_data)
@@ -20,4 +19,5 @@ def position_frame(x,y):
     frame = np.frombuffer(depth_frame, dtype=np.float32)
     depth_frame_reshape = frame.reshape(resolution)
     valor=depth_frame_reshape[x][y]
+    socket.setsockopt_string(zmq.UNSUBSCRIBE, '')
     return valor
