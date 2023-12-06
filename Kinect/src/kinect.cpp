@@ -21,11 +21,10 @@ using std::chrono::duration;
 using std::chrono::milliseconds;
 
 zmq::context_t context(1);
-zmq::socket_t rgb_socket(context, ZMQ_PUB);
-zmq::socket_t ir_socket(context, ZMQ_PUB);
-zmq::socket_t depth_socket(context, ZMQ_PUB);
-zmq::socket_t registered_socket(context, ZMQ_PUB);
-zmq::socket_t read_socket(context, ZMQ_SUB);
+zmq::socket_t rgb_socket(context, ZMQ_REP);
+zmq::socket_t ir_socket(context, ZMQ_REP);
+zmq::socket_t depth_socket(context, ZMQ_REP);
+zmq::socket_t registered_socket(context, ZMQ_REP);
 
 bool displayDepthValue = false;
 int clickedX = -1, clickedY = -1;
@@ -50,13 +49,13 @@ void send_encode(Mat frame, zmq::socket_t* socket) {
     zmq::message_t message(encodedframe.size());
     memcpy(message.data(), encodedframe.data(), encodedframe.size());
     // envio
-    socket->send(message);
+    socket->send(message, ZMQ_NOBLOCK);
 }
 
 void send_plain(Mat frame, zmq::socket_t* socket) {
     zmq::message_t message(frame.total() * frame.elemSize());
     memcpy(message.data(), frame.data, message.size());
-    socket->send(message);
+    socket->send(message, ZMQ_NOBLOCK);
 }
 
 void kinect(string serial) {
@@ -160,23 +159,43 @@ void kinect(string serial) {
 
         //streaming thread si llego a los 30 frames
         auto frame2 = high_resolution_clock::now();
-        if (duration_cast<milliseconds>(frame2 - frame1) >= frametime) {
+
+        zmq::message_t request;
+        if (rgb_socket.recv(&request, ZMQ_NOBLOCK)) {
+            // Process the request for RGB (you can add logic here)
+            send_encode(cropped, &rgb_socket);  // Sending an empty reply
+        }
+        if (ir_socket.recv(&request, ZMQ_NOBLOCK)) {
+            // Process the request for IR (you can add logic here)
+            send_plain(irmat, &ir_socket);  // Sending an empty reply
+        }
+        if (depth_socket.recv(&request, ZMQ_NOBLOCK)) {
+            // Process the request for Depth (you can add logic here)
+            send_plain(depthmat, &depth_socket);  // Sending an empty reply
+        }
+        if (registered_socket.recv(&request, ZMQ_NOBLOCK)) {
+            // Process the request for Registered (you can add logic here)
+            send_encode(rgbd, &registered_socket);  // Sending an empty reply
+        }
+
+        /*if (duration_cast<milliseconds>(frame2 - frame1) >= frametime) {
             send_encode(cropped, &rgb_socket);
             send_plain(irmat, &ir_socket);
             send_plain(depthmat, &depth_socket);
             send_encode(rgbd, &registered_socket);
-           /* thread zmq_streaming([&rgb_stream, &ir_stream, &depth_stream, &registered_stream](){
+            thread zmq_streaming([&rgb_stream, &ir_stream, &depth_stream, &registered_stream](){
                 rgb_stream.encodeo_envio(cropped);
                 ir_stream.envio_plain(irmat);
                 depth_stream.envio_plain(depthmat);
                 registered_stream.encodeo_envio(rgbd);
-            });*/
+            });
             auto frame1 = high_resolution_clock::now();
 
          if (zmq_streaming.joinable()) {
             zmq_streaming.join();  
         }
-        }
+        }*/
+
         
         int key = waitKey(1);
         protonect_shutdown = protonect_shutdown || (key > 0 && ((key & 0xFF) == 27));
