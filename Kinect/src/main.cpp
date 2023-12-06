@@ -63,15 +63,15 @@ int main(int argc, char *argv[]) {
             string serial = freenect2.getDefaultDeviceSerialNumber();
             thread Kinect1(kinect, serial);
             signal(SIGINT, sigint_handler);
-            thread mainM_thread(mainMenu);
+            //thread mainM_thread(mainMenu);
             cout << "Abriendo Menu" << endl;
-            thread menu_thread(menu); //Inicilizamos el menu 
+            //thread menu_thread(menu); //Inicilizamos el menu 
             while(onStreaming) {
                 this_thread::sleep_for(std::chrono::milliseconds(100));
             }
             Kinect1.join();
-            mainM_thread.join();
-            menu_thread.join();
+            //mainM_thread.join();
+           // menu_thread.join();
             pRunning = false;
         }
     }
