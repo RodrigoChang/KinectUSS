@@ -65,11 +65,6 @@ def main():
     cv2.setMouseCallback("Depth", mouse_callback)
 
     while True:
-            #socketrgb.setsockopt(zmq.SUBSCRIBE, b'')
-            #socketir.setsockopt(zmq.SUBSCRIBE, b'')
-            #socketdepth.setsockopt(zmq.SUBSCRIBE, b'')
-           # socketreg.setsockopt(zmq.SUBSCRIBE, b'')
-        
         rgb_frame = receive_rgb_frame()
         ir_frame = receive_ir_frame()
         depth_frame = receive_depth_frame()
