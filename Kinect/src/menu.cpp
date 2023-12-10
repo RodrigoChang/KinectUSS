@@ -52,14 +52,15 @@ void onCallbackButton2(int state, void* userdata) {
 // reiniciar registration
 
 void menu() {
-
-    namedWindow("Depth Config", WINDOW_NORMAL);
-    Mat depthmenu(400, 800, CV_8UC3, Scalar(255, 255, 255));
-    // depth
-    createTrackbar("MinDepth", "Depth Config", &minD, 8500, onMinDepthSlider);
-    createTrackbar("MaxDepth", "Depth Config", &maxD, 8500, onMaxDepthSlider);
-    createButton("Bilateral Filtering", onCallbackButton1, NULL, QT_CHECKBOX, 1);
-    createButton("Edge Aware Filtering", onCallbackButton2, NULL, QT_CHECKBOX, 1);
-
-    imshow("Depth Config", depthmenu);
+   // while (!protonect_shutdown) {
+        namedWindow("Depth Config", WINDOW_NORMAL);
+        Mat depthmenu(400, 800, CV_8UC3, Scalar(255, 255, 255));
+        // depth
+        createTrackbar("MinDepth", "Depth Config", &minD, 8500, onMinDepthSlider);
+        createTrackbar("MaxDepth", "Depth Config", &maxD, 8500, onMaxDepthSlider);
+        createButton("Bilateral Filtering", onCallbackButton1, NULL, QT_CHECKBOX, 1);
+        createButton("Edge Aware Filtering", onCallbackButton2, NULL, QT_CHECKBOX, 1);
+        imshow("Depth Config", depthmenu);
+    //}
+    //cv::destroyWindow("Depth Config");  
 }
