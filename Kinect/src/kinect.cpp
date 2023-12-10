@@ -1,6 +1,8 @@
 // Este es el kinect.cpp, aqui stremeamos
 #include <iostream>
 #include <string>
+#include <sstream>
+#include <cppcodec/base64_rfc4648.hpp>
 #include <opencv2/opencv.hpp>
 #include <libfreenect2/libfreenect2.hpp>
 #include <libfreenect2/frame_listener_impl.h>
@@ -20,21 +22,15 @@ using std::chrono::duration_cast;
 using std::chrono::duration;
 using std::chrono::milliseconds;
 
-zmq::context_t context(1);
-zmq::socket_t rgb_socket(context, ZMQ_REP);
-zmq::socket_t ir_socket(context, ZMQ_REP);
-zmq::socket_t depth_socket(context, ZMQ_REP);
-zmq::socket_t registered_socket(context, ZMQ_REP);
-
 bool displayDepthValue = false;
 int clickedX = -1, clickedY = -1;
 float pixelValue;
-auto frametime = milliseconds(16);
+auto frametime = milliseconds(33);
 Mat rgbmat, depthmat, depthmatUndistorted, irmat, rgbd, rgbd2, cropped;
 
 libfreenect2::PacketPipeline* pipeline = 0;
 
-void onMouseCallback(int event, int x, int y, int flags, void* userdata) {
+static void onMouseCallback(int event, int x, int y, int flags, void* userdata) {
     if (event == EVENT_LBUTTONDOWN) {
         clickedX = x;
         clickedY = y;
@@ -42,26 +38,50 @@ void onMouseCallback(int event, int x, int y, int flags, void* userdata) {
     }
 }
 
-void send_encode(Mat frame, zmq::socket_t* socket) {
-    std::vector<uchar> encodedframe;
-    cv::imencode(".jpg", frame, encodedframe);
-    // mempcpy moment
-    zmq::message_t message(encodedframe.size());
-    memcpy(message.data(), encodedframe.data(), encodedframe.size());
-    // envio
-    socket->send(message, ZMQ_NOBLOCK);
+void find_z() {
+    zmq_stream depth_points("tcp://" + ip + ":5557", ZMQ_REP);
+    while(!protonect_shutdown) {
+        zmq::message_t request;
+        request = depth_points.receive();
+        string receivedMsg = string(static_cast<char*>(request.data()), request.size());
+        cout << "Received X and Y: " << receivedMsg << endl;
+        istringstream iss(receivedMsg);
+        static int x, y;
+        char comma;
+        iss >> x >> comma >> y;
+        if (x >= 0 && y >= 0 && x < depthmat.cols && y < depthmat.rows) {
+                pixelValue = depthmatUndistorted.at<float>(y, x);
+                cout << "Profundidad pixel (" << x << ", " << y << "): " << pixelValue << " mm" << endl;
+                string responseMsg = to_string(pixelValue);
+                depth_points.send_mgs(responseMsg);
+        }
+    }
 }
 
-void send_plain(Mat frame, zmq::socket_t* socket) {
-    zmq::message_t message(frame.total() * frame.elemSize());
-    memcpy(message.data(), frame.data, message.size());
-    socket->send(message, ZMQ_NOBLOCK);
+static void zmq_streaming() {
+    zmq_stream rgb_stream("tcp://" + ip + ":5555", ZMQ_PUB);
+    zmq_stream ir_stream("tcp://" + ip + ":5556", ZMQ_PUB);;
+    zmq_stream registered_stream("tcp://" + ip + ":5558", ZMQ_PUB);
+    cout << "socket listos" << endl;
+    this_thread::sleep_for(milliseconds(5000));
+    cout << "comenzando stream" << endl;
+    while(!protonect_shutdown) {
+        thread rgb_streaming([&rgb_stream] () {rgb_stream.encodeo_envio(cropped);});
+        thread ir_streaming([&ir_stream] () {ir_stream.encodeo_envio(irmat / 4096.0f);});
+        thread registered_streaming([&registered_stream] () {registered_stream.encodeo_envio(rgbd);});
+        rgb_streaming.join();
+        ir_streaming.join();
+        registered_streaming.join();
+        this_thread::sleep_for(milliseconds(33));
+        if (protonect_shutdown) break;
+    }
 }
 
 void kinect(string serial) {
     cout << "Iniciando Kinect default" << endl;
     //Abriendo la kiect basado en el n serie
-    pipeline = new libfreenect2::OpenGLPacketPipeline(); 
+    pipeline = new libfreenect2::OpenGLPacketPipeline();
+    //Abriendo la kiect basado en el n serial 
     if (pipeline) dev = freenect2.openDevice(serial, pipeline);
     else dev = freenect2.openDevice(serial);      
     dev = freenect2.openDevice(serial);
@@ -70,20 +90,12 @@ void kinect(string serial) {
         int conf = confirmacion();
         if(!conf) onStreaming = false;
     }       
-    //Abriendo la kiect basado en el n serial
-    thread zmq_streaming;
-    // Initialize OpenCV window for the Kinect stream
+
+    // Opencv value thing
     namedWindow("registered");
     setMouseCallback("registered", onMouseCallback);
 
-    cout << "Inicializando sockets" << endl;
-    rgb_socket.bind("tcp://0.0.0.0:5555");
-    ir_socket.bind("tcp://0.0.0.0:5556");
-    depth_socket.bind("tcp://0.0.0.0:5557");
-    registered_socket.bind("tcp://0.0.0.0:5558");
-    cout << "Sockets listos" << endl;
     //PointCloud point_cloud_basico;
-
     //seteando el listener de libfreenect2
     int types = 0;
     if (enable_rgb) types |= libfreenect2::Frame::Color;
@@ -98,8 +110,9 @@ void kinect(string serial) {
     cout << "Firmware de la Kinect : " << dev->getFirmwareVersion() << endl;
     libfreenect2::Registration* registration = new libfreenect2::Registration(dev->getIrCameraParams(), dev->getColorCameraParams());
     libfreenect2::Frame undistorted(512, 424, 4), registered(512, 424, 4), depth2rgb(1920, 1080 + 2, 4);
+    thread recv_mesg(find_z);
+    thread frame_streaming(zmq_streaming);
     auto frame1 = high_resolution_clock::now();
-
     while (!protonect_shutdown) {   //Mientras spawneen mas frames va a seguir ejecutandose
         listener.waitForNewFrame(frames);
         libfreenect2::Frame* rgb = frames[libfreenect2::Frame::Color];
@@ -120,6 +133,8 @@ void kinect(string serial) {
             flip(irmat, irmat, 1);
             Mat ROI(rgbmat, Rect(308,0,1304,1080));
             ROI.copyTo(cropped);
+            resize(cropped, cropped, Size(512, 424), 0, 0, INTER_LINEAR);
+            //Creamos la imagen recortada para hacer fit al mediapipe
         });
         
         //point cloud
@@ -138,7 +153,6 @@ void kinect(string serial) {
         });
 
         mat1.join();
-
         //Display de profundidad ***TO DO*** Hacer algo mas bonito
         if (displayDepthValue) {
             if (clickedX >= 0 && clickedY >= 0 && clickedX < depthmat.cols && clickedY < depthmat.rows) {
@@ -146,56 +160,16 @@ void kinect(string serial) {
                 cout << "Profundidad pixel (" << clickedX << ", " << clickedY << "): " << pixelValue << " mm" << endl;
             }
         }
-        //Creamos la imagen recortada para hacer fit al mediapipe
+
         mat2.join();
         putText(rgbd, to_string(pixelValue) + " mm", Point(clickedX, clickedY), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(205, 255, 0), 2, LINE_AA);
         //imshow("rgb", rgbmat);
         //imshow("ir", irmat / 4096.0f);
-        imshow("depth", depthmat / 4096.0f);
+      //  imshow("depth", depthmat / 4096.0f);
         //imshow("undistorted", depthmatUndistorted / 4096.0f);
         imshow("registered", rgbd);
         //imshow("depth2RGB", rgbd2 / 4096.0f);
-        imshow("cropped", cropped);
-
-        //streaming thread si llego a los 30 frames
-        auto frame2 = high_resolution_clock::now();
-
-        zmq::message_t request;
-        if (rgb_socket.recv(&request, ZMQ_NOBLOCK)) {
-            // Process the request for RGB (you can add logic here)
-            send_encode(cropped, &rgb_socket);  // Sending an empty reply
-        }
-        if (ir_socket.recv(&request, ZMQ_NOBLOCK)) {
-            // Process the request for IR (you can add logic here)
-            send_plain(irmat, &ir_socket);  // Sending an empty reply
-        }
-        if (depth_socket.recv(&request, ZMQ_NOBLOCK)) {
-            // Process the request for Depth (you can add logic here)
-            send_plain(depthmat, &depth_socket);  // Sending an empty reply
-        }
-        if (registered_socket.recv(&request, ZMQ_NOBLOCK)) {
-            // Process the request for Registered (you can add logic here)
-            send_encode(rgbd, &registered_socket);  // Sending an empty reply
-        }
-
-        /*if (duration_cast<milliseconds>(frame2 - frame1) >= frametime) {
-            send_encode(cropped, &rgb_socket);
-            send_plain(irmat, &ir_socket);
-            send_plain(depthmat, &depth_socket);
-            send_encode(rgbd, &registered_socket);
-            thread zmq_streaming([&rgb_stream, &ir_stream, &depth_stream, &registered_stream](){
-                rgb_stream.encodeo_envio(cropped);
-                ir_stream.envio_plain(irmat);
-                depth_stream.envio_plain(depthmat);
-                registered_stream.encodeo_envio(rgbd);
-            });
-            auto frame1 = high_resolution_clock::now();
-
-         if (zmq_streaming.joinable()) {
-            zmq_streaming.join();  
-        }
-        }*/
-
+       // imshow("cropped", cropped);
         
         int key = waitKey(1);
         protonect_shutdown = protonect_shutdown || (key > 0 && ((key & 0xFF) == 27));
@@ -205,7 +179,7 @@ void kinect(string serial) {
     dev->stop();
     dev->close();
     delete registration;
-    destroyAllWindows();
+    cv::destroyAllWindows();
     onStreaming = false;
 }
 

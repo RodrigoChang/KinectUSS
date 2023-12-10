@@ -8,6 +8,7 @@
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
 #include <pcl/visualization/pcl_visualizer.h>
+#include <string>
 
 //extern libfreenect2::Registration* registration;
 extern libfreenect2::Freenect2 freenect2;
@@ -16,6 +17,7 @@ extern libfreenect2::Freenect2Device::ColorCameraParams ColorCameraParams;
 extern libfreenect2::Freenect2Device::IrCameraParams IrCameraParams;
 extern libfreenect2::Freenect2Device::Config config;
 extern bool onStreaming, protonect_shutdown, enable_rgb, enable_depth, enable_stream;
+extern std::string ip;
 
 //ZMQ
 class zmq_stream {
@@ -28,8 +30,11 @@ public:
     zmq_stream(const std::string& serverAddress, int socketType);
     ~zmq_stream();
 
+    zmq::message_t receive();
+    void send_mgs(std::string msg);
     void encodeo_envio(const cv::Mat& frame);
     void envio_plain(const cv::Mat& frame);
+    
 
 private:
     std::vector<uchar> encodeo(const cv::Mat& frame);
@@ -76,8 +81,7 @@ private:
 void kinect(std::string serial);
 
 //utils.cpp
-void readIni();
-void writeIni();
+std::map<std::string, std::string> readConfigFile(const std::string& filename);
 void getParams(libfreenect2::Freenect2Device *dev);
 void setParams(libfreenect2::Freenect2Device *dev);
 int confirmacion();
