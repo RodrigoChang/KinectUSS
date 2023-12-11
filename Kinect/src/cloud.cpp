@@ -8,6 +8,7 @@
 #include <libfreenect2/libfreenect2.hpp>
 #include <libfreenect2/registration.h>
 #include "../include/utils.h"
+#include <thread>
 
 /* 
 Clase PointCloud
@@ -19,17 +20,18 @@ xd
 //PointCloud::PointCloud() : viewer("Visor de Point Cloud") {}
 
 void PointCloud::getPointCloud(libfreenect2::Registration* registration, 
-                libfreenect2::Frame* undistorted_frame, 
-                libfreenect2::Frame*  registered_frame = NULL, int type = 0) {
+                libfreenect2::Frame* undistorted_frame,
+                cloud_type type, 
+                libfreenect2::Frame*  registered_frame = nullptr) {
     std::cout << "Partimos" << endl;                 
-    if (registered_frame = NULL) {
+    if (registered_frame == nullptr || type == GRAY) {
         std::cout << "XYZ" << endl;
         getCloudData(registration, undistorted_frame);
         fixCloud<pcl::PointXYZ>(cloud);
         visualizePointCloud();                    
     }
     else {
-        if (type = 1) getCloudDataRGB2(registration, undistorted_frame, registered_frame);
+        if (type == RGB2) getCloudDataRGB2(registration, undistorted_frame, registered_frame);
         else getCloudDataRGB(registration, undistorted_frame, registered_frame);
         fixCloud<pcl::PointXYZRGB>(cloud_rgb);
         visualizePointCloudRGB();
