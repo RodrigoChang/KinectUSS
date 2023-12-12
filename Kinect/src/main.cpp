@@ -4,6 +4,7 @@
 #include <string>
 #include <map>
 #include <opencv2/opencv.hpp>
+#include <opencv2/core/core.hpp>
 #include <libfreenect2/libfreenect2.hpp>
 #include <libfreenect2/logger.h>
 #include "../include/utils.h"

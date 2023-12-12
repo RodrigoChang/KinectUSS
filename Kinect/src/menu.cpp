@@ -1,6 +1,7 @@
 #include "../include/utils.h"
 //#include "menu.h"
 #include <opencv2/opencv.hpp>
+#include <opencv2/core/core.hpp>
 #include <string>
 #include <iostream>
 #include <libfreenect2/libfreenect2.hpp>

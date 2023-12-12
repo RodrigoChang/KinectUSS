@@ -19,13 +19,31 @@ EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+		MinSizeRel|x64 = MinSizeRel|x64
+		RelWithDebInfo|x64 = RelWithDebInfo|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{D2FBB84D-B193-3BEE-B7C3-FB26C4E45774}.Debug|x64.ActiveCfg = Debug|x64
+		{D2FBB84D-B193-3BEE-B7C3-FB26C4E45774}.Release|x64.ActiveCfg = Release|x64
+		{D2FBB84D-B193-3BEE-B7C3-FB26C4E45774}.MinSizeRel|x64.ActiveCfg = MinSizeRel|x64
+		{D2FBB84D-B193-3BEE-B7C3-FB26C4E45774}.RelWithDebInfo|x64.ActiveCfg = RelWithDebInfo|x64
 		{A02056D6-599B-3404-B70F-1EC54E655F89}.Debug|x64.ActiveCfg = Debug|x64
 		{A02056D6-599B-3404-B70F-1EC54E655F89}.Debug|x64.Build.0 = Debug|x64
+		{A02056D6-599B-3404-B70F-1EC54E655F89}.Release|x64.ActiveCfg = Release|x64
+		{A02056D6-599B-3404-B70F-1EC54E655F89}.Release|x64.Build.0 = Release|x64
+		{A02056D6-599B-3404-B70F-1EC54E655F89}.MinSizeRel|x64.ActiveCfg = MinSizeRel|x64
+		{A02056D6-599B-3404-B70F-1EC54E655F89}.MinSizeRel|x64.Build.0 = MinSizeRel|x64
+		{A02056D6-599B-3404-B70F-1EC54E655F89}.RelWithDebInfo|x64.ActiveCfg = RelWithDebInfo|x64
+		{A02056D6-599B-3404-B70F-1EC54E655F89}.RelWithDebInfo|x64.Build.0 = RelWithDebInfo|x64
 		{2C4E634F-3E7E-39CF-9CF4-9B7D4E1CBC65}.Debug|x64.ActiveCfg = Debug|x64
 		{2C4E634F-3E7E-39CF-9CF4-9B7D4E1CBC65}.Debug|x64.Build.0 = Debug|x64
+		{2C4E634F-3E7E-39CF-9CF4-9B7D4E1CBC65}.Release|x64.ActiveCfg = Release|x64
+		{2C4E634F-3E7E-39CF-9CF4-9B7D4E1CBC65}.Release|x64.Build.0 = Release|x64
+		{2C4E634F-3E7E-39CF-9CF4-9B7D4E1CBC65}.MinSizeRel|x64.ActiveCfg = MinSizeRel|x64
+		{2C4E634F-3E7E-39CF-9CF4-9B7D4E1CBC65}.MinSizeRel|x64.Build.0 = MinSizeRel|x64
+		{2C4E634F-3E7E-39CF-9CF4-9B7D4E1CBC65}.RelWithDebInfo|x64.ActiveCfg = RelWithDebInfo|x64
+		{2C4E634F-3E7E-39CF-9CF4-9B7D4E1CBC65}.RelWithDebInfo|x64.Build.0 = RelWithDebInfo|x64
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7F92C7C9-0D04-3E5D-B943-398B0D3695B9}

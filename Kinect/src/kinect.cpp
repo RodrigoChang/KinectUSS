@@ -3,6 +3,7 @@
 #include <string>
 #include <sstream>
 #include <opencv2/opencv.hpp>
+#include <opencv2/core/core.hpp>
 #include <libfreenect2/libfreenect2.hpp>
 #include <libfreenect2/frame_listener_impl.h>
 #include <libfreenect2/packet_pipeline.h>
@@ -109,7 +110,7 @@ static void zmq_streaming() {
 void kinect(string serial) {
     cout << "Iniciando Kinect default" << endl;
     //Abriendo la kiect basado en el n serie
-    pipeline = new libfreenect2::OpenGLPacketPipeline();
+    pipeline = new libfreenect2::CpuPacketPipeline();
     //Abriendo la kiect basado en el n serial 
     if (pipeline) dev = freenect2.openDevice(serial, pipeline);
     else dev = freenect2.openDevice(serial);      
@@ -142,7 +143,7 @@ void kinect(string serial) {
         thread frame_streaming(zmq_streaming); 
         thread recv_mesg(find_z);
     }
-    if (enable_cloud) thread cloud_function(cloud_streaming);
+//    if (enable_cloud) thread cloud_function(cloud_streaming);
 
     while (!protonect_shutdown) {   //Mientras spawneen mas frames va a seguir ejecutandose
         listener.waitForNewFrame(frames);

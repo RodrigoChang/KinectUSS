@@ -3,7 +3,8 @@
 #include <libfreenect2/libfreenect2.hpp>
 #include <libfreenect2/registration.h>
 #include <opencv2/opencv.hpp>
-#include <C:/Users/rodri/Documents/Git/vcpkg/packages/zeromq_x64-windows/include/zmq.hpp>
+#include <opencv2/core/core.hpp>
+#include <../include/zmq.hpp>
 #include <string>
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
