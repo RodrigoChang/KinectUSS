@@ -23,10 +23,10 @@ xd
 zmq::context_t zmq_stream::context(1);
 
 zmq_stream::zmq_stream(const std::string& serverAddress, const std::string& serverPort, int socketType)
-    : serverAddress(serverAddress), serverPort(serverPort), socketType(socketType) {
+    : serverAddress(serverAddress), socketType(socketType) {
     socket = new zmq::socket_t(context, socketType);
     //bind/connect
-    if (serverAddress == "0.0.0.0" || serverAddress == "127.0.0.1") socket->bind("tcp://" + serverAddress + ":" + serverPort);
+    if (serverAddress == "0.0.0.0") socket->bind("tcp://" + serverAddress + ":" + serverPort);
     // Connecting
     else socket->connect("tcp://" + serverAddress + ":" + serverPort);
     

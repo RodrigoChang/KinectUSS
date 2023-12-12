@@ -12,15 +12,17 @@
 #include "../include/log.h"
 #include <thread>
 #include <chrono>
+#include <mutex>
 
 using namespace std;
 using namespace cv;
 
+mutex stream_mutex;
 bool displayDepthValue = false;
 int clickedX = -1, clickedY = -1;
 float pixelValue;
-thread mat1, mat2;
-Mat rgbmat, depthmat, depthmatUndistorted, irmat, rgbd, rgbd2, cropped;
+thread mat1, mat2, recorte, recv_mesg;
+Mat rgbmat, depthmat, depthmatUndistorted, irmat, rgbd, rgbd2, cropped, resized, reg_send, ir_send, depth_send;
 
 libfreenect2::Registration* registration;
 libfreenect2::PacketPipeline* pipeline = 0;
@@ -31,26 +33,6 @@ static void onMouseCallback(int event, int x, int y, int flags, void* userdata) 
         clickedX = x;
         clickedY = y;
         displayDepthValue = true;
-    }
-}
-
-static void find_z() {
-    zmq_stream depth_points(ip, "5557", ZMQ_REP);
-    while(!protonect_shutdown) {
-        zmq::message_t request;
-        request = depth_points.receive();
-        string receivedMsg = string(static_cast<char*>(request.data()), request.size());
-        cout << "Received X and Y: " << receivedMsg << endl;
-        istringstream iss(receivedMsg);
-        static int x, y;
-        char coma;
-        iss >> x >> coma >> y;
-        if (x >= 0 && y >= 0 && x < depthmat.cols && y < depthmat.rows) {
-                pixelValue = depthmatUndistorted.at<float>(y, x);
-                cout << "Profundidad pixel (" << x << ", " << y << "): " << pixelValue << " mm" << endl;
-                string responseMsg = to_string(pixelValue);
-                depth_points.send_mgs(responseMsg);
-        }
     }
 }
 
@@ -85,6 +67,26 @@ static void cloud_streaming() {
     }
 }
 
+static void find_z() {
+    zmq_stream depth_points(ip, "5557", ZMQ_REP);
+    while(!protonect_shutdown) {
+        zmq::message_t request;
+        request = depth_points.receive();
+        string receivedMsg = string(static_cast<char*>(request.data()), request.size());
+        cout << "Received X and Y: " << receivedMsg << endl;
+        istringstream iss(receivedMsg);
+        static int x, y;
+        char coma;
+        iss >> x >> coma >> y;
+        if (x >= 0 && y >= 0 && x < depth_send.cols && y < depth_send.rows) {
+                pixelValue = depth_send.at<float>(y, x);
+                cout << "Profundidad pixel (" << x << ", " << y << "): " << pixelValue << " mm" << endl;
+                string responseMsg = to_string(pixelValue);
+                depth_points.send_mgs(responseMsg);
+        }
+    }
+}
+
 static void zmq_streaming() {
     zmq_stream rgb_stream(ip, "5555", ZMQ_PUB);
     zmq_stream ir_stream(ip, "5556", ZMQ_PUB);;
@@ -93,11 +95,13 @@ static void zmq_streaming() {
     this_thread::sleep_for(chrono::milliseconds(5000));
     cout << "comenzando stream" << endl;
     while(!protonect_shutdown) {
-        mat1.join();
-        mat2.join();
-        thread rgb_streaming([&rgb_stream] () {rgb_stream.encodeo_envio(cropped);});
-        thread ir_streaming([&ir_stream] () {ir_stream.encodeo_envio(irmat / 4096.0f);});
-        thread registered_streaming([&registered_stream] () {registered_stream.encodeo_envio(rgbd);});
+        if (recorte.joinable()) recorte.join();
+        thread rgb_streaming([&rgb_stream] () {rgb_stream.encodeo_envio(resized);});
+        //lock_guard<mutex> guard(stream_mutex);
+        if(mat1.joinable()) mat1.join();
+        thread ir_streaming([&ir_stream] () {ir_stream.encodeo_envio(ir_send / 512.0f );});
+        if(mat2.joinable()) mat2.join();
+        thread registered_streaming([&registered_stream] () {registered_stream.encodeo_envio(reg_send);});
         rgb_streaming.join();
         ir_streaming.join();
         registered_streaming.join();
@@ -129,7 +133,7 @@ void kinect(string serial) {
     if (enable_depth) types |= libfreenect2::Frame::Ir | libfreenect2::Frame::Depth;
     libfreenect2::SyncMultiFrameListener listener(types);
     libfreenect2::FrameMap frames;
-
+    thread frame_streaming;
     dev->setColorFrameListener(&listener);
     dev->setIrAndDepthFrameListener(&listener);
     dev->start();
@@ -139,11 +143,11 @@ void kinect(string serial) {
     libfreenect2::Frame undistorted(512, 424, 4), registered(512, 424, 4), depth2rgb(1920, 1080 + 2, 4);
 
     if (enable_stream) {
-        thread frame_streaming(zmq_streaming); 
-        thread recv_mesg(find_z);
+        recv_mesg = thread(find_z);
+        frame_streaming = thread(zmq_streaming);
     }
-    if (enable_cloud) thread cloud_function(cloud_streaming);
-
+ 
+    //if (enable_cloud) thread cloud_function(cloud_streaming);
     while (!protonect_shutdown) {   //Mientras spawneen mas frames va a seguir ejecutandose
         listener.waitForNewFrame(frames);
         libfreenect2::Frame* rgb = frames[libfreenect2::Frame::Color];
@@ -160,14 +164,10 @@ void kinect(string serial) {
             rgb_mat.join();
             flip(rgbmat, rgbmat, 1); 
             //por alguna razon los frames directo de la kinect salen en mirror, asi que aqui los damos vuelta
-            Mat ROI(rgbmat, Rect(308,0,1304,1080));
-            ROI.copyTo(cropped);
-            resize(cropped, cropped, Size(512, 424), 0, 0, INTER_LINEAR);
-            //Creamos la imagen recortada para hacer fit al mediapipe
             ir_mat.join();
             depth_mat.join();
-            flip(depthmat, depthmat, 1);
-            flip(irmat, irmat, 1);
+            flip(depthmat, depth_send, 1);
+            flip(irmat, ir_send, 1);
         });
 
         thread mat2([&undistorted, &registered, &depth2rgb] () {
@@ -179,11 +179,19 @@ void kinect(string serial) {
             registered_mat.join();
             depth2rgb_mat.join();
             flip(depthmatUndistorted, depthmatUndistorted, 1); 
-            flip(rgbd, rgbd, 1);
+            flip(rgbd, reg_send, 1);
             flip(rgbd2, rgbd2, 1);
         });
         
         mat1.join();
+
+        thread recorte([] () {
+            Mat ROI(rgbmat, Rect(308,0,1304,1080));
+            ROI.copyTo(cropped);
+            resize(cropped, resized, Size(512, 424), 0, 0, INTER_LINEAR);
+            //Creamos la imagen recortada para hacer fit al mediapipe
+        });
+
         //Display de profundidad ***TO DO*** Hacer algo mas bonito
         if (displayDepthValue) {
             if (clickedX >= 0 && clickedY >= 0 && clickedX < depthmat.cols && clickedY < depthmat.rows) {
@@ -191,18 +199,18 @@ void kinect(string serial) {
                 cout << "Profundidad pixel (" << clickedX << ", " << clickedY << "): " << pixelValue << " mm" << endl;
             }
         }
-
+        recorte.join();
         mat2.join();
+
         putText(rgbd, to_string(pixelValue) + " mm", Point(clickedX, clickedY), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(205, 255, 0), 2, LINE_AA);
         //imshow("rgb", rgbmat);
         //imshow("ir", irmat / 4096.0f);
-      //  imshow("depth", depthmat / 4096.0f);
+        //imshow("depth", depthmat / 4096.0f);
         //imshow("undistorted", depthmatUndistorted / 4096.0f);
         imshow("registered", rgbd);
         //imshow("depth2RGB", rgbd2 / 4096.0f);
-       // imshow("cropped", cropped);
-        
-        int key = waitKey(1);
+        //imshow("cropped", cropped);
+        int key = cv::waitKey(1);
         protonect_shutdown = protonect_shutdown || (key > 0 && ((key & 0xFF) == 27));
         listener.release(frames);
     }
