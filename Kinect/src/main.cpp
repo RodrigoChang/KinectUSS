@@ -13,9 +13,11 @@
 
 using namespace std;
 
-bool enable_rgb, enable_depth, enable_stream, onStreaming = true, protonect_shutdown = false;
+bool enable_rgb, enable_depth, enable_stream, enable_cloud, onStreaming = true, protonect_shutdown = false;
 static bool pRunning = true;
+int tipo_cloud; 
 string ip;
+chrono::milliseconds frametime(33);
 libfreenect2::Freenect2 freenect2;
 libfreenect2::Freenect2Device* dev = 0;
 
@@ -48,9 +50,7 @@ int main() {
 
     for (const auto& pair : config) {
         cout << pair.first << " = " << pair.second << endl;
-        if (pair.first == "ip_mp") {
-            ip = pair.second;
-        }
+        if (pair.first == "ip_mp") ip = pair.second;
         if (pair.first == "rgb") {
             if (pair.second == "True") enable_rgb = true;
             else enable_rgb = false;
@@ -62,6 +62,24 @@ int main() {
         if (pair.first == "stream") {
             if (pair.second == "True") enable_stream = true;
             else enable_stream = false;
+        }
+        if (pair.first == "cloud") {
+            if (pair.second == "gray") {
+                tipo_cloud == PointCloud::GRAY;
+                enable_cloud = true;
+            }
+            else if (pair.second == "rgb") {
+                tipo_cloud == PointCloud::RGB;
+                enable_cloud = true; 
+            }
+            else if (pair.second == "rgb2") {
+                tipo_cloud == PointCloud::RGB2;
+                enable_cloud = true;
+            }
+        }
+        if (pair.first == "frametime") {
+            long long number = stoll(pair.second);
+            chrono::milliseconds frametime(number);
         }
     } 
     if (!enable_rgb && !enable_depth) {

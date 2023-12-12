@@ -9,6 +9,7 @@
 #include <pcl/point_types.h>
 #include <pcl/visualization/pcl_visualizer.h>
 #include <string>
+#include <chrono>
 
 //extern libfreenect2::Registration* registration;
 extern libfreenect2::Freenect2 freenect2;
@@ -16,18 +17,20 @@ extern libfreenect2::Freenect2Device *dev;
 extern libfreenect2::Freenect2Device::ColorCameraParams ColorCameraParams;
 extern libfreenect2::Freenect2Device::IrCameraParams IrCameraParams;
 extern libfreenect2::Freenect2Device::Config config;
-extern bool onStreaming, protonect_shutdown, enable_rgb, enable_depth, enable_stream;
+extern bool onStreaming, protonect_shutdown, enable_rgb, enable_depth, enable_stream, enable_cloud;
 extern std::string ip;
-
+extern std::chrono::milliseconds frametime;
+extern int tipo_cloud;
 //ZMQ
 class zmq_stream {
 private:
     zmq::socket_t* socket;
+    std::string serverPort;
     std::string serverAddress;
     int socketType;
 
 public:
-    zmq_stream(const std::string& serverAddress, int socketType);
+    zmq_stream(const std::string& serverAddress, const std::string& serverPort, int socketType);
     ~zmq_stream();
 
     zmq::message_t receive();
@@ -50,11 +53,16 @@ class PointCloud {
     std::ofstream outputFile;
 
 public:
+    enum cloud_type {
+        GRAY = 0, RGB = 1, RGB2 = 2
+    };
+
     PointCloud() : viewer("Visor de Point Cloud") {}
 
     void getPointCloud(libfreenect2::Registration* registration, 
-                    libfreenect2::Frame* undistorted_frame, 
-                    libfreenect2::Frame*  registered_frame = NULL, int type = 0);
+                    libfreenect2::Frame* undistorted_frame,
+                    cloud_type type,
+                    libfreenect2::Frame*  registered_frame = NULL);
 
     void visualizePointCloud();
     void visualizePointCloudRGB();
