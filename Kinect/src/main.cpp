@@ -13,7 +13,7 @@
 
 using namespace std;
 
-bool enable_rgb, enable_depth, enable_stream, enable_cloud, onStreaming = true, protonect_shutdown = false;
+bool enable_rgb, enable_depth, enable_stream, enable_cloud, enable_z_stream, onStreaming = true, protonect_shutdown = false;
 static bool pRunning = true;
 int tipo_cloud; 
 string ip;
@@ -63,6 +63,10 @@ int main() {
             if (pair.second == "True") enable_stream = true;
             else enable_stream = false;
         }
+         if (pair.first == "z_stream") {
+            if (pair.second == "True") enable_z_stream = true;
+            else enable_z_stream = false;
+        }
         if (pair.first == "cloud") {
             if (pair.second == "gray") {
                 tipo_cloud == PointCloud::GRAY;
@@ -76,6 +80,7 @@ int main() {
                 tipo_cloud == PointCloud::RGB2;
                 enable_cloud = true;
             }
+            else enable_cloud = false;
         }
         if (pair.first == "frametime") {
             long long number = stoll(pair.second);
@@ -99,8 +104,6 @@ int main() {
             signal(SIGINT, sigint_handler);
             this_thread::sleep_for(chrono::milliseconds(5000));
             //thread mainM_thread(mainMenu);
-            cout << "Abriendo Menu" << endl;
-            //menu(); //Inicilizamos el menu 
             while(onStreaming) {
                 this_thread::sleep_for(chrono::milliseconds(100));
             }
@@ -111,4 +114,5 @@ int main() {
         }
     }
     cout << "Noh Vimoh!" << endl;
+    return 0;
 }

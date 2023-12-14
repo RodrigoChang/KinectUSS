@@ -25,7 +25,6 @@ void PointCloud::getPointCloud(libfreenect2::Registration* registration,
                 libfreenect2::Frame*  registered_frame = nullptr) {
     std::cout << "Partimos" << endl;                 
     if (registered_frame == nullptr || type == GRAY) {
-        std::cout << "XYZ" << endl;
         getCloudData(registration, undistorted_frame);
         fixCloud<pcl::PointXYZ>(cloud);
         visualizePointCloud();                    
@@ -92,8 +91,9 @@ void PointCloud::getCloudDataRGB(libfreenect2::Registration* registration,
                     libfreenect2::Frame* undistorted_frame, 
                     libfreenect2::Frame* registered_frame) {
 
-    cloud_rgb->header.frame_id = "RGB";
-    cloud_rgb->reserve(512 * 424);
+    //cloud_rgb->header.frame_id = "RGB";
+    //cloud_rgb->reserve(512 * 424);
+    std::cout << "XYZ" << endl; 
     for(int r = 0; r < 424; ++r) {
         for(int c = 0; c < 512; ++c) {
             pcl::PointXYZRGB pt;

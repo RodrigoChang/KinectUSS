@@ -17,7 +17,7 @@ extern libfreenect2::Freenect2Device *dev;
 extern libfreenect2::Freenect2Device::ColorCameraParams ColorCameraParams;
 extern libfreenect2::Freenect2Device::IrCameraParams IrCameraParams;
 extern libfreenect2::Freenect2Device::Config config;
-extern bool onStreaming, protonect_shutdown, enable_rgb, enable_depth, enable_stream, enable_cloud;
+extern bool onStreaming, protonect_shutdown, enable_rgb, enable_depth, enable_stream, enable_cloud, enable_z_stream;
 extern std::string ip;
 extern std::chrono::milliseconds frametime;
 extern int tipo_cloud;

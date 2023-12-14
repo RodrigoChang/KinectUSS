@@ -17,11 +17,11 @@
 using namespace std;
 using namespace cv;
 
-mutex stream_mutex;
 bool displayDepthValue = false;
 int clickedX = -1, clickedY = -1;
 float pixelValue;
-thread mat1, mat2, recorte, recv_mesg;
+mutex stream_mutex;
+thread mat1, mat2, recorte, recv_mesg, cloud_thread;
 Mat rgbmat, depthmat, depthmatUndistorted, irmat, rgbd, rgbd2, cropped, resized, reg_send, ir_send, depth_send;
 
 libfreenect2::Registration* registration;
@@ -79,11 +79,12 @@ static void find_z() {
         char coma;
         iss >> x >> coma >> y;
         if (x >= 0 && y >= 0 && x < depth_send.cols && y < depth_send.rows) {
-                pixelValue = depth_send.at<float>(y, x);
-                cout << "Profundidad pixel (" << x << ", " << y << "): " << pixelValue << " mm" << endl;
-                string responseMsg = to_string(pixelValue);
-                depth_points.send_mgs(responseMsg);
+            pixelValue = depth_send.at<float>(y, x);
+            cout << "Profundidad pixel (" << x << ", " << y << "): " << pixelValue << " mm" << endl;
+            string responseMsg = to_string(pixelValue);
+            depth_points.send_mgs(responseMsg);
         }
+        else depth_points.send_mgs("0");
     }
 }
 
@@ -126,7 +127,8 @@ void kinect(string serial) {
     // Opencv value thing
     namedWindow("registered");
     setMouseCallback("registered", onMouseCallback);
-
+    cout << "Abriendo Menu" << endl;
+    menu(); //Inicilizamos el menu 
     //seteando el listener de libfreenect2
     int types = 0;
     if (enable_rgb) types |= libfreenect2::Frame::Color;
@@ -142,10 +144,9 @@ void kinect(string serial) {
     libfreenect2::Registration* registration = new libfreenect2::Registration(dev->getIrCameraParams(), dev->getColorCameraParams());
     libfreenect2::Frame undistorted(512, 424, 4), registered(512, 424, 4), depth2rgb(1920, 1080 + 2, 4);
 
-    if (enable_stream) {
-        recv_mesg = thread(find_z);
-        frame_streaming = thread(zmq_streaming);
-    }
+    if (enable_stream) frame_streaming = thread(zmq_streaming);
+    if (enable_z_stream) recv_mesg = thread(find_z);
+    if (enable_cloud) cloud_thread = thread(cloud_streaming);
  
     //if (enable_cloud) thread cloud_function(cloud_streaming);
     while (!protonect_shutdown) {   //Mientras spawneen mas frames va a seguir ejecutandose
@@ -194,20 +195,21 @@ void kinect(string serial) {
 
         //Display de profundidad ***TO DO*** Hacer algo mas bonito
         if (displayDepthValue) {
-            if (clickedX >= 0 && clickedY >= 0 && clickedX < depthmat.cols && clickedY < depthmat.rows) {
-                pixelValue = depthmatUndistorted.at<float>(clickedY, clickedX);
+            if (clickedX >= 0 && clickedY >= 0 && clickedX < depth_send.cols && clickedY < depth_send.rows) {
+                pixelValue = depth_send.at<float>(clickedY, clickedX);
                 cout << "Profundidad pixel (" << clickedX << ", " << clickedY << "): " << pixelValue << " mm" << endl;
+                displayDepthValue = false;
             }
         }
         recorte.join();
         mat2.join();
 
-        putText(rgbd, to_string(pixelValue) + " mm", Point(clickedX, clickedY), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(205, 255, 0), 2, LINE_AA);
+        cv::putText(reg_send, to_string(pixelValue) + " mm", Point(clickedX, clickedY), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(205, 255, 0), 2, LINE_AA);
         //imshow("rgb", rgbmat);
         //imshow("ir", irmat / 4096.0f);
         //imshow("depth", depthmat / 4096.0f);
         //imshow("undistorted", depthmatUndistorted / 4096.0f);
-        imshow("registered", rgbd);
+        cv::imshow("registered", reg_send);
         //imshow("depth2RGB", rgbd2 / 4096.0f);
         //imshow("cropped", cropped);
         int key = cv::waitKey(1);
