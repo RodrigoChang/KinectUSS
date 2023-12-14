@@ -1,0 +1,12 @@
+version: "3.7"
+
+services:
+  kinectuss:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    #devices:
+    #  - "/dev/video0:/dev/video0"
+    volumes:
+      - ..:/app:delegated
+    command: sleep infinity

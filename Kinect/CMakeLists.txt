@@ -11,7 +11,7 @@ SET (CMAKE_CONFIGURATION_TYPES "Debug")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wformat-security -pthread -fpermissive -pg -O -D_FORTIFY_SOURCE=2 -D_GLIBCXX_ASSERTIONS -fstack-clash-protection -g -pipe")
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pg")
 # si esta en produccion
-#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Ofast -pthread")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Ofast -pthread")
 
 SET (source_dir "${PROJECT_SOURCE_DIR}/src/")
 FILE (GLOB KinectSUS_SRC "${source_dir}/*.cpp")
