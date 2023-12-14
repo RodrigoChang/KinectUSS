@@ -1,10 +1,12 @@
 import cv2
 import zmq
 import base64
+
 def video_stream():
     context = zmq.Context()
     socket = context.socket(zmq.PUB)
-    socket.bind("tcp://0.0.0.0:3001")  # Puedes cambiar la dirección y el puerto según tus necesidades
+    # Puedes cambiar la dirección y el puerto según tus necesidades
+    socket.bind("tcp://0.0.0.0:3001")  
 
     cap = cv2.VideoCapture(0)  # Cambia 0 a la fuente de video que estás utilizando
 
@@ -21,4 +23,6 @@ def video_stream():
         _, img_encoded = cv2.imencode('.jpg', frame)
         msg = base64.b64encode(img_encoded.tobytes())
         socket.send(msg)
+
+video_stream()
 

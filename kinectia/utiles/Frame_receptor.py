@@ -5,8 +5,8 @@ import numpy as np
 def server_connect():
     context = zmq.Context()
     socket = context.socket(zmq.SUB)
-    socket.connect("tcp://10.170.50.131:3002")  # Asegúrate de usar la misma dirección y puerto que el servidor
-    #socket.connect("tcp://0.0.0.0:3002")
+    #socket.connect("tcp://10.170.50.131:3002")  # Asegúrate de usar la misma dirección y puerto que el servidor
+    socket.connect("tcp://0.0.0.0:3002")
     socket.setsockopt_string(zmq.SUBSCRIBE, '')
     
     while True:
@@ -20,3 +20,5 @@ def server_connect():
             break
         
     cv2.destroyAllWindows()
+
+server_connect()

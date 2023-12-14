@@ -5,12 +5,12 @@ import numpy as np
 depth_frame = None
 framecount = 0
 
-IP = "10.171.23.91"
+IP = "10.170.53.126"
 context = zmq.Context()
-socketrgb = context.socket(zmq.SUB)
-socketir = context.socket(zmq.SUB)
-socketdepth = context.socket(zmq.SUB)
-socketreg = context.socket(zmq.SUB)
+socketrgb = context.socket(zmq.REQ)
+socketir = context.socket(zmq.REQ)
+socketdepth = context.socket(zmq.REQ)
+socketreg = context.socket(zmq.REQ)
 
 #socketrgb.setsockopt(zmq.CONFLATE, 1)
 #socketir.setsockopt(zmq.CONFLATE, 1)
@@ -22,18 +22,25 @@ socketir.connect(f'tcp://{IP}:5556')
 socketdepth.connect(f'tcp://{IP}:5557') 
 socketreg.connect(f'tcp://{IP}:5558')
 
-socketrgb.setsockopt(zmq.SUBSCRIBE, b'')
+"""socketrgb.setsockopt(zmq.SUBSCRIBE, b'')
 socketir.setsockopt(zmq.SUBSCRIBE, b'')
 socketdepth.setsockopt(zmq.SUBSCRIBE, b'')
-socketreg.setsockopt(zmq.SUBSCRIBE, b'')
+socketreg.setsockopt(zmq.SUBSCRIBE, b'')"""
+
+socketrgb.setsockopt(zmq.IDENTITY, b'rgb_socket')
+socketir.setsockopt(zmq.IDENTITY, b'ir_socket')
+socketdepth.setsockopt(zmq.IDENTITY, b'depth_socket')
+socketreg.setsockopt(zmq.IDENTITY, b'reg_socket')
 
 def receive_rgb_frame():
+    socketrgb.send(b'')
     frame_bytes = socketrgb.recv()
     rgb_frame = np.frombuffer(frame_bytes, dtype='uint8')
     rgb_frame = cv2.imdecode(rgb_frame, cv2.IMREAD_COLOR)
     return rgb_frame
 
 def receive_ir_frame():
+    socketir.send(b'')
     frame_bytes = socketir.recv()
     ir_frame = np.frombuffer(frame_bytes, dtype='float32')
     ir_frame = ir_frame.reshape((height, width))
@@ -41,12 +48,14 @@ def receive_ir_frame():
 
 def receive_depth_frame():
     global depth_frame
+    socketdepth.send(b'')
     frame_bytes = socketdepth.recv()
     depth_frame = np.frombuffer(frame_bytes, dtype='float32')
     depth_frame = depth_frame.reshape((height, width))
     return depth_frame
 
 def receive_reg_frame():
+    socketreg.send(b'')
     frame_bytes = socketreg.recv()
     reg_frame = np.frombuffer(frame_bytes, dtype='uint8')
     reg_frame = cv2.imdecode(reg_frame, cv2.IMREAD_COLOR)
@@ -65,16 +74,15 @@ def main():
     cv2.setMouseCallback("Depth", mouse_callback)
 
     while True:
-        
         rgb_frame = receive_rgb_frame()
-        #ir_frame = receive_ir_frame()
-        #depth_frame = receive_depth_frame()
-        #reg_frame = receive_reg_frame()
+        ir_frame = receive_ir_frame()
+        depth_frame = receive_depth_frame()
+        reg_frame = receive_reg_frame()
 
         cv2.imshow("RGB", rgb_frame)
-        #cv2.imshow("IR", ir_frame / 4096.0)
-        #cv2.imshow("Depth", depth_frame / 4096.0)
-        #cv2.imshow("Registered", reg_frame)
+        cv2.imshow("IR", ir_frame / 4096.0)
+        cv2.imshow("Depth", depth_frame / 4096.0)
+        cv2.imshow("Registered", reg_frame)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
@@ -82,6 +90,6 @@ def main():
     context.term()
     cv2.destroyAllWindows()
 
-if __name__ == "__main__":
+if __name__ == "_main_":
     height, width = 424, 512
     main()

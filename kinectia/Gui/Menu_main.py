@@ -3,8 +3,10 @@ import imutils
 import tkinter as tk
 from PIL import Image, ImageTk
 from tkinter import font
-from MediaPipe.Gui.config import COLOR_BARRA_SUPERIOR, COLOR_CUERPO_PRINCIPAL,COLOR_MENU,COLOR_MENU_CURSOR_ENCIMA
-
+import sys
+sys.path.append('/home/fabian/Documents/Python codes/kinect/KinectUSS/KinectUSS/kinectia')
+from utiles.config import COLOR_BARRA_SUPERIOR, COLOR_CUERPO_PRINCIPAL,COLOR_MENU,COLOR_MENU_CURSOR_ENCIMA
+import Logica.Body_tracking as BT
 
 class MaestroDesign(tk.Tk):
 
@@ -15,9 +17,10 @@ class MaestroDesign(tk.Tk):
         self.controles_barra_superior()
         self.controles_cuerpo()
         self.botones_arranque()
-
+        
+    IP = "0.0.0.0:3001"
     video = None
-    etiqueta = None  # Inicializamos la variable de etiqueta
+    etiqueta = None # Inicializamos la variable de etiqueta
 
     def config_window(self):
         self.title("KINECTUSS")
@@ -93,26 +96,13 @@ class MaestroDesign(tk.Tk):
         button.config(bg=COLOR_MENU, fg="white")
 
     def iniciar_video(self):
-        self.video = cv2.VideoCapture(0,cv2.CAP_ANY)
+        
+        #self.video = cv2.VideoCapture(self.IP,cv2.CAP_ANY)
         self.iniciar()
 
     def iniciar(self):
-        global video
-        if self.video:
-            ret, frame = self.video.read()
-            if ret:
-
-                frame = imutils.resize(frame, width=640)
-                frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-
-                # Aplicar filtro de mediana para reducir el ruido
-
-                frame = cv2.medianBlur(frame, ksize=5)
-                img = Image.fromarray(frame)
-                image = ImageTk.PhotoImage(image=img)
-                self.etiqueta.configure(image=image)
-                self.etiqueta.image = image
-                self.after(10, self.iniciar)
+        IP = "0.0.0.0:3001"
+        BT.Bodytracking(IP)
 
     def quitar(self):
         global video
@@ -124,15 +114,21 @@ class MaestroDesign(tk.Tk):
         self.etiqueta = tk.Label(self, bg="white")
         self.etiqueta.place(x=187, y=75)
 
-        arranque = tk.Button(self, text="Iniciar video", bg=COLOR_CUERPO_PRINCIPAL, relief="flat",
+        arranque = tk.Button(self, text="Iniciar video", bg=COLOR_MENU, relief="flat",
                              cursor="hand2", command=self.iniciar_video, width=15, height=2, font=("Calisto MT", 12, "bold"))
         arranque.place(x=200, y=590)
 
-        detener = tk.Button(self, text="Detener video", bg=COLOR_CUERPO_PRINCIPAL, relief="flat",
+        detener = tk.Button(self, text="Detener video", bg=COLOR_MENU, relief="flat",
                              cursor="hand2", command=self.quitar, width=15, height=2, font=("Calisto MT", 12, "bold"))
-        detener.place(x=640, y=590)        
+        detener.place(x=640, y=590) 
+
+        #BodyTracking = tk.Button(self, text="tracking", bg=COLOR_CUERPO_PRINCIPAL, relief="flat",
+        #                     cursor="hand2", command= BT.Bodytracking(I), width=15, height=2, font=("Calisto MT", 12, "bold"))
+        #BodyTracking.place(x=800, y=590)       
+
 
 # Creamos una instancia de la clase y la ejecutamos
-
 app = MaestroDesign()
 app.mainloop()
+
+
