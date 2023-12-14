@@ -3,6 +3,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <map>
 #include <chrono>
 #include <zmq.hpp>
 #include <opencv2/opencv.hpp>
@@ -10,6 +11,68 @@
 #include <libfreenect2/registration.h>
 
 using namespace cv;
+
+/* 
+Clase zmq_stream
+Esta clase stremea a traves de zmq en el address y puerto elegido
+puede encodear o no el frame si es necesario mantener, o es posible optimizar la data.
+Es mucho mejor llevarlo a clase, ya que asi solucionamos los problemas de ownership, y tal.
+A y tambien multithreading si es necesario encodear.
+xd
+*/
+zmq::context_t zmq_stream::context(1);
+
+zmq_stream::zmq_stream(const std::string& serverAddress, const std::string& serverPort, int socketType)
+    : serverAddress(serverAddress), socketType(socketType) {
+    socket = new zmq::socket_t(context, socketType);
+    //bind/connect
+    if (serverAddress == "0.0.0.0") socket->bind("tcp://" + serverAddress + ":" + serverPort);
+    // Connecting
+    else socket->connect("tcp://" + serverAddress + ":" + serverPort);
+    
+}
+
+zmq_stream::~zmq_stream() {
+    // Cleanup
+    socket->close();
+    delete socket;
+}
+
+void zmq_stream::send_mgs(std::string msg) {
+    zmq::message_t message(msg.size());
+    memcpy(message.data(), msg.data(), msg.size());
+    socket->send(message);
+}
+
+zmq::message_t zmq_stream::receive() {
+    zmq::message_t message;
+    socket->recv(message);
+    return message;
+}
+
+void zmq_stream::encodeo_envio(const Mat& frame) {
+    std::vector<uchar> encodedframe = encodeo(frame);
+    // mempcpy moment
+    zmq::message_t message(encodedframe.size());
+    memcpy(message.data(), encodedframe.data(), encodedframe.size());
+    // envio
+    socket->send(message);
+    //std::cout << "Frame encodeado enviado" << std::endl;
+}
+
+void zmq_stream::envio_plain(const Mat& frame) {
+    zmq::message_t message(frame.total() * frame.elemSize());
+    memcpy(message.data(), frame.data, message.size());
+    socket->send(message);
+    //std::cout << "Frame enviado" << std::endl;
+}
+
+std::vector<uchar> zmq_stream::encodeo(const Mat& frame) {
+    std::vector<uchar> encodedFrame;
+    cv::imencode(".jpg", frame, encodedFrame);
+    return encodedFrame;
+}
+
 int confirmacion() {
     int numb;
     while (true) {
@@ -28,138 +91,38 @@ int confirmacion() {
     return numb;
 }
 
-void send_zmq(Mat& frame, zmq::socket_t&& socket, bool encodeado, std::string tipo) {
-    if (encodeado) {
-        auto t1 = std::chrono::high_resolution_clock::now();
-        std::vector<uchar> encodedFrame;
-        cv::imencode(".jpg", frame, encodedFrame);
-        zmq::message_t message(encodedFrame.size());
-        memcpy(message.data(), encodedFrame.data(), encodedFrame.size());
-        socket.send(message, ZMQ_DONTWAIT);
-        auto t2 = std::chrono::high_resolution_clock::now();
-        auto ms_int = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1);
-        std::cout << tipo << " demoro " << ms_int.count() << "ms\n";
+std::map<std::string, std::string> readConfigFile(const std::string& filename) {
+    std::map<std::string, std::string> config;
+
+    std::ifstream file(filename);
+    if (!file.is_open()) {
+        std::cerr << "Error opening file: " << filename << std::endl;
+        return config;
     }
-    else {
-        zmq::message_t message(frame.total() * frame.elemSize());
-        memcpy(message.data(), frame.data, message.size());
-        socket.send(message);
-    }
-}
 
-void readIni() {
-
-    std::ifstream infile("../config.ini");
-    if (infile.is_open()) {
-        std::string line;
-        std::string currentSection; // Track the current section
-
-        while (std::getline(infile, line)) {
-            std::istringstream iss(line);
-            std::string key, value, section;
-
-            // Check for a section
-            if (line.find('[') != std::string::npos && line.find(']') != std::string::npos) {
-                // Extract section name
-                section = line.substr(line.find('[') + 1, line.find(']') - line.find('[') - 1);
-                currentSection = section;
-            } else {
-                // No section, parse key-value pair
-                if (std::getline(iss, key, '=') && std::getline(iss, value)) {
-                    // Trim leading and trailing whitespaces
-                    key.erase(0, key.find_first_not_of(" \t\n\r\f\v"));
-                    key.erase(key.find_last_not_of(" \t\n\r\f\v") + 1);
-                    value.erase(0, value.find_first_not_of(" \t\n\r\f\v"));
-                    value.erase(value.find_last_not_of(" \t\n\r\f\v") + 1);
-
-                    // Literalmente no encontre otra forma mas eficiente para comparar el ini aiuda
-
-                    if (currentSection == "ColorCameraParams") {
-                        try {
-                            if (key == "fx") {
-                                    ColorCameraParams.fx = std::stod(value);
-                            }
-                            else if (key == "fy") {
-                                    ColorCameraParams.fy = std::stod(value);
-                            }
-                            else if (key == "cx") {
-                                    ColorCameraParams.cx = std::stod(value);
-                            }
-                            else if (key == "cy") {
-                                    ColorCameraParams.cy = std::stod(value);
-                            }
-                        } catch(const std::invalid_argument& e) {
-                            std::cerr << "Error en el parseo de datos" << std::endl;
-                        }
-                    } 
-                    else if (currentSection == "IrCameraParams") {
-                        try {
-                            if (key == "fx") {
-                                    IrCameraParams.fx = std::stod(value);
-                            }
-                            else if (key == "fy") {
-                                    IrCameraParams.fy = std::stod(value);
-                            }
-                            else if (key == "cx") {
-                                    IrCameraParams.cx = std::stod(value);
-                            }
-                            else if (key == "cy") {
-                                    IrCameraParams.cy = std::stod(value);
-                            }
-                            else if (key == "k1") {
-                                    IrCameraParams.k1 = std::stod(value);
-                            }
-                            else if (key == "k2") {
-                                    IrCameraParams.k2 = std::stod(value);
-                            }
-                            else if (key == "k3") {
-                                    IrCameraParams.k3 = std::stod(value);
-                            }
-                            else if (key == "p1") {
-                                    IrCameraParams.p1 = std::stod(value);
-                            }
-                            else if (key == "p2") {
-                                    IrCameraParams.p2 = std::stod(value);
-                            }
-                        } catch(const std::invalid_argument& e) {
-                            std::cerr << "Error en el parseo de datos" << std::endl;
-                        }
-                    }
-                }
-            }
+    std::string line;
+    while (std::getline(file, line)) {
+        // Skip comments and empty lines
+        if (line.empty() || line[0] == '#') {
+            continue;
         }
-        infile.close();
-    } else {
-        std::cerr << "No es posible abrir config.ini" << std::endl;
-    }
-}
 
-void writeIni() {
+        // Parse key-value pairs
+        std::istringstream iss(line);
+        std::string key, value;
+        if (std::getline(iss, key, '=') && std::getline(iss, value)) {
+            // Trim leading and trailing whitespaces
+            key.erase(0, key.find_first_not_of(" \t"));
+            key.erase(key.find_last_not_of(" \t") + 1);
+            value.erase(0, value.find_first_not_of(" \t"));
+            value.erase(value.find_last_not_of(" \t") + 1);
 
-    // Write updated parameters to INI file
-    std::ofstream outfile("../config.ini");
-    if (outfile.is_open()) {
-        outfile << "[ColorCameraParams]" << std::endl;
-        outfile << "fx = " << ColorCameraParams.fx << std::endl;
-        outfile << "fy = " << ColorCameraParams.fy << std::endl;
-        outfile << "cx = " << ColorCameraParams.cx << std::endl;
-        outfile << "cy = " << ColorCameraParams.cy << std::endl;
-        outfile << "" << std::endl;
-        outfile << "[IrCameraParams]" << std::endl;
-        outfile << "fx = " << IrCameraParams.fx << std::endl;
-        outfile << "fy = " << IrCameraParams.fy << std::endl;
-        outfile << "cx = " << IrCameraParams.cx << std::endl;
-        outfile << "cy = " << IrCameraParams.cy << std::endl;
-        outfile << "k1 = " << IrCameraParams.k1 << std::endl;
-        outfile << "k2 = " << IrCameraParams.k2 << std::endl;
-        outfile << "k3 = " << IrCameraParams.k3 << std::endl;
-        outfile << "p1 = " << IrCameraParams.p1 << std::endl;
-        outfile << "p2 = " << IrCameraParams.p2 << std::endl;
-        outfile.close();
-        std::cout << "Parametros escritos en config.ini" << std::endl;
-    } else {
-        std::cerr << "No se puede abrir config.ini" << std::endl;
+            // Store key-value pairs in the map
+            config[key] = value;
+        }
     }
+
+    return config;
 }
 
 void getParams(libfreenect2::Freenect2Device *dev) {
