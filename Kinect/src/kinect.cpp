@@ -73,18 +73,55 @@ static void find_z() {
         zmq::message_t request;
         request = depth_points.receive();
         string receivedMsg = string(static_cast<char*>(request.data()), request.size());
-        cout << "Received X and Y: " << receivedMsg << endl;
-        istringstream iss(receivedMsg);
-        static int x, y;
-        char coma;
-        iss >> x >> coma >> y;
-        if (x >= 0 && y >= 0 && x < depth_send.cols && y < depth_send.rows) {
-            pixelValue = depth_send.at<float>(y, x);
-            cout << "Profundidad pixel (" << x << ", " << y << "): " << pixelValue << " mm" << endl;
-            string responseMsg = to_string(pixelValue);
-            depth_points.send_mgs(responseMsg);
+        receivedMsg.erase(receivedMsg.size() - 1);
+        cout << "Data:" << receivedMsg << endl;
+        std::istringstream ss(receivedMsg);
+        std::string token;
+        std::vector<int> par;
+
+        while (getline(ss, token, ',')) {
+            int value = std::stoi(token);
+            par.push_back(value);
         }
-        else depth_points.send_mgs("0");
+
+        cout << par.size() << endl;
+        string resp_iz, resp_der, respuesta;
+        //iss >> x >> coma >> y;
+        thread z_izquierdo([&par, &resp_iz] () {
+        int parSize = par.size();
+        for(int i = 0; i < 16; i =+ 2) {
+            int x = par[i];
+            int y = par[i + 1];
+            if (x >= 0 && y >= 0 && x < depth_send.cols && y < depth_send.rows) {
+                pixelValue = depth_send.at<float>(y, x);
+                resp_iz += "," + to_string(pixelValue);
+            }
+            else resp_iz += ",0";
+        }
+    });
+
+    thread z_derecho([&par, &resp_der] () {
+        int parSize = par.size();
+        for(int i = 8; i < 32; i =+ 2) {
+            int x = par[i];
+            int y = par[i + 1];
+            if (x >= 0 && y >= 0 && x < depth_send.cols && y < depth_send.rows) {
+                pixelValue = depth_send.at<float>(y, x);
+                resp_der += "," + to_string(pixelValue);
+            }
+            else resp_der += ",0";
+        }
+    });
+
+    z_izquierdo.join();
+    z_derecho.join();
+
+    cout << "izquierda" << resp_iz << endl;
+    cout << "derecha" << resp_der << endl;
+    respuesta.erase(0, 1);
+    depth_points.send_msg(respuesta);
+    cout << "final" << respuesta << endl;
+    this_thread::sleep_for(frametime);
     }
 }
 

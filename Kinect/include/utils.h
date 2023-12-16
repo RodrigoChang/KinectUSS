@@ -34,7 +34,7 @@ public:
     ~zmq_stream();
 
     zmq::message_t receive();
-    void send_mgs(std::string msg);
+    void send_msg(std::string msg);
     void encodeo_envio(const cv::Mat& frame);
     void envio_plain(const cv::Mat& frame);
     
