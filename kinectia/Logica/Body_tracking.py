@@ -1,4 +1,4 @@
-# Version 3.0
+# Version 3.1
 #Distance detecion hands 2.7 mt
 #Libreria para controlar camaras y visualizacion
 import cv2
