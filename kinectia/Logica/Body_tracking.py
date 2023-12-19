@@ -89,23 +89,42 @@ class ThreadedCamera(object):
         frame_resized = frame_cam
         frame_rgb = cv2.cvtColor(frame_cam, cv2.COLOR_BGR2RGB)
         results_skeleto = self.pose.process(frame_rgb)
-        if results_skeleto.pose_landmarks is not None:                
+        if results_skeleto.pose_landmarks is not None: 
+                def ask_z(message):
+                    self.socket_z.send(message)
+                    response_msg = self.socket_z.recv()
+                    print(f"Received z landmarks: {response_msg.decode('utf-8')}")               
                 # Definir los índices de los landmarks para el lado izquierdo y derecho del cuerpo
                 left_landmark_indices = [11, 13, 15, 23, 25, 27, 29, 31]
                 right_landmark_indices = [12, 14, 16, 24, 26, 28, 30, 32]
                 # Inicializar listas para almacenar las coordenadas x e y de cada landmark
-                left_x_coords, left_y_coords = [], []
-                right_x_coords, right_y_coords = [], []
+                left_x_coords, left_y_coords,left_z_coords = [], [], []
+                right_x_coords, right_y_coords,right_z_coords = [], [],[]
+                
                 # Iterar sobre los índices y obtener las coordenadas x e y de cada landmark para el lado izquierdo
                 for index in left_landmark_indices:
                     landmark = results_skeleto.pose_landmarks.landmark[index]
                     left_x_coords.append(int(landmark.x * frame_resized.shape[1]))
                     left_y_coords.append(int(landmark.y * frame_resized.shape[0]))
+                    message =f"{int(landmark.x * frame_resized.shape[1])},{int(landmark.y * frame_resized.shape[0])}"
+                    left_z_coords.append(message)
+                
+                #ask_z(z_landamrks)
                 # Iterar sobre los índices y obtener las coordenadas x e y de cada landmark para el lado derecho
                 for index in right_landmark_indices:
                     landmark = results_skeleto.pose_landmarks.landmark[index]
                     right_x_coords.append(int(landmark.x * frame_resized.shape[1]))
                     right_y_coords.append(int(landmark.y * frame_resized.shape[0]))
+                    message =f"{int(landmark.x * frame_resized.shape[1])},{int(landmark.y * frame_resized.shape[0])}"
+                    right_z_coords.append(message)
+                
+                left_z_coords.extend(right_z_coords)
+                landmarks_z= ""
+                for landmark in left_z_coords:
+                    landmarks_z += str(landmark)+","
+                #print(landmarks_z)
+                ask_z(landmarks_z.encode("utf-8"))
+                
                 # Dibujar círculos para cada landmark del lado izquierdo
                 for x, y in zip(left_x_coords, left_y_coords):
                     cv2.circle(frame_resized, (x, y), 5, (0, 0, 0), -1)
@@ -137,16 +156,7 @@ class ThreadedCamera(object):
                 cv2.line(frame_resized, (right_x_coords[5], right_y_coords[5]), (right_x_coords[6], right_y_coords[6]), (0,0,0), 2)
                 cv2.line(frame_resized, (right_x_coords[6], right_y_coords[6]), (right_x_coords[7], right_y_coords[7]), (0,0,0), 2)
                 cv2.line(frame_resized, (right_x_coords[7], right_y_coords[7]), (right_x_coords[5], right_y_coords[5]), (0,0,0), 2)
-                def ask_z(message):
-                    self.socket_z.send(message)
-                    response_msg = self.socket_z.recv()
-                    print(f"Received response: {response_msg.decode('utf-8')}")
-                try:
-                    message = f"{left_x_coords[0]},{left_y_coords[0]}".encode('utf-8')
-                    ask_z(message)
-                except Exception as e:
-                    print(f"{e}")
-                    print(f"hombro izquierdo{left_x_coords[0],left_y_coords[0]}")
+                
         return frame_resized
 
 
