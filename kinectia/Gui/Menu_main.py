@@ -4,7 +4,13 @@ import tkinter as tk
 from PIL import Image, ImageTk
 from tkinter import font
 import sys
-sys.path.append('/home/fabian/Documents/Python codes/kinect/KinectUSS/KinectUSS/kinectia')
+import os
+## Rutas relativas para importar modulos
+work_directory = os.path.dirname(os.path.realpath(__file__))
+root_directory = os.path.abspath(os.path.join(work_directory, os.pardir))
+
+sys.path.append(os.path.join(root_directory))
+## Importacion de modulos via rutas relativas
 from utiles.config import COLOR_BARRA_SUPERIOR, COLOR_CUERPO_PRINCIPAL,COLOR_MENU,COLOR_MENU_CURSOR_ENCIMA
 import Logica.Body_tracking as BT
 

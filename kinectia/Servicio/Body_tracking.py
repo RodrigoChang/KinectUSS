@@ -13,7 +13,12 @@ import numpy as np
 import base64
 from math import acos, degrees
 import sys
-sys.path.append('/home/fabian/Documents/Python codes/kinect/KinectUSS/KinectUSS/kinectia')
+import os
+## Rutas relativas para importar modulos
+work_directory = os.path.dirname(os.path.realpath(__file__))
+root_directory = os.path.abspath(os.path.join(work_directory, os.pardir))
+
+sys.path.append(os.path.join(root_directory))
 #import utiles.susweb as sus
 mp_pose = mp.solutions.pose
 
