@@ -87,9 +87,10 @@ class ThreadedCamera(object):
     def process_pose(self, frame_cam):
         
         def ask_z(lista1, lista2):
-            lista1.extend(lista2)
+            listamsg = lista1
+            listamsg.extend(lista2)
             landmarks_z= ""
-            for landmark in lista1:
+            for landmark in listamsg:
                 landmarks_z += str(landmark)+","
             message = landmarks_z.encode("utf-8")    
             self.socket_z.send(message)
