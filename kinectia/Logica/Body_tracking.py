@@ -11,14 +11,10 @@ import time
 import zmq
 import numpy as np
 import base64
+from . import Csv_handler
 from math import acos, degrees
 import sys
-import os
-## Rutas relativas para importar modulos
-work_directory = os.path.dirname(os.path.realpath(__file__))
-root_directory = os.path.abspath(os.path.join(work_directory, os.pardir))
-
-sys.path.append(os.path.join(root_directory))
+#sys.path.append('../')
 mp_pose = mp.solutions.pose
 class ThreadedCamera(object):
     def __init__(self,mode =0):   
@@ -52,7 +48,6 @@ class ThreadedCamera(object):
             socket = context.socket(zmq.SUB)
             socket.connect(f"tcp://{self.ip}")
             socket.setsockopt(zmq.SUBSCRIBE, b'')
-            
             self.socket_z = context.socket(zmq.REQ)
             IP= self.ip.split(":")
             print(IP[0])
@@ -69,7 +64,7 @@ class ThreadedCamera(object):
                     message = socket.recv()
                     frame_data = np.frombuffer(message, dtype=np.uint8)
                     frame = cv2.imdecode(frame_data, cv2.IMREAD_COLOR)
-                    self.frame_cam = cv2.resize(frame, (512, 424))   
+                    self.frame_cam = frame #cv2.resize(frame, (512, 424))   
                 except Exception as e:
                     print(f"Esta dando este error {e}")
                     self.thread._stop()
@@ -90,15 +85,24 @@ class ThreadedCamera(object):
                     break
     #Funcion_para crear eskeleto 
     def process_pose(self, frame_cam):
-        frame_resized = cv2.resize(frame_cam, (512, 424))
+        
+        def ask_z(lista1, lista2):
+            listamsg = lista1
+            listamsg.extend(lista2)
+            landmarks_z= ""
+            for landmark in listamsg:
+                landmarks_z += str(landmark)+","
+            message = landmarks_z.encode("utf-8")    
+            self.socket_z.send(message)
+            response_msg = self.socket_z.recv()
+            print(f"Received z landmarks: {response_msg.decode('utf-8')}")
+            Csv_handler.save_frame(response_msg.decode('utf-8'), lista1)
+
         frame_resized = frame_cam
         frame_rgb = cv2.cvtColor(frame_cam, cv2.COLOR_BGR2RGB)
         results_skeleto = self.pose.process(frame_rgb)
-        if results_skeleto.pose_landmarks is not None: 
-                def ask_z(message):
-                    self.socket_z.send(message)
-                    response_msg = self.socket_z.recv()
-                    print(f"Received z landmarks: {response_msg.decode('utf-8')}")               
+        if results_skeleto.pose_landmarks is not None:
+                
                 # Definir los índices de los landmarks para el lado izquierdo y derecho del cuerpo
                 left_landmark_indices = [11, 13, 15, 23, 25, 27, 29, 31]
                 right_landmark_indices = [12, 14, 16, 24, 26, 28, 30, 32]
@@ -123,12 +127,8 @@ class ThreadedCamera(object):
                     message =f"{int(landmark.x * frame_resized.shape[1])},{int(landmark.y * frame_resized.shape[0])}"
                     right_z_coords.append(message)
                 
-                left_z_coords.extend(right_z_coords)
-                landmarks_z= ""
-                for landmark in left_z_coords:
-                    landmarks_z += str(landmark)+","
-                #print(landmarks_z)
-                ask_z(landmarks_z.encode("utf-8"))
+                z = Thread(target=ask_z, args=(left_z_coords, right_z_coords))
+                z.start()
                 
                 # Dibujar círculos para cada landmark del lado izquierdo
                 for x, y in zip(left_x_coords, left_y_coords):
@@ -161,7 +161,7 @@ class ThreadedCamera(object):
                 cv2.line(frame_resized, (right_x_coords[5], right_y_coords[5]), (right_x_coords[6], right_y_coords[6]), (0,0,0), 2)
                 cv2.line(frame_resized, (right_x_coords[6], right_y_coords[6]), (right_x_coords[7], right_y_coords[7]), (0,0,0), 2)
                 cv2.line(frame_resized, (right_x_coords[7], right_y_coords[7]), (right_x_coords[5], right_y_coords[5]), (0,0,0), 2)
-                
+                z.join()
         return frame_resized
 
 

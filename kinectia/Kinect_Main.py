@@ -3,6 +3,7 @@
 from multiprocessing import Process, cpu_count
 from threading import Thread
 import time
+import sys
 import Logica.Body_tracking as BT
 import Logica.Bodyanglecalculator as BTA
 import Logica.Handstracking as HT

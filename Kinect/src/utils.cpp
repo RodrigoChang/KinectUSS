@@ -38,7 +38,7 @@ zmq_stream::~zmq_stream() {
     delete socket;
 }
 
-void zmq_stream::send_mgs(std::string msg) {
+void zmq_stream::send_msg(std::string msg) {
     zmq::message_t message(msg.size());
     memcpy(message.data(), msg.data(), msg.size());
     socket->send(message);

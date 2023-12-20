@@ -73,18 +73,37 @@ static void find_z() {
         zmq::message_t request;
         request = depth_points.receive();
         string receivedMsg = string(static_cast<char*>(request.data()), request.size());
-        cout << "Received X and Y: " << receivedMsg << endl;
-        istringstream iss(receivedMsg);
-        static int x, y;
-        char coma;
-        iss >> x >> coma >> y;
-        if (x >= 0 && y >= 0 && x < depth_send.cols && y < depth_send.rows) {
-            pixelValue = depth_send.at<float>(y, x);
-            cout << "Profundidad pixel (" << x << ", " << y << "): " << pixelValue << " mm" << endl;
-            string responseMsg = to_string(pixelValue);
-            depth_points.send_mgs(responseMsg);
+        receivedMsg.erase(receivedMsg.size() - 1);
+        cout << "Data: " << receivedMsg << endl;
+        istringstream ss(receivedMsg);
+        vector<int> vect;
+        string respuesta;
+
+        for (int i; ss >> i;) {
+            vect.push_back(i);    
+            if (ss.peek() == ',') ss.ignore();
         }
-        else depth_points.send_mgs("0");
+
+        if(vect.size() != 32) {
+            cout << "z invalido, recivido un string con tamaño " << vect.size() << endl;
+            depth_points.send_msg("z invalido, recivido un string con tamaño " + vect.size());
+            continue;
+        }
+
+        for(size_t i = 0; i < vect.size(); i+=2) {
+            int x = vect[i];
+            int y = vect[i + 1];
+            if (x >= 0 && y >= 0 && x < depth_send.cols && y < depth_send.rows) {
+                pixelValue = depth_send.at<float>(y, x);
+                respuesta += "," + to_string(pixelValue);
+            }
+            else respuesta += ",0";
+        }
+        
+        respuesta.erase(0, 1);
+        depth_points.send_msg(respuesta);
+        cout << "Data final: " << respuesta << endl;
+        this_thread::sleep_for(frametime);
     }
 }
 
