@@ -14,6 +14,7 @@ import base64
 from . import Csv_handler
 from math import acos, degrees
 import sys
+import socket
 #sys.path.append('../')
 mp_pose = mp.solutions.pose
 class ThreadedCamera(object):
@@ -41,6 +42,9 @@ class ThreadedCamera(object):
         #Parametros body
         confianza = 0.9
         self.pose =  mp_pose.Pose(static_image_mode=False, min_detection_confidence=confianza,min_tracking_confidence=confianza,model_complexity=2, smooth_landmarks= True)
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        #self.Unity = ("10.171.18.227",5052)
+        
     def update(self):
         try:
             print("Conectando...")
@@ -95,6 +99,9 @@ class ThreadedCamera(object):
             message = landmarks_z.encode("utf-8")    
             self.socket_z.send(message)
             response_msg = self.socket_z.recv()
+            data=(lista1,lista2,response_msg)
+            print(data)
+            self.sock.sendto(str.encode(str(data)), ("10.171.18.227",3000))
             print(f"Received z landmarks: {response_msg.decode('utf-8')}")
             Csv_handler.save_frame(response_msg.decode('utf-8'), lista1)
 
@@ -128,6 +135,7 @@ class ThreadedCamera(object):
                     right_z_coords.append(message)
                 
                 z = Thread(target=ask_z, args=(left_z_coords, right_z_coords))
+                
                 z.start()
                 
                 # Dibujar círculos para cada landmark del lado izquierdo
@@ -162,6 +170,7 @@ class ThreadedCamera(object):
                 cv2.line(frame_resized, (right_x_coords[6], right_y_coords[6]), (right_x_coords[7], right_y_coords[7]), (0,0,0), 2)
                 cv2.line(frame_resized, (right_x_coords[7], right_y_coords[7]), (right_x_coords[5], right_y_coords[5]), (0,0,0), 2)
                 z.join()
+                
         return frame_resized
 
 
