@@ -5,18 +5,18 @@ MediaPipe en una libreria de google en python3.x, asi que lo primero que haremos
 ## En Linux
 
 Descargar Anaconda para linux:
-´´´bash
+```bash
 "Anaconda": https://repo.anaconda.com/archive/Anaconda3-2023.09-0-Linux-x86_64.sh
 "usar en terminal": bash Anaconda-latest-Linux-x86_64.sh
-´´´
+```
 Crear un entorno python
-´´´bash
+```bash
 Conda create --name <Nombre del entorno> python=<3.8>
-´´´
+```
 Inicializar
-´´´bash
+```bash
 Conda activate <Nombre del entorno>
-´´´
+```
 # Librerias necesarias
 
 Instalar python y ffmpeg.
@@ -44,4 +44,4 @@ pip install mediapipe opencv-python
 
 ## Continuando
 
-Para continuar, visitamos [Corriendo MediaPipe](doc/correr_mediapipe.md), o a [Kinect](Kinect/kinect.md) si no esta instalado.
+Para continuar, visitamos [Corriendo MediaPipe](../doc/correr_mediapipe.md), o a [Kinect](../Kinect/kinect.md) si no esta instalado.

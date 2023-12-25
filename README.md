@@ -26,7 +26,7 @@ El funcionamiento se basa en 2 computadores, uno en conectado a la Kinect, y otr
 Como este proyecto cuenta de dos interfaces, Kinect y MediaPipe, hay instalaciones propias de cada una.
 
 - [Kinect](Kinect/kinect.md)
-- [MediaPipe](MediaPipe/mediapipe.md)
+- [MediaPipe](kinectia/mediapipe.md)
 
 ## Corriendo el proyecto
 

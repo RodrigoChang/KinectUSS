@@ -58,7 +58,7 @@ cd Kinect/libfreenect2
 ```
 ## Continuando
 
-Ahora podemos dirigirnos a [Corriendo Kinect](../doc/correr_kinect.md) para continuar con la Kinect, o a [MediaPipe](../MediaPipe/mediapipe.md) para instalarlo si no lo tenemos.
+Ahora podemos dirigirnos a [Corriendo Kinect](../doc/correr_kinect.md) para continuar con la Kinect, o a [MediaPipe](../kinectia/mediapipe.md) para instalarlo si no lo tenemos.
 
 ## Troubleshooting
 
