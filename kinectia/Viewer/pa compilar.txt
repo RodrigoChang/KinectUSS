@@ -1,0 +1,1 @@
+gcc -o lel lel.cpp -g -lGL -lglfw -lpthread -ldl `pkg-config --cflags --libs gtk+-3.0` -lstdc++ -lm
