@@ -18,6 +18,7 @@ vector <float> l_entries;
 vector <float> d_entries;
 vector <pair<int, int>> conexiones;
 
+thread z1_thread, z2_thread;
 GtkWidget *window;
 GtkWidget *grid;
 GtkWidget *button;
@@ -113,7 +114,7 @@ gboolean updateLenght(gpointer data) {
 }
 
 void set_length_fields(vector<Point> landmark) {
-    float x1, x2, y1, y2, z1, z2, valor, x_value, y_value;
+    float x1, x2, y1, y2, z1, z2, z3, z4, valor, x_value, y_value;
     
     for (int i=0; i < conexiones.size() - 1; i++) {
         switch (i) {
@@ -126,21 +127,48 @@ void set_length_fields(vector<Point> landmark) {
             case 13:
                 continue;
             case 14:
-                l_entries.push_back(69.0);
+                z1_thread = thread([&landmark, &x_value, &z3](){
+                    float x1 = landmark[0].x < 0 ? landmark[0].x * -1 : landmark[0].x;
+                    float x2 = landmark[3].x < 0 ? landmark[3].x * -1 : landmark[3].x;
+                    float y1 = landmark[0].y < 0 ? landmark[0].y * -1 : landmark[0].y;
+                    float y2 = landmark[3].y < 0 ? landmark[3].y * -1 : landmark[3].y;
+                    float z1 = landmark[0].z == 0 ? 500 : landmark[0].z;
+                    float z2 = landmark[3].z == 0 ? 500 : landmark[3].z;
+                    float x_value = pow(x1-x2, 2);
+                    float y_value = pow(y1-y2, 2);
+                    z3 = sqrt((x_value + y_value)*(z1/z2));
+                });
+                
+                z2_thread = thread([&landmark, &x_value, &z4](){
+                    float x1 = landmark[8].x < 0 ? landmark[8].x * -1 : landmark[8].x;
+                    float x2 = landmark[11].x < 0 ? landmark[11].x * -1 : landmark[11].x;
+                    float y1 = landmark[8].y < 0 ? landmark[8].y * -1 : landmark[8].y;
+                    float y2 = landmark[11].y < 0 ? landmark[11].y * -1 : landmark[11].y;
+                    float z1 = landmark[8].z == 0 ? 500 : landmark[8].z;
+                    float z2 = landmark[11].z == 0 ? 500 : landmark[11].z;
+                    float x_value = pow(x1-x2, 2);
+                    float y_value = pow(y1-y2, 2);
+                    z4 = sqrt((x_value + y_value)*(z1/z2));
+                });
+                z1_thread.join();
+                z2_thread.join();
+
+                l_entries.push_back((z3+z4)/2);
                 break;
             default:
                 x1 = landmark[conexiones[i].first].x < 0 ? landmark[conexiones[i].first].x * -1 : landmark[conexiones[i].first].x;
                 x2 = landmark[conexiones[i].second].x < 0 ? landmark[conexiones[i].second].x * -1 : landmark[conexiones[i].second].x;
                 y1 = landmark[conexiones[i].first].y < 0 ? landmark[conexiones[i].first].y * -1 : landmark[conexiones[i].first].y;
                 y2 = landmark[conexiones[i].second].y < 0 ? landmark[conexiones[i].second].y * -1 : landmark[conexiones[i].second].y;
-                z1 = landmark[conexiones[i].first].z = 0 ? 500 : landmark[conexiones[i].first].z;
-                z2 = landmark[conexiones[i].second].z = 0 ? 500 : landmark[conexiones[i].second].z;
+                z1 = landmark[conexiones[i].first].z == 0 ? 500 : landmark[conexiones[i].first].z;
+                z2 = landmark[conexiones[i].second].z == 0 ? 500 : landmark[conexiones[i].second].z;
+                cout << "z1: " << z1 << " z2: " << z2 << endl;
                 thread x_thread([&x1, &x2, &x_value](){x_value = pow(x1-x2, 2);});
                 thread y_thread([&y1, &y2, &y_value](){y_value = pow(y1-y2, 2);});
                 x_thread.join();
                 y_thread.join();
                 valor = sqrt(x_value + y_value);
-                l_entries.push_back(valor);
+                l_entries.push_back(valor*(z1/z2));
         }
     }
     // Schedule the update function to be called in the main thread
@@ -178,8 +206,8 @@ void set_distance_fields(vector<Point> landmark) {
     float z1, z2, z3, z4;
     
     for (int i=0; i < conexiones.size() - 1; i++) {
-        z1 = landmark[conexiones[i].first].z = 0 ? 500 : landmark[conexiones[i].first].z;
-        z2 = landmark[conexiones[i].second].z = 0 ? 500 : landmark[conexiones[i].second].z;
+        z1 = landmark[conexiones[i].first].z == 0 ? 500 : landmark[conexiones[i].first].z;
+        z2 = landmark[conexiones[i].second].z == 0 ? 500 : landmark[conexiones[i].second].z;
         switch (i) {
             case 2:
                 continue;
@@ -190,10 +218,10 @@ void set_distance_fields(vector<Point> landmark) {
             case 13:
                 continue;
             case 14:
-                z1 = landmark[0].z = 0 ? 500 : landmark[0].z;
-                z2 = landmark[3].z = 0 ? 500 : landmark[3].z;
-                z3 = landmark[8].z = 0 ? 500 : landmark[8].z;
-                z4 = landmark[11].z = 0 ? 500 : landmark[11].z;
+                z1 = landmark[0].z == 0 ? 500 : landmark[0].z;
+                z2 = landmark[3].z == 0 ? 500 : landmark[3].z;
+                z3 = landmark[8].z == 0 ? 500 : landmark[8].z;
+                z4 = landmark[11].z == 0 ? 500 : landmark[11].z;
                 d_entries.push_back((z1+z2+z3+z4)/4);
                 break;
             default:
