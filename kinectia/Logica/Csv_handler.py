@@ -18,7 +18,7 @@ def save_frame(linea, lista):
         xs.append(num1)
         ys.append(num2)
 
-    with open('movimiento.csv', 'a', newline='') as csvfile:
+    with open('Test1.csv', 'a', newline='') as csvfile:
     # Create a CSV writer object with ";" as the delimiter
         csv_writer = csv.writer(csvfile)
         print(xs)
@@ -31,5 +31,5 @@ def save_frame(linea, lista):
         csv_writer.writerow(listafinal)
 
 def read_frame():
-    data = pd.read_csv('movimiento.csv', low_memory=False)
+    data = pd.read_csv('Test1.csv', low_memory=False)
     return data

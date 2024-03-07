@@ -1,44 +1,35 @@
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
-from matplotlib.animation import FuncAnimation
+import struct
 
-# Read the CSV file into a Pandas DataFrame
-df = pd.read_csv('movimiento.csv', header=None)
+def write_string(file, string):
+    string_bytes = string.encode('utf-8')  # Convertir la cadena a bytes
+    file.write(len(string_bytes).to_bytes(4, byteorder='little'))
+    file.write(string_bytes)
 
-# Initialize frame index
-frame_index = 0
+def write_vertices(file, vertices):
+    file.write(b'Vert')
+    file.write(len(vertices).to_bytes(4, byteorder='little'))
+    for vertex in vertices:
+        file.write(struct.pack('fff', *vertex))
 
-def plot_frame(frame_index, ax):
-    ax.clear()
+def write_faces(file, faces):
+    file.write(b'Face')
+    file.write(len(faces).to_bytes(4, byteorder='little'))
+    for face in faces:
+        file.write(len(face).to_bytes(4, byteorder='little'))
+        file.write(struct.pack('I' * len(face), *face))
 
-    # Extract the points for the current frame
-    start_idx = frame_index
-    end_idx = (frame_index + 1)
-    frame_points = df.iloc[start_idx:end_idx].values.reshape(-1, 3)
+blend_file_path = 'mi_escena.blend'
+blend_header = b'BLENDER-v279'
 
-    # Scatter plot the points for the current frame
-    ax.scatter(frame_points[:, 0], frame_points[:, 1], frame_points[:, 2], c='r', marker='o')
+cube_data = {
+    'name': 'Cube',
+    'type': 'MESH',
+    'vertices': [(0, 0, 0), (1, 0, 0), (1, 1, 0), (0, 1, 0)],
+    'faces': [(0, 1, 2, 3)],
+}
 
-    # Connect points with lines
-    ax.plot(frame_points[:, 0], frame_points[:, 1], frame_points[:, 2], c='b', linestyle='-', linewidth=2)
-
-    # Set axis labels
-    ax.set_xlabel('X Label')
-    ax.set_ylabel('Y Label')
-    ax.set_zlabel('Z Label')
-
-def update(frame_index):
-    # Plot the current frame
-    plot_frame(frame_index, ax)
-
-# Set up the initial plot
-fig = plt.figure()
-ax = fig.add_subplot(111, projection='3d')
-
-# Create the animation
-animation = FuncAnimation(fig, update, frames=len(df), interval=1000, repeat=True)
-
-# Show the plot
-plt.show()
+with open(blend_file_path, 'wb') as blend_file:
+    blend_file.write(blend_header)
+    write_string(blend_file, 'MESH' + '\x00' + cube_data['name'])
+    write_vertices(blend_file, cube_data['vertices'])
+    write_faces(blend_file, cube_data['faces'])
