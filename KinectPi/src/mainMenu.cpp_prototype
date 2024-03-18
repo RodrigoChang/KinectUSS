@@ -1,0 +1,25 @@
+#include "../include/menu.h"
+
+MainMenu::MainMenu(QWidget *parent) : QWidget(parent) {
+    // Create buttons
+    button1 = new QPushButton("Button 1", this);
+    button2 = new QPushButton("Button 2", this);
+    button3 = new QPushButton("Button 3", this);
+
+    // Create a layout manager
+    layout = new QVBoxLayout(this);
+
+    // Add buttons to the layout
+    layout->addWidget(button1);
+    layout->addWidget(button2);
+    layout->addWidget(button3);
+
+    // Set the layout for the main window
+    setLayout(layout);
+
+    // Set up any additional configuration or connections here
+}
+
+MainMenu::~MainMenu() {
+    // Perform any necessary cleanup here
+}

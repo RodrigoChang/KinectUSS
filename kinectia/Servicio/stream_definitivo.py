@@ -11,7 +11,7 @@ socketir = context.socket(zmq.SUB)
 socket_z = context.socket(zmq.REQ)
 socketreg = context.socket(zmq.SUB)
 
-socketrgb.bind(f'tcp://{IP}:5555')
+socketrgb.con(f'tcp://{IP}:5555')
 socketir.bind(f'tcp://{IP}:5556') 
 socket_z.bind(f'tcp://{IP}:5557')
 socketreg.bind(f'tcp://{IP}:5558')
