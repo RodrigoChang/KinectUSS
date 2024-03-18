@@ -1,6 +1,6 @@
 #Version 1.2
 #importes necesarios
-#import LogicAI.Body_tracking as BT
+from LogicAI import Body_tracking as BT
 #import LogicAI.Bodyanglecalculator as BTA
 #import LogicAI.Handstracking as HT
 import configparser
