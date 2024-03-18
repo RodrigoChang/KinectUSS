@@ -17,6 +17,10 @@ def server_connect():
     port = args.p if args.p != None else default_port
     ir = bool(args.ir)
     
+    print(f"IP del servidor: {server_ip}")
+    print(f"Puerto del servidor: {port}")
+    print(f"Modo IR: {'No' if ir == False else 'Si'}")
+
     context = zmq.Context()
     socket = context.socket(zmq.SUB)
     socket.connect(f"tcp://{server_ip}:{port}") 
