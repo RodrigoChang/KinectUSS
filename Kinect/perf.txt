@@ -1,0 +1,1078 @@
+listener demoro  10ms
+matrices base tomo  4ms
+registration tomo  5ms
+cloud tomo  23ms
+matrices 2 tomo  3ms
+pre display tomo  3ms
+imshow tomo  2ms
+ciclo terminado, demoro 62ms
+
+listener demoro  13ms
+matrices base tomo  4ms
+registration tomo  4ms
+cloud tomo  24ms
+matrices 2 tomo  3ms
+pre display tomo  3ms
+imshow tomo  1ms
+ciclo terminado, demoro 66ms
+
+listener demoro  13ms
+matrices base tomo  4ms
+registration tomo  3ms
+cloud tomo  22ms
+matrices 2 tomo  3ms
+pre display tomo  3ms
+imshow tomo  1ms
+ciclo terminado, demoro 63ms
+
+listener demoro  18ms
+matrices base tomo  4ms
+registration tomo  4ms
+cloud tomo  22ms
+matrices 2 tomo  2ms
+pre display tomo  2ms
+imshow tomo  1ms
+ciclo terminado, demoro 66ms
+
+listener demoro  7ms
+matrices base tomo  9ms
+registration tomo  2ms
+cloud tomo  23ms
+matrices 2 tomo  6ms
+pre display tomo  6ms
+imshow tomo  1ms
+ciclo terminado, demoro 66ms
+
+listener demoro  21ms
+matrices base tomo  7ms
+registration tomo  4ms
+cloud tomo  20ms
+matrices 2 tomo  4ms
+pre display tomo  4ms
+imshow tomo  3ms
+ciclo terminado, demoro 77ms
+
+listener demoro  8ms
+matrices base tomo  5ms
+registration tomo  4ms
+cloud tomo  26ms
+matrices 2 tomo  3ms
+pre display tomo  3ms
+imshow tomo  2ms
+ciclo terminado, demoro 62ms
+
+listener demoro  10ms
+matrices base tomo  4ms
+registration tomo  3ms
+cloud tomo  24ms
+matrices 2 tomo  2ms
+pre display tomo  2ms
+imshow tomo  1ms
+ciclo terminado, demoro 61ms
+
+listener demoro  6ms
+matrices base tomo  10ms
+registration tomo  3ms
+cloud tomo  24ms
+matrices 2 tomo  5ms
+pre display tomo  5ms
+imshow tomo  1ms
+ciclo terminado, demoro 66ms
+
+listener demoro  17ms
+matrices base tomo  4ms
+registration tomo  4ms
+cloud tomo  22ms
+matrices 2 tomo  3ms
+pre display tomo  3ms
+imshow tomo  1ms
+rgb demoro 7ms
+registered demoro 0ms
+ciclo terminado, demoro 71ms
+
+listener demoro  9ms
+matrices base tomo  4ms
+registration tomo  3ms
+cloud tomo  26ms
+matrices 2 tomo  3ms
+pre display tomo  3ms
+imshow tomo  1ms
+ciclo terminado, demoro 65ms
+
+listener demoro  12ms
+matrices base tomo  4ms
+registration tomo  4ms
+cloud tomo  23ms
+matrices 2 tomo  3ms
+pre display tomo  3ms
+imshow tomo  1ms
+ciclo terminado, demoro 65ms
+
+listener demoro  14ms
+matrices base tomo  4ms
+registration tomo  4ms
+cloud tomo  23ms
+matrices 2 tomo  3ms
+pre display tomo  3ms
+imshow tomo  1ms
+ciclo terminado, demoro 64ms
+
+listener demoro  15ms
+matrices base tomo  4ms
+registration tomo  3ms
+cloud tomo  27ms
+matrices 2 tomo  3ms
+pre display tomo  3ms
+imshow tomo  2ms
+ciclo terminado, demoro 72ms
+
+listener demoro  18ms
+matrices base tomo  7ms
+registration tomo  3ms
+cloud tomo  25ms
+matrices 2 tomo  5ms
+pre display tomo  5ms
+imshow tomo  2ms
+ciclo terminado, demoro 77ms
+
+listener demoro  23ms
+matrices base tomo  9ms
+registration tomo  3ms
+cloud tomo  22ms
+matrices 2 tomo  5ms
+pre display tomo  5ms
+imshow tomo  1ms
+ciclo terminado, demoro 77ms
+
+listener demoro  25ms
+matrices base tomo  9ms
+registration tomo  2ms
+cloud tomo  20ms
+matrices 2 tomo  4ms
+pre display tomo  4ms
+imshow tomo  2ms
+ciclo terminado, demoro 77ms
+
+listener demoro  15ms
+matrices base tomo  7ms
+registration tomo  3ms
+cloud tomo  21ms
+matrices 2 tomo  3ms
+pre display tomo  3ms
+imshow tomo  1ms
+ciclo terminado, demoro 66ms
+
+listener demoro  16ms
+matrices base tomo  8ms
+registration tomo  2ms
+cloud tomo  22ms
+matrices 2 tomo  6ms
+pre display tomo  6ms
+imshow tomo  1ms
+ciclo terminado, demoro 67ms
+
+listener demoro  31ms
+matrices base tomo  11ms
+registration tomo  3ms
+cloud tomo  22ms
+matrices 2 tomo  5ms
+pre display tomo  5ms
+imshow tomo  1ms
+ciclo terminado, demoro 86ms
+
+listener demoro  12ms
+matrices base tomo  12ms
+registration tomo  4ms
+cloud tomo  24ms
+matrices 2 tomo  5ms
+pre display tomo  5ms
+imshow tomo  1ms
+ciclo terminado, demoro 74ms
+
+listener demoro  19ms
+matrices base tomo  7ms
+registration tomo  3ms
+cloud tomo  22ms
+matrices 2 tomo  5ms
+pre display tomo  5ms
+imshow tomo  1ms
+ciclo terminado, demoro 72ms
+
+listener demoro  10ms
+matrices base tomo  4ms
+registration tomo  4ms
+cloud tomo  22ms
+matrices 2 tomo  3ms
+pre display tomo  3ms
+imshow tomo  1ms
+ciclo terminado, demoro 65ms
+
+listener demoro  12ms
+matrices base tomo  4ms
+registration tomo  5ms
+cloud tomo  24ms
+matrices 2 tomo  6ms
+pre display tomo  6ms
+imshow tomo  1ms
+ciclo terminado, demoro 68ms
+
+listener demoro  30ms
+matrices base tomo  12ms
+registration tomo  4ms
+cloud tomo  24ms
+matrices 2 tomo  3ms
+pre display tomo  3ms
+imshow tomo  2ms
+ciclo terminado, demoro 90ms
+
+listener demoro  18ms
+matrices base tomo  4ms
+registration tomo  6ms
+cloud tomo  24ms
+matrices 2 tomo  4ms
+pre display tomo  4ms
+imshow tomo  3ms
+ciclo terminado, demoro 73ms
+
+listener demoro  18ms
+matrices base tomo  7ms
+registration tomo  3ms
+cloud tomo  20ms
+matrices 2 tomo  4ms
+pre display tomo  4ms
+imshow tomo  2ms
+ciclo terminado, demoro 68ms
+
+listener demoro  13ms
+matrices base tomo  7ms
+registration tomo  4ms
+cloud tomo  20ms
+matrices 2 tomo  3ms
+pre display tomo  3ms
+imshow tomo  2ms
+ciclo terminado, demoro 63ms
+
+listener demoro  15ms
+matrices base tomo  8ms
+registration tomo  3ms
+cloud tomo  22ms
+matrices 2 tomo  5ms
+pre display tomo  5ms
+imshow tomo  1ms
+ciclo terminado, demoro 70ms
+
+listener demoro  16ms
+matrices base tomo  7ms
+registration tomo  3ms
+cloud tomo  22ms
+matrices 2 tomo  5ms
+pre display tomo  5ms
+imshow tomo  2ms
+ciclo terminado, demoro 69ms
+
+listener demoro  8ms
+matrices base tomo  5ms
+registration tomo  4ms
+cloud tomo  23ms
+matrices 2 tomo  3ms
+pre display tomo  3ms
+imshow tomo  2ms
+ciclo terminado, demoro 62ms
+
+listener demoro  10ms
+matrices base tomo  4ms
+registration tomo  3ms
+cloud tomo  25ms
+matrices 2 tomo  4ms
+pre display tomo  4ms
+imshow tomo  1ms
+ciclo terminado, demoro 66ms
+
+listener demoro  16ms
+matrices base tomo  7ms
+registration tomo  4ms
+cloud tomo  21ms
+matrices 2 tomo  4ms
+pre display tomo  4ms
+imshow tomo  2ms
+ciclo terminado, demoro 67ms
+
+listener demoro  20ms
+matrices base tomo  6ms
+registration tomo  3ms
+cloud tomo  24ms
+matrices 2 tomo  5ms
+pre display tomo  5ms
+imshow tomo  1ms
+ciclo terminado, demoro 82ms
+
+listener demoro  25ms
+matrices base tomo  15ms
+registration tomo  6ms
+cloud tomo  35ms
+matrices 2 tomo  5ms
+pre display tomo  5ms
+imshow tomo  2ms
+ciclo terminado, demoro 110ms
+
+listener demoro  31ms
+matrices base tomo  5ms
+registration tomo  2ms
+cloud tomo  24ms
+matrices 2 tomo  3ms
+pre display tomo  3ms
+imshow tomo  1ms
+ciclo terminado, demoro 85ms
+
+listener demoro  23ms
+matrices base tomo  7ms
+registration tomo  4ms
+cloud tomo  24ms
+matrices 2 tomo  4ms
+pre display tomo  4ms
+imshow tomo  1ms
+ciclo terminado, demoro 80ms
+
+listener demoro  11ms
+matrices base tomo  9ms
+registration tomo  2ms
+cloud tomo  26ms
+matrices 2 tomo  4ms
+pre display tomo  4ms
+imshow tomo  1ms
+ciclo terminado, demoro 69ms
+
+listener demoro  16ms
+matrices base tomo  4ms
+registration tomo  4ms
+cloud tomo  25ms
+matrices 2 tomo  3ms
+pre display tomo  3ms
+imshow tomo  1ms
+ciclo terminado, demoro 70ms
+
+listener demoro  15ms
+matrices base tomo  5ms
+registration tomo  4ms
+cloud tomo  22ms
+matrices 2 tomo  3ms
+pre display tomo  3ms
+imshow tomo  2ms
+ciclo terminado, demoro 66ms
+
+listener demoro  15ms
+matrices base tomo  6ms
+registration tomo  4ms
+cloud tomo  24ms
+matrices 2 tomo  5ms
+pre display tomo  5ms
+imshow tomo  1ms
+ciclo terminado, demoro 67ms
+
+listener demoro  14ms
+matrices base tomo  7ms
+registration tomo  4ms
+cloud tomo  21ms
+matrices 2 tomo  5ms
+pre display tomo  5ms
+imshow tomo  1ms
+ciclo terminado, demoro 72ms
+
+listener demoro  27ms
+matrices base tomo  12ms
+registration tomo  3ms
+cloud tomo  29ms
+matrices 2 tomo  4ms
+pre display tomo  4ms
+imshow tomo  1ms
+rgb demoro 7ms
+registered demoro 1ms
+ciclo terminado, demoro 94ms
+
+listener demoro  16ms
+matrices base tomo  9ms
+registration tomo  3ms
+cloud tomo  22ms
+matrices 2 tomo  4ms
+pre display tomo  4ms
+imshow tomo  1ms
+ciclo terminado, demoro 71ms
+
+listener demoro  28ms
+matrices base tomo  11ms
+registration tomo  2ms
+cloud tomo  19ms
+matrices 2 tomo  8ms
+pre display tomo  8ms
+imshow tomo  1ms
+ciclo terminado, demoro 88ms
+
+listener demoro  20ms
+matrices base tomo  8ms
+registration tomo  4ms
+cloud tomo  22ms
+matrices 2 tomo  5ms
+pre display tomo  5ms
+imshow tomo  2ms
+ciclo terminado, demoro 73ms
+
+listener demoro  12ms
+matrices base tomo  4ms
+registration tomo  5ms
+cloud tomo  24ms
+matrices 2 tomo  2ms
+pre display tomo  2ms
+imshow tomo  2ms
+ciclo terminado, demoro 66ms
+
+listener demoro  13ms
+matrices base tomo  8ms
+registration tomo  4ms
+cloud tomo  22ms
+matrices 2 tomo  5ms
+pre display tomo  5ms
+imshow tomo  1ms
+ciclo terminado, demoro 70ms
+
+listener demoro  11ms
+matrices base tomo  7ms
+registration tomo  3ms
+cloud tomo  22ms
+matrices 2 tomo  5ms
+pre display tomo  5ms
+imshow tomo  2ms
+ciclo terminado, demoro 63ms
+
+listener demoro  9ms
+matrices base tomo  4ms
+registration tomo  3ms
+cloud tomo  21ms
+matrices 2 tomo  3ms
+pre display tomo  3ms
+imshow tomo  1ms
+ciclo terminado, demoro 60ms
+
+listener demoro  16ms
+matrices base tomo  4ms
+registration tomo  4ms
+cloud tomo  23ms
+matrices 2 tomo  4ms
+pre display tomo  4ms
+imshow tomo  1ms
+ciclo terminado, demoro 68ms
+
+listener demoro  17ms
+matrices base tomo  7ms
+registration tomo  3ms
+cloud tomo  19ms
+matrices 2 tomo  3ms
+pre display tomo  3ms
+imshow tomo  1ms
+ciclo terminado, demoro 67ms
+
+listener demoro  11ms
+matrices base tomo  4ms
+registration tomo  2ms
+cloud tomo  25ms
+matrices 2 tomo  3ms
+pre display tomo  3ms
+imshow tomo  1ms
+ciclo terminado, demoro 60ms
+
+listener demoro  9ms
+matrices base tomo  9ms
+registration tomo  3ms
+cloud tomo  26ms
+matrices 2 tomo  4ms
+pre display tomo  4ms
+imshow tomo  2ms
+ciclo terminado, demoro 71ms
+
+listener demoro  13ms
+matrices base tomo  4ms
+registration tomo  3ms
+cloud tomo  23ms
+matrices 2 tomo  3ms
+pre display tomo  3ms
+imshow tomo  1ms
+ciclo terminado, demoro 61ms
+
+listener demoro  9ms
+matrices base tomo  10ms
+registration tomo  2ms
+cloud tomo  23ms
+matrices 2 tomo  4ms
+pre display tomo  4ms
+imshow tomo  1ms
+ciclo terminado, demoro 65ms
+
+listener demoro  10ms
+matrices base tomo  9ms
+registration tomo  3ms
+cloud tomo  19ms
+matrices 2 tomo  5ms
+pre display tomo  5ms
+imshow tomo  1ms
+ciclo terminado, demoro 61ms
+
+listener demoro  14ms
+matrices base tomo  9ms
+registration tomo  4ms
+cloud tomo  20ms
+matrices 2 tomo  5ms
+pre display tomo  5ms
+imshow tomo  1ms
+ciclo terminado, demoro 65ms
+
+listener demoro  15ms
+matrices base tomo  8ms
+registration tomo  3ms
+cloud tomo  19ms
+matrices 2 tomo  6ms
+pre display tomo  6ms
+imshow tomo  1ms
+ciclo terminado, demoro 67ms
+
+listener demoro  15ms
+matrices base tomo  9ms
+registration tomo  3ms
+cloud tomo  23ms
+matrices 2 tomo  4ms
+pre display tomo  4ms
+imshow tomo  1ms
+ciclo terminado, demoro 69ms
+
+listener demoro  12ms
+matrices base tomo  11ms
+registration tomo  3ms
+cloud tomo  22ms
+matrices 2 tomo  4ms
+pre display tomo  4ms
+imshow tomo  1ms
+ciclo terminado, demoro 67ms
+
+listener demoro  11ms
+matrices base tomo  9ms
+registration tomo  3ms
+cloud tomo  20ms
+matrices 2 tomo  7ms
+pre display tomo  7ms
+imshow tomo  2ms
+ciclo terminado, demoro 69ms
+
+listener demoro  21ms
+matrices base tomo  5ms
+registration tomo  4ms
+cloud tomo  21ms
+matrices 2 tomo  2ms
+pre display tomo  2ms
+imshow tomo  1ms
+ciclo terminado, demoro 73ms
+
+listener demoro  12ms
+matrices base tomo  5ms
+registration tomo  6ms
+cloud tomo  24ms
+matrices 2 tomo  5ms
+pre display tomo  5ms
+imshow tomo  2ms
+ciclo terminado, demoro 67ms
+
+listener demoro  9ms
+matrices base tomo  4ms
+registration tomo  2ms
+cloud tomo  23ms
+matrices 2 tomo  4ms
+pre display tomo  4ms
+imshow tomo  1ms
+ciclo terminado, demoro 59ms
+
+listener demoro  7ms
+matrices base tomo  9ms
+registration tomo  3ms
+cloud tomo  19ms
+matrices 2 tomo  4ms
+pre display tomo  4ms
+imshow tomo  1ms
+ciclo terminado, demoro 60ms
+
+listener demoro  18ms
+matrices base tomo  7ms
+registration tomo  3ms
+cloud tomo  23ms
+matrices 2 tomo  3ms
+pre display tomo  3ms
+imshow tomo  1ms
+ciclo terminado, demoro 69ms
+
+listener demoro  12ms
+matrices base tomo  8ms
+registration tomo  3ms
+cloud tomo  19ms
+matrices 2 tomo  5ms
+pre display tomo  5ms
+imshow tomo  1ms
+ciclo terminado, demoro 66ms
+
+listener demoro  21ms
+matrices base tomo  4ms
+registration tomo  3ms
+cloud tomo  20ms
+matrices 2 tomo  4ms
+pre display tomo  4ms
+imshow tomo  2ms
+ciclo terminado, demoro 72ms
+
+listener demoro  17ms
+matrices base tomo  5ms
+registration tomo  6ms
+cloud tomo  23ms
+matrices 2 tomo  3ms
+pre display tomo  3ms
+imshow tomo  2ms
+ciclo terminado, demoro 68ms
+
+listener demoro  12ms
+matrices base tomo  4ms
+registration tomo  3ms
+cloud tomo  25ms
+matrices 2 tomo  3ms
+pre display tomo  3ms
+imshow tomo  1ms
+ciclo terminado, demoro 64ms
+
+listener demoro  7ms
+matrices base tomo  9ms
+registration tomo  3ms
+cloud tomo  19ms
+matrices 2 tomo  5ms
+pre display tomo  5ms
+imshow tomo  1ms
+ciclo terminado, demoro 58ms
+
+listener demoro  17ms
+matrices base tomo  8ms
+registration tomo  2ms
+cloud tomo  19ms
+matrices 2 tomo  7ms
+pre display tomo  7ms
+imshow tomo  2ms
+ciclo terminado, demoro 71ms
+
+listener demoro  23ms
+matrices base tomo  8ms
+registration tomo  3ms
+cloud tomo  25ms
+matrices 2 tomo  4ms
+pre display tomo  4ms
+imshow tomo  1ms
+ciclo terminado, demoro 81ms
+
+listener demoro  27ms
+matrices base tomo  9ms
+registration tomo  4ms
+cloud tomo  24ms
+matrices 2 tomo  3ms
+pre display tomo  3ms
+imshow tomo  1ms
+ciclo terminado, demoro 84ms
+
+listener demoro  28ms
+matrices base tomo  6ms
+registration tomo  2ms
+cloud tomo  20ms
+matrices 2 tomo  3ms
+pre display tomo  3ms
+imshow tomo  1ms
+rgb demoro 7ms
+registered demoro 0ms
+ciclo terminado, demoro 82ms
+
+listener demoro  28ms
+matrices base tomo  11ms
+registration tomo  2ms
+cloud tomo  24ms
+matrices 2 tomo  3ms
+pre display tomo  3ms
+imshow tomo  1ms
+ciclo terminado, demoro 86ms
+
+listener demoro  17ms
+matrices base tomo  4ms
+registration tomo  4ms
+cloud tomo  21ms
+matrices 2 tomo  3ms
+pre display tomo  3ms
+imshow tomo  1ms
+ciclo terminado, demoro 66ms
+
+listener demoro  10ms
+matrices base tomo  7ms
+registration tomo  3ms
+cloud tomo  21ms
+matrices 2 tomo  5ms
+pre display tomo  5ms
+imshow tomo  2ms
+ciclo terminado, demoro 62ms
+
+listener demoro  23ms
+matrices base tomo  4ms
+registration tomo  4ms
+cloud tomo  20ms
+matrices 2 tomo  3ms
+pre display tomo  3ms
+imshow tomo  1ms
+ciclo terminado, demoro 69ms
+
+listener demoro  11ms
+matrices base tomo  7ms
+registration tomo  3ms
+cloud tomo  23ms
+matrices 2 tomo  4ms
+pre display tomo  4ms
+imshow tomo  1ms
+ciclo terminado, demoro 62ms
+
+listener demoro  14ms
+matrices base tomo  9ms
+registration tomo  3ms
+cloud tomo  20ms
+matrices 2 tomo  5ms
+pre display tomo  5ms
+imshow tomo  3ms
+ciclo terminado, demoro 69ms
+
+listener demoro  11ms
+matrices base tomo  9ms
+registration tomo  3ms
+cloud tomo  25ms
+matrices 2 tomo  3ms
+pre display tomo  3ms
+imshow tomo  1ms
+ciclo terminado, demoro 66ms
+
+listener demoro  14ms
+matrices base tomo  7ms
+registration tomo  3ms
+cloud tomo  19ms
+matrices 2 tomo  4ms
+pre display tomo  4ms
+imshow tomo  1ms
+ciclo terminado, demoro 61ms
+
+listener demoro  18ms
+matrices base tomo  6ms
+registration tomo  4ms
+cloud tomo  25ms
+matrices 2 tomo  4ms
+pre display tomo  4ms
+imshow tomo  2ms
+ciclo terminado, demoro 76ms
+
+listener demoro  20ms
+matrices base tomo  5ms
+registration tomo  4ms
+cloud tomo  20ms
+matrices 2 tomo  3ms
+pre display tomo  3ms
+imshow tomo  1ms
+ciclo terminado, demoro 69ms
+
+listener demoro  13ms
+matrices base tomo  4ms
+registration tomo  3ms
+cloud tomo  22ms
+matrices 2 tomo  3ms
+pre display tomo  3ms
+imshow tomo  2ms
+ciclo terminado, demoro 64ms
+
+listener demoro  20ms
+matrices base tomo  6ms
+registration tomo  3ms
+cloud tomo  23ms
+matrices 2 tomo  4ms
+pre display tomo  4ms
+imshow tomo  2ms
+ciclo terminado, demoro 72ms
+
+listener demoro  14ms
+matrices base tomo  7ms
+registration tomo  3ms
+cloud tomo  23ms
+matrices 2 tomo  5ms
+pre display tomo  5ms
+imshow tomo  2ms
+ciclo terminado, demoro 66ms
+
+listener demoro  9ms
+matrices base tomo  4ms
+registration tomo  3ms
+cloud tomo  21ms
+matrices 2 tomo  3ms
+pre display tomo  3ms
+imshow tomo  1ms
+ciclo terminado, demoro 59ms
+
+listener demoro  18ms
+matrices base tomo  4ms
+registration tomo  4ms
+cloud tomo  24ms
+matrices 2 tomo  3ms
+pre display tomo  3ms
+imshow tomo  1ms
+ciclo terminado, demoro 68ms
+
+listener demoro  20ms
+matrices base tomo  7ms
+registration tomo  2ms
+cloud tomo  20ms
+matrices 2 tomo  3ms
+pre display tomo  3ms
+imshow tomo  2ms
+ciclo terminado, demoro 69ms
+
+listener demoro  11ms
+matrices base tomo  4ms
+registration tomo  3ms
+cloud tomo  20ms
+matrices 2 tomo  3ms
+pre display tomo  3ms
+imshow tomo  1ms
+ciclo terminado, demoro 55ms
+
+listener demoro  14ms
+matrices base tomo  8ms
+registration tomo  3ms
+cloud tomo  19ms
+matrices 2 tomo  4ms
+pre display tomo  4ms
+imshow tomo  1ms
+ciclo terminado, demoro 65ms
+
+listener demoro  14ms
+matrices base tomo  10ms
+registration tomo  3ms
+cloud tomo  18ms
+matrices 2 tomo  4ms
+pre display tomo  4ms
+imshow tomo  1ms
+ciclo terminado, demoro 64ms
+
+listener demoro  18ms
+matrices base tomo  9ms
+registration tomo  3ms
+cloud tomo  22ms
+matrices 2 tomo  4ms
+pre display tomo  4ms
+imshow tomo  1ms
+ciclo terminado, demoro 70ms
+
+listener demoro  14ms
+matrices base tomo  10ms
+registration tomo  3ms
+cloud tomo  20ms
+matrices 2 tomo  5ms
+pre display tomo  5ms
+imshow tomo  1ms
+ciclo terminado, demoro 66ms
+
+listener demoro  13ms
+matrices base tomo  8ms
+registration tomo  4ms
+cloud tomo  19ms
+matrices 2 tomo  5ms
+pre display tomo  5ms
+imshow tomo  2ms
+ciclo terminado, demoro 64ms
+
+listener demoro  25ms
+matrices base tomo  5ms
+registration tomo  5ms
+cloud tomo  22ms
+matrices 2 tomo  3ms
+pre display tomo  3ms
+imshow tomo  1ms
+ciclo terminado, demoro 79ms
+
+listener demoro  16ms
+matrices base tomo  6ms
+registration tomo  3ms
+cloud tomo  24ms
+matrices 2 tomo  4ms
+pre display tomo  4ms
+imshow tomo  2ms
+ciclo terminado, demoro 69ms
+
+listener demoro  15ms
+matrices base tomo  6ms
+registration tomo  3ms
+cloud tomo  20ms
+matrices 2 tomo  4ms
+pre display tomo  4ms
+imshow tomo  1ms
+ciclo terminado, demoro 64ms
+
+listener demoro  12ms
+matrices base tomo  4ms
+registration tomo  3ms
+cloud tomo  23ms
+matrices 2 tomo  2ms
+pre display tomo  2ms
+imshow tomo  1ms
+ciclo terminado, demoro 61ms
+
+listener demoro  20ms
+matrices base tomo  5ms
+registration tomo  4ms
+cloud tomo  21ms
+matrices 2 tomo  3ms
+pre display tomo  3ms
+imshow tomo  1ms
+ciclo terminado, demoro 66ms
+
+listener demoro  9ms
+matrices base tomo  9ms
+registration tomo  3ms
+cloud tomo  19ms
+matrices 2 tomo  8ms
+pre display tomo  8ms
+imshow tomo  1ms
+ciclo terminado, demoro 62ms
+
+listener demoro  21ms
+matrices base tomo  5ms
+registration tomo  4ms
+cloud tomo  23ms
+matrices 2 tomo  3ms
+pre display tomo  3ms
+imshow tomo  1ms
+ciclo terminado, demoro 75ms
+
+listener demoro  14ms
+matrices base tomo  5ms
+registration tomo  4ms
+cloud tomo  24ms
+matrices 2 tomo  3ms
+pre display tomo  3ms
+imshow tomo  2ms
+ciclo terminado, demoro 67ms
+
+listener demoro  17ms
+matrices base tomo  6ms
+registration tomo  3ms
+cloud tomo  20ms
+matrices 2 tomo  3ms
+pre display tomo  3ms
+imshow tomo  1ms
+ciclo terminado, demoro 68ms
+
+listener demoro  9ms
+matrices base tomo  4ms
+registration tomo  3ms
+cloud tomo  22ms
+matrices 2 tomo  3ms
+pre display tomo  3ms
+imshow tomo  1ms
+ciclo terminado, demoro 60ms
+
+listener demoro  16ms
+matrices base tomo  4ms
+registration tomo  3ms
+cloud tomo  21ms
+matrices 2 tomo  3ms
+pre display tomo  3ms
+imshow tomo  1ms
+rgb demoro 8ms
+registered demoro 1ms
+ciclo terminado, demoro 72ms
+
+listener demoro  11ms
+matrices base tomo  4ms
+registration tomo  4ms
+cloud tomo  20ms
+matrices 2 tomo  3ms
+pre display tomo  3ms
+imshow tomo  1ms
+ciclo terminado, demoro 56ms
+
+listener demoro  11ms
+matrices base tomo  8ms
+registration tomo  2ms
+cloud tomo  19ms
+matrices 2 tomo  4ms
+pre display tomo  4ms
+imshow tomo  1ms
+ciclo terminado, demoro 59ms
+
+listener demoro  18ms
+matrices base tomo  9ms
+registration tomo  2ms
+cloud tomo  21ms
+matrices 2 tomo  8ms
+pre display tomo  8ms
+imshow tomo  2ms
+ciclo terminado, demoro 76ms
+
+listener demoro  23ms
+matrices base tomo  7ms
+registration tomo  2ms
+cloud tomo  20ms
+matrices 2 tomo  2ms
+pre display tomo  2ms
+imshow tomo  1ms
+ciclo terminado, demoro 71ms
+
+listener demoro  11ms
+matrices base tomo  4ms
+registration tomo  2ms
+cloud tomo  23ms
+matrices 2 tomo  3ms
+pre display tomo  3ms
+imshow tomo  1ms
+ciclo terminado, demoro 62ms
+
+listener demoro  18ms
+matrices base tomo  4ms
+registration tomo  4ms
+cloud tomo  22ms
+matrices 2 tomo  3ms
+pre display tomo  3ms
+imshow tomo  1ms
+ciclo terminado, demoro 69ms
+
+listener demoro  15ms
+matrices base tomo  4ms
+registration tomo  3ms
+cloud tomo  21ms
+matrices 2 tomo  3ms
+pre display tomo  3ms
+imshow tomo  1ms
+ciclo terminado, demoro 61ms
+
+listener demoro  17ms
+matrices base tomo  4ms
+registration tomo  2ms
+cloud tomo  24ms
+matrices 2 tomo  3ms
+pre display tomo  3ms
+imshow tomo  1ms
+ciclo terminado, demoro 69ms
+
+listener demoro  17ms
+matrices base tomo  4ms
+registration tomo  5ms
+cloud tomo  25ms
+matrices 2 tomo  3ms
+pre display tomo  3ms
+imshow tomo  2ms
+ciclo terminado, demoro 71ms
+
+listener demoro  11ms
+matrices base tomo  4ms
+registration tomo  4ms
+^Ccloud tomo  21ms
+matrices 2 tomo  4ms
+pre display tomo  4ms
+imshow tomo  1ms
+ciclo terminado, demoro 59ms
