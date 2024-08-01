@@ -17,8 +17,12 @@ float frametime = 1.0 / 30.0;
 int line = 0;
 
 float cameraSpeed = 0.1f;
-float cameraPosX = 0.0f, cameraPosY = 0.0f, cameraPosZ = -0.2f;
-float cameraYaw = 0.0f, cameraPitch = 0.0f;
+glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, -2.0f);
+glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
+glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f,  0.0f);
+glm::vec3 direction;
+float yaw, pitch;
+bool firstMouse = true;
 static double lastX = 400, lastY = 300;
 
 struct Point {
@@ -57,50 +61,56 @@ void make_conexion() {
     conexiones.push_back(make_pair(3, 11));  //('left hip', 'right hip')
 }
 
-static void cursor_position_callback(GLFWwindow* window, double xpos, double ypos) {
-    // Adjust cameraYaw and cameraPitch based on mouse movement
-    float sensitivity = 0.0005f;
-    cameraYaw += sensitivity * static_cast<float>(xpos - 400); // 400 is the horizontal center of the window
-    cameraPitch += sensitivity * static_cast<float>(ypos - 300); // 300 is the vertical center of the window
-
-    // Clamp pitch to avoid flipping
-    cameraPitch = std::fmaxf(std::fminf(cameraPitch, 89.0f), -89.0f);
+void mouse_callback(GLFWwindow* window, double xpos, double ypos)
+{
+    if (firstMouse) {
+        lastX = xpos;
+        lastY = ypos;
+        firstMouse = false;
+    }
+  
+    float xoffset = xpos - lastX;
+    float yoffset = lastY - ypos; 
     lastX = xpos;
     lastY = ypos;
-}
 
-static void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
-    // Adjust cameraPosZ based on the scroll wheel movement
     float sensitivity = 0.1f;
-    cameraPosZ -= sensitivity * static_cast<float>(yoffset);
-}
+    xoffset *= sensitivity;
+    yoffset *= sensitivity;
+
+    yaw   += xoffset;
+    pitch += yoffset;
+
+    pitch = pitch > 89.0F ? 89.0F : pitch;
+    pitch = pitch < -89.0F ? -89.0F : pitch;
+
+    glm::vec3 direction;
+    direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+    direction.y = sin(glm::radians(pitch));
+    direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+    cameraFront = glm::normalize(direction);
+}  
 
 static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
     if (key == GLFW_KEY_W && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
-        cameraPosX -= cameraSpeed * sin(glm::radians(cameraYaw));
-        cameraPosZ -= cameraSpeed * cos(glm::radians(cameraYaw));
+        cameraPos += cameraSpeed * cameraFront;
+        cout << "W" << endl;
     }
     if (key == GLFW_KEY_S && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
-        cameraPosX += cameraSpeed * sin(glm::radians(cameraYaw));
-        cameraPosZ += cameraSpeed * cos(glm::radians(cameraYaw));
+        cameraPos -= cameraSpeed * cameraFront;
+        cout << "S" << endl;
     }
     if (key == GLFW_KEY_A && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
-        cameraPosX -= cameraSpeed * cos(glm::radians(cameraYaw));
-        cameraPosZ -= cameraSpeed * sin(glm::radians(cameraYaw));
+        cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+        cout << "A" << endl;
     }
     if (key == GLFW_KEY_D && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
-        cameraPosX += cameraSpeed * cos(glm::radians(cameraYaw));
-        cameraPosZ += cameraSpeed * sin(glm::radians(cameraYaw));
+        cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+        cout << "D" << endl;
     }
-}
-
-// Function to update the camera
-void updateCamera() {
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    glTranslatef(-cameraPosX, -cameraPosY, -cameraPosZ);
-    glRotatef(cameraPitch, 1.0f, 0.0f, 0.0f);
-    glRotatef(cameraYaw, 0.0f, 1.0f, 0.0f);
+    if (key == GLFW_KEY_ESCAPE && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
+        glfwSetWindowShouldClose(window, true);
+    }
 }
 
 vector<Point> parseCSV(const string& csv) {
@@ -142,10 +152,11 @@ int main() {
         glfwTerminate();
         return -1;
     }
+    
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);  
     glfwSetKeyCallback(window, key_callback);
-    glfwSetCursorPosCallback(window, cursor_position_callback);
-    glfwSetScrollCallback(window, scroll_callback);
-    //glfwSetCursorPos(window, 400, 300); // Assuming 800x600 window
+    glfwSetCursorPosCallback(window, mouse_callback);  
+    
     make_conexion();
     glfwMakeContextCurrent(window);
     glEnable(GL_DEPTH_TEST);
@@ -173,8 +184,16 @@ int main() {
                 glPointSize(5.0f);
 
                 glfwPollEvents();
-                updateCamera();
+   
+                glm::mat4 view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
 
+                glMatrixMode(GL_MODELVIEW);
+                glLoadIdentity();
+                gluLookAt(cameraPos.x, cameraPos.y, cameraPos.z, 
+                        cameraPos.x + cameraFront.x, cameraPos.y + cameraFront.y, cameraPos.z + cameraFront.z, 
+                        cameraUp.x, cameraUp.y, cameraUp.z);
+
+                //updateCamera();
                 glBegin(GL_POINTS);
                 for (const auto& point : points) {
                     glVertex3f(point.x, point.y, point.z);
@@ -188,8 +207,6 @@ int main() {
                     glVertex3f(points[conexiones[i].first].x, points[conexiones[i].first].y, points[conexiones[i].first].z);
                 }
                 glEnd();
-                //lastX = xpos;
-                //lastY = ypos;
                 glfwSwapBuffers(window);
                 break;
             }
